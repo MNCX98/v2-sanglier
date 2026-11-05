@@ -81,12 +81,15 @@ def _diag_select(ctx: Context, scene, icon) -> None:
         save_image(logs_dir() / f"selection_sort_{datetime.now():%Y%m%d_%H%M%S}.png", out)
 
 
-def _select_spell(ctx: Context) -> bool:
+def _select_spell(ctx: Context, force: bool = False) -> bool:
+    """force=True : on SAIT que le sort est désélectionné (après un déplacement) → on clique l'icône sans condition."""
+    if force:
+        ctx.select_unverified = False
     if ctx.select_unverified:
         return True                                   # supposé sélectionné : recliquer sur l'icône le désélectionnerait
     scene, (ox, oy) = ctx.capture.grab()
     icon = _find(ctx, scene, "sort_attaque")
-    if _is_selected(scene, icon):
+    if not force and _is_selected(scene, icon):
         return True                                   # déjà sélectionné
     if not icon:
         ctx.log("⚠ Icône du sort introuvable.")
@@ -131,6 +134,30 @@ def _deselect_spell(ctx: Context) -> bool:
             return True
     ctx.log("⚠ Le sort reste sélectionné : pas de déplacement.")
     return False
+
+
+def _reselect_after_move(ctx: Context) -> bool:
+    """Après un déplacement, le sort est forcément désélectionné : on reclique sur Coagulation."""
+    time.sleep(0.8)                                   # laisse le personnage s'arrêter et l'écran se stabiliser
+    ctx.log("Je resélectionne Coagulation après le déplacement.")
+    return _select_spell(ctx, force=True)
+
+
+def _release_spells(ctx: Context) -> None:
+    """Avant de finir le tour : désélectionne tout sort resté sélectionné (Pied du Sacrieur, puis Coagulation)."""
+    scene, (ox, oy) = ctx.capture.grab()
+    if _find(ctx, scene, "resultat_titre"):
+        return
+    icon2 = _find(ctx, scene, SECOND_SPELL)
+    if icon2 and spell_selected(scene, icon2.x, icon2.y, icon2.w, icon2.h):
+        ctx.log(f"Je désélectionne le {SECOND_SPELL_LABEL} avant de finir le tour.")
+        inp.click(ox + icon2.center[0], oy + icon2.center[1])
+        time.sleep(0.5)
+    scene, _ = ctx.capture.grab()
+    icon = _find(ctx, scene, "sort_attaque")
+    if ctx.select_unverified or _is_selected(scene, icon):
+        ctx.log("Je désélectionne Coagulation avant de finir le tour.")
+        _deselect_spell(ctx)
 
 
 def plan_move(ctx: Context, scene, enemies, me_pos: tuple[int, int]):
@@ -270,9 +297,8 @@ def play_turn(ctx: Context, should_stop) -> int:
                 ctx.log("Aucun adversaire à portée : je me rapproche.")
                 if move_closer(ctx, enemies, pos, should_stop):
                     moved = True
-                    ctx.log("Déplacement terminé : j'essaie Coagulation.")
-                    time.sleep(0.5)
-                    continue                           # on retente le sort depuis la nouvelle position
+                    if _reselect_after_move(ctx):
+                        continue                       # on retente le sort depuis la nouvelle position
             else:
                 ctx.log("Aucun adversaire à portée : je passe le tour.")
             break
@@ -305,9 +331,8 @@ def play_turn(ctx: Context, should_stop) -> int:
                     ctx.log("Aucune cible n'a répondu : je me rapproche.")
                     if move_closer(ctx, enemies, pos, should_stop):
                         moved = True
-                        ctx.log("Déplacement terminé : j'essaie Coagulation.")
-                        time.sleep(0.5)
-                        continue                       # on retente le sort depuis la nouvelle position
+                        if _reselect_after_move(ctx):
+                            continue                   # on retente le sort depuis la nouvelle position
             break
     if (cfg.second_spell and casts >= cfg.casts_per_turn and not should_stop()
             and not _find(ctx, ctx.capture.grab()[0], "resultat_titre")):
@@ -316,6 +341,8 @@ def play_turn(ctx: Context, should_stop) -> int:
             time.sleep(cfg.pause_between_casts_ms / 1000)
         if cast_second_spell(ctx):
             casts += 1
+    if not should_stop():
+        _release_spells(ctx)                          # aucun sort ne doit rester sélectionné au moment de finir le tour
     return casts
 
 
