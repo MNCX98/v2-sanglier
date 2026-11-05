@@ -1,0 +1,41 @@
+name: Construire DofusAuto.exe
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Installer les dépendances
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt pyinstaller
+
+      - name: Vérifier la détection (tests)
+        run: python tests/test_vision.py
+
+      - name: Construire le .exe
+        run: pyinstaller --onefile --windowed --name DofusAuto main.py
+
+      - name: Préparer le dossier final
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path release
+          Copy-Item dist/DofusAuto.exe release/
+          Copy-Item -Recurse assets release/assets
+          Copy-Item config.json release/
+          Copy-Item LISEZMOI.txt release/
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: DofusAuto
+          path: release
