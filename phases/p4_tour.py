@@ -233,6 +233,7 @@ def play_turn(ctx: Context, should_stop) -> int:
     ctx.select_unverified = False
     time.sleep(cfg.turn_start_delay_s)
     casts = 0
+    moved = False                                      # un seul déplacement par tour
     while casts < cfg.casts_per_turn and not should_stop():
         scene0, _ = ctx.capture.grab()
         if _find(ctx, scene0, "resultat_titre"):
@@ -263,10 +264,15 @@ def play_turn(ctx: Context, should_stop) -> int:
             ctx.log(f"{len(enemies)} adversaire(s). Portée du sort illisible à l'écran : j'essaie les adversaires "
                     "un par un, du plus proche au plus loin (la fenêtre de confirmation vérifie).")
         if not in_range:
-            pos = my_position(ctx, scene, me, mask, enemies) if cfg.move_when_out_of_range else None
+            pos = (my_position(ctx, scene, me, mask, enemies)
+                   if cfg.move_when_out_of_range and not moved else None)
             if pos:
                 ctx.log("Aucun adversaire à portée : je me rapproche.")
-                move_closer(ctx, enemies, pos, should_stop)
+                if move_closer(ctx, enemies, pos, should_stop):
+                    moved = True
+                    ctx.log("Déplacement terminé : j'essaie Coagulation.")
+                    time.sleep(0.5)
+                    continue                           # on retente le sort depuis la nouvelle position
             else:
                 ctx.log("Aucun adversaire à portée : je passe le tour.")
             break
@@ -293,11 +299,15 @@ def play_turn(ctx: Context, should_stop) -> int:
                 break
             scene, (ox, oy) = ctx.capture.grab()
         if not done:
-            if not range_known and cfg.move_when_out_of_range:
+            if not range_known and cfg.move_when_out_of_range and not moved:
                 pos = my_position(ctx, scene, me, mask, enemies)
                 if pos:
                     ctx.log("Aucune cible n'a répondu : je me rapproche.")
-                    move_closer(ctx, enemies, pos, should_stop)
+                    if move_closer(ctx, enemies, pos, should_stop):
+                        moved = True
+                        ctx.log("Déplacement terminé : j'essaie Coagulation.")
+                        time.sleep(0.5)
+                        continue                       # on retente le sort depuis la nouvelle position
             break
     if (cfg.second_spell and casts >= cfg.casts_per_turn and not should_stop()
             and not _find(ctx, ctx.capture.grab()[0], "resultat_titre")):
