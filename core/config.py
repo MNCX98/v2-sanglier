@@ -22,7 +22,7 @@ class Config:
     pause_between_casts_ms: int = 500           # pause supplémentaire entre deux lancers d'un même tour
     second_spell: bool = True                   # après les Coagulations réussies : lancer le Pied du Sacrieur
     move_when_out_of_range: bool = True         # personne à portée : se rapprocher du monstre le plus proche
-    max_move_cells: int = 3                     # nombre maximum de cases parcourues pour se rapprocher
+    max_move_cells: int = 4                     # nombre maximum de cases parcourues pour se rapprocher
     turn_wait_s: int = 120                      # attente maximale de mon tour
     turn_start_delay_s: float = 2.5             # attente après le début du tour (bandeau « À toi de jouer »)
     range_min_fraction: float = 0.05            # part de violet autour d'un monstre pour le dire « à portée »
