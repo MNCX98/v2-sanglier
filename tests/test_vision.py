@@ -198,6 +198,21 @@ def main():
           f"{empty + real} fausse(s) détection(s) sur décors vides et captures réelles")
     failures += not ok
 
+    # 3k) lecture de la vie : cœur à 97 % (fin de combat) et à 67 % (hors combat), repère « œil » du HUD
+    from core.vie import read_hp_percent
+    eye_t = cv2.imread(str(Path(__file__).resolve().parent.parent / "assets" / "ui" / "hud_oeil.png"))
+    got = []
+    for name, expected in (("26_resultat_combat.png", 97), ("27_hors_combat_vie_67.png", 67)):
+        if not (fx / name).exists():
+            continue                                    # capture absente du dépôt : test sauté
+        img = load(name)
+        res = cv2.matchTemplate(img, eye_t, cv2.TM_CCOEFF_NORMED)
+        _, score, _, loc = cv2.minMaxLoc(res)
+        pct = read_hp_percent(img, loc[0], loc[1]) if score > 0.85 else None
+        got.append((name[:2], round(pct) if pct is not None else None))
+        failures += not (pct is not None and abs(pct - expected) <= 3)
+    print(f"[{'OK' if all(g[1] is not None for g in got) else 'ÉCHEC'}] lecture de la vie sur le cœur : {got} (attendu 97 et 67)")
+
     # 4) vitesse
     t0 = time.time()
     for _ in range(5):
