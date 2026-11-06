@@ -227,6 +227,21 @@ def main():
           f"{n_fix}/{n_ref} monstres reconnus après adaptation, aucune modification à l'échelle d'origine")
     failures += not ok
 
+    # 3m) fenêtre de montée de niveau posée sur le résultat : sa croix doit être repérée, pas celle du résultat
+    if (fx / "28_montee_niveau.png").exists():
+        from phases.p6_fin import popup_close_buttons
+        from phases.p2_combat import find_ui
+        lvl, _ = Viewport().normalize(load("28_montee_niveau.png"))
+        import types
+        tctx = types.SimpleNamespace(ui_templates=ui, config=types.SimpleNamespace(ui_threshold=0.85))
+        title = find_ui(tctx, lvl, "resultat_titre")
+        pops = popup_close_buttons(tctx, lvl, title)
+        ok = title is not None and len(pops) == 1 and pops[0].center[1] > title.center[1] + 60
+        none_without = len(popup_close_buttons(tctx, load("26_resultat_combat.png"), find_ui(tctx, load("26_resultat_combat.png"), "resultat_titre"))) == 0
+        print(f"[{'OK' if ok and none_without else 'ÉCHEC'}] fenêtre de montée de niveau : {len(pops)} croix à fermer repérée(s) ; "
+              f"aucune sur un résultat sans fenêtre ajoutée : {none_without}")
+        failures += not (ok and none_without)
+
     # 4) vitesse
     t0 = time.time()
     for _ in range(5):
