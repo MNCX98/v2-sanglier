@@ -213,6 +213,20 @@ def main():
         failures += not (pct is not None and abs(pct - expected) <= 3)
     print(f"[{'OK' if all(g[1] is not None for g in got) else 'ÉCHEC'}] lecture de la vie sur le cœur : {got} (attendu 97 et 67)")
 
+    # 3l) adaptation à la taille d'affichage : jeu agrandi de 10,5 % (bandeau de pub disparu) remis à l'échelle d'origine
+    from core.viewport import REF_POS, Viewport
+    base = load("27_hors_combat_vie_67.png") if (fx / "27_hors_combat_vie_67.png").exists() else load("26_resultat_combat.png")
+    n_ref = len(scan(base, mine, THRESHOLD).detections)
+    big = cv2.warpAffine(base, np.float32([[1.105, 0, 1663 - 1.105 * REF_POS[0]], [0, 1.105, 937 - 1.105 * REF_POS[1]]]),
+                         (base.shape[1], base.shape[0]), flags=cv2.INTER_CUBIC)
+    fixed, tr = Viewport().normalize(big)
+    n_fix = len(scan(fixed, mine, THRESHOLD).detections)
+    same = all(Viewport().normalize(load(n))[1] is None for n in ("26_resultat_combat.png", "10_sort_choisi.png"))
+    ok = tr is not None and abs(tr[0] - 1.105) <= 0.01 and n_fix == n_ref and same
+    print(f"[{'OK' if ok else 'ÉCHEC'}] adaptation à la taille du jeu : échelle {tr[0] if tr else None} retrouvée, "
+          f"{n_fix}/{n_ref} monstres reconnus après adaptation, aucune modification à l'échelle d'origine")
+    failures += not ok
+
     # 4) vitesse
     t0 = time.time()
     for _ in range(5):

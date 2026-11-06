@@ -43,6 +43,7 @@ def _fight(ctx: Context, should_stop, on_frame) -> str:
 def run_phases(ctx: Context, should_stop, on_frame=None) -> None:
     cfg = ctx.config
     ctx.log("Démarré. Appuie sur F12 pour arrêter.")
+    ctx.capture.viewport.log_hook = ctx.log                        # messages d'adaptation à l'échelle du jeu
     combats = 0
     need_heal = True                                               # contrôle de la vie avant chaque combat
     while not should_stop():

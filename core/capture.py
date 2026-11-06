@@ -4,6 +4,9 @@ import threading
 
 import numpy as np
 
+from core import input as inp
+from core.viewport import REF_POS, Viewport
+
 IS_WINDOWS = sys.platform == "win32"
 
 if IS_WINDOWS:
@@ -29,6 +32,7 @@ class WindowCapture:
         self.title_contains = title_contains
         self._local = threading.local()   # mss doit vivre dans le thread qui l'utilise
         self.last_title = ""
+        self.viewport = Viewport()        # adaptation automatique à la taille d'affichage du jeu
 
     def _find_window(self):
         if not IS_WINDOWS:
@@ -81,4 +85,6 @@ class WindowCapture:
             sct = self._local.sct = mss.mss()
         shot = sct.grab({"left": pt.x, "top": pt.y, "width": w, "height": h})
         img = np.ascontiguousarray(np.array(shot)[:, :, :3])   # BGRA -> BGR
+        img, tr = self.viewport.normalize(img)                  # remet le jeu à l'échelle d'origine si besoin
+        inp.set_transform((pt.x, pt.y, tr[0], tr[1], tr[2], REF_POS[0], REF_POS[1]) if tr else None)
         return img, (pt.x, pt.y)

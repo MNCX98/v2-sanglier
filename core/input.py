@@ -11,10 +11,29 @@ if IS_WINDOWS:
     _user32 = ctypes.windll.user32
 
 
+_transform = None   # (x0, y0, échelle, px, py, ref_x, ref_y) : voir core/viewport.py
+
+
+def set_transform(transform) -> None:
+    """Mémorise l'adaptation d'échelle appliquée à la dernière capture (None : aucune)."""
+    global _transform
+    _transform = transform
+
+
+def map_point(x: float, y: float) -> tuple[float, float]:
+    """Convertit un point de l'image remise à l'échelle d'origine en vraie coordonnée d'écran."""
+    if _transform is None:
+        return x, y
+    x0, y0, s, px, py, rx, ry = _transform
+    return x0 + px + (x - x0 - rx) * s, y0 + py + (y - y0 - ry) * s
+
+
 def click(x: int, y: int, hold_s: float = 0.06) -> None:
-    """Clic gauche à la position écran (x, y)."""
+    """Clic gauche à la position écran (x, y). Les coordonnées sont celles de l'image remise à l'échelle d'origine
+    (origine de la fenêtre + position dans l'image) ; elles sont reconverties en vraies coordonnées d'écran."""
     if not IS_WINDOWS:
         raise RuntimeError("Les clics ne fonctionnent que sous Windows.")
+    x, y = map_point(x, y)
     _user32.SetCursorPos(int(x), int(y))
     time.sleep(0.05)
     _user32.mouse_event(0x0002, 0, 0, 0, 0)   # bouton gauche enfoncé
