@@ -41,6 +41,22 @@ def click(x: int, y: int, hold_s: float = 0.06) -> None:
     _user32.mouse_event(0x0004, 0, 0, 0, 0)   # bouton gauche relâché
 
 
+def double_click(x: int, y: int, gap_s: float = 0.10, hold_s: float = 0.04) -> None:
+    """Vrai double clic : le curseur est placé une seule fois, puis deux appuis rapprochés (gap_s entre les deux).
+    Nécessaire pour les actions qui exigent un double appui rapide (boire une potion)."""
+    if not IS_WINDOWS:
+        raise RuntimeError("Les clics ne fonctionnent que sous Windows.")
+    x, y = map_point(x, y)
+    _user32.SetCursorPos(int(x), int(y))
+    time.sleep(0.08)                              # laisse le curseur se poser sur la case
+    for i in range(2):
+        _user32.mouse_event(0x0002, 0, 0, 0, 0)   # bouton gauche enfoncé
+        time.sleep(hold_s)
+        _user32.mouse_event(0x0004, 0, 0, 0, 0)   # bouton gauche relâché
+        if i == 0:
+            time.sleep(gap_s)
+
+
 def is_key_down(vk: int) -> bool:
     if not IS_WINDOWS:
         return False
