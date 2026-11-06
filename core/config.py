@@ -22,7 +22,6 @@ class Config:
     pause_between_casts_ms: int = 500           # pause supplémentaire entre deux lancers d'un même tour
     heal_enabled: bool = True                   # avant chaque combat : vérifier la vie et boire des potions si besoin
     min_hp_percent: int = 70                    # vie minimale (%) pour lancer un combat
-    heal_max_potions: int = 15                  # nombre maximum de potions bues d'affilée
     opening_spell: bool = True                  # 1er tour du combat uniquement : lancer le sort d'ouverture sur soi, avant Coagulation
     second_spell: bool = True                   # après les Coagulations réussies : lancer le Pied du Sacrieur
     move_when_out_of_range: bool = True         # personne à portée : se rapprocher du monstre le plus proche
