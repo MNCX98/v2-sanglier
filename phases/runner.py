@@ -8,6 +8,7 @@ from phases.p2_combat import wait_for_combat
 from phases.p3_placement import run_placement
 from phases.p4_tour import run_turns
 from phases.p6_fin import close_result, close_stray_popups
+from phases.p_inventaire import inventory_full, unload_to_mount
 from phases.p_vie import ensure_health
 
 
@@ -49,6 +50,14 @@ def run_phases(ctx: Context, should_stop, on_frame=None) -> None:
     while not should_stop():
         pause = cfg.scan_interval_ms / 1000
         try:
+            if cfg.unload_enabled:                                  # inventaire plein : on vide dans la monture
+                scene, _ = ctx.capture.grab()
+                if inventory_full(ctx, scene):
+                    if unload_to_mount(ctx, should_stop) != "ok":
+                        if not should_stop():
+                            ctx.log("Le programme s'arrête : impossible de vider l'inventaire dans la monture.")
+                        return
+                    continue
             if close_stray_popups(ctx, should_stop):                # fenêtre (montée de niveau…) arrivée en retard
                 continue
             if need_heal and cfg.heal_enabled:

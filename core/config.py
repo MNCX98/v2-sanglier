@@ -20,6 +20,8 @@ class Config:
     do_turns: bool = True                       # phases 4-5 : jouer les tours (sorts + fin du tour)
     casts_per_turn: int = 2                     # nombre de lancers de Coagulation par tour
     pause_between_casts_ms: int = 500           # pause supplémentaire entre deux lancers d'un même tour
+    unload_enabled: bool = True                 # inventaire plein : transférer les objets dans la monture
+    unload_mode: str = "visibles"               # « visibles » (selon les filtres de l'inventaire) ou « tous »
     heal_enabled: bool = True                   # avant chaque combat : vérifier la vie et boire des potions si besoin
     min_hp_percent: int = 70                    # vie minimale (%) pour lancer un combat
     opening_spell: bool = True                  # 1er tour du combat uniquement : lancer le sort d'ouverture sur soi, avant Coagulation

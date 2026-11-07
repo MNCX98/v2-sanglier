@@ -242,6 +242,26 @@ def main():
               f"aucune sur un résultat sans fenêtre ajoutée : {none_without}")
         failures += not (ok and none_without)
 
+    # 3n) inventaire plein : badge rouge / message d'avertissement détectés, menu de transfert reconnu, pas de fausse alerte
+    if (fx / "29_inventaire_plein.png").exists() and (fx / "30_menu_transfert.png").exists():
+        import types
+        from phases.p_inventaire import find_text, inventory_full
+        ictx = types.SimpleNamespace(ui_templates=ui)
+        full, menu = load("29_inventaire_plein.png"), load("30_menu_transfert.png")
+        calm = load("27_hors_combat_vie_67.png") if (fx / "27_hors_combat_vie_67.png").exists() else load("26_resultat_combat.png")
+        checks = {
+            "message « Inventaire plein » lu": find_text(full, "inv_plein_texte") is not None,
+            "inventaire plein détecté": inventory_full(ictx, full),
+            "options du menu de transfert lues": find_text(menu, "inv_menu_visibles") is not None
+                                                 and find_text(menu, "inv_menu_tous") is not None,
+            "titres Monture et Inventaire lus": find_text(menu, "inv_titre_monture") is not None
+                                                and find_text(menu, "inv_titre_inventaire") is not None,
+            "pas de fausse alerte (carte normale, fenêtres ouvertes)": not inventory_full(ictx, calm) and not inventory_full(ictx, menu),
+        }
+        ok = all(checks.values())
+        print(f"[{'OK' if ok else 'ÉCHEC'}] transfert vers la monture : " + ", ".join(f"{k}: {'oui' if v else 'NON'}" for k, v in checks.items()))
+        failures += not ok
+
     # 4) vitesse
     t0 = time.time()
     for _ in range(5):
