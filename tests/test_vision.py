@@ -262,6 +262,19 @@ def main():
         print(f"[{'OK' if ok else 'ÉCHEC'}] transfert vers la monture : " + ", ".join(f"{k}: {'oui' if v else 'NON'}" for k, v in checks.items()))
         failures += not ok
 
+    # 3o) personnage à moitié caché derrière un bloc : l'anneau rouge incomplet doit quand même être localisé
+    if (fx / "31_perso_cache.png").exists():
+        pair = load("31_perso_cache.png")                      # deux vignettes 140×100 (captures réelles), l'une sur l'autre
+        ground = np.full((1020, 1920, 3), (150, 170, 120), np.uint8)
+        found = []
+        for i, (ox, oy, expect) in enumerate(((1130, 600, (1198, 648)), (1090, 620, (1153, 672)))):
+            scene = ground.copy()
+            scene[oy:oy + 100, ox:ox + 140] = pair[i * 100:(i + 1) * 100]
+            me = find_me(scene)
+            found.append(me is not None and abs(me.cx - expect[0]) <= 4 and abs(me.cy - expect[1]) <= 4)
+        print(f"[{'OK' if all(found) else 'ÉCHEC'}] personnage à moitié caché : anneau partiel localisé sur {sum(found)}/2 captures réelles")
+        failures += not all(found)
+
     # 4) vitesse
     t0 = time.time()
     for _ in range(5):

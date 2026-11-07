@@ -69,6 +69,11 @@ def _find_rings(mask: np.ndarray, min_cover: float = 0.55, max_fill: float = 2.6
     min_cover : part de l'ellipse retrouvée dans le masque de couleur (un anneau à demi caché reste accepté).
     max_fill  : écarte les formes pleines (cases, icônes, chiffres de dégâts), qui ne sont pas des anneaux fins.
     """
+    return [f for f, _ in _find_rings_scored(mask, min_cover, max_fill)]
+
+
+def _find_rings_scored(mask: np.ndarray, min_cover: float = 0.55, max_fill: float = 2.6) -> list[tuple[Fighter, float]]:
+    """Comme _find_rings, avec la couverture de l'ellipse pour chaque anneau trouvé."""
     th, tw = _RING.shape
     if mask.shape[0] < th or mask.shape[1] < tw:
         return []
@@ -79,16 +84,16 @@ def _find_rings(mask: np.ndarray, min_cover: float = 0.55, max_fill: float = 2.6
     area = cv2.boxFilter(raw, -1, (tw, th), normalize=False, borderType=cv2.BORDER_CONSTANT)
     ys, xs = np.where(cover >= min_cover)
     order = np.argsort(-cover[ys, xs])
-    found: list[Fighter] = []
+    found: list[tuple[Fighter, float]] = []
     for i in order:
         x, y = int(xs[i]), int(ys[i])
         cx, cy = x + tw // 2, y + th // 2
-        if any(abs(cx - f.cx) < 20 and abs(cy - f.cy) < 10 for f in found):
+        if any(abs(cx - f.cx) < 20 and abs(cy - f.cy) < 10 for f, _ in found):
             continue
         inside = float(area[y + th // 2, x + tw // 2])
         if inside > max_fill * n_ring:
             continue
-        found.append(Fighter(cx, cy, int(inside), tw, th))
+        found.append((Fighter(cx, cy, int(inside), tw, th), float(cover[y, x])))
         if len(found) >= 24:
             break
     return found
@@ -131,12 +136,36 @@ def find_me(scene: np.ndarray, hint: tuple[int, int] | None = None) -> Fighter |
     cands = [f for f, fill in _rings(m, min_pixels=120)
              if 120 <= f.pixels <= 650 and 40 <= f.w <= 60 and 15 <= f.h <= 40 and f.w / f.h >= 1.3 and fill < 0.6]
     if not cands:
-        return None
+        return _find_me_partial(m, hint)
     if hint is not None:
         near = [f for f in cands if abs(f.cx - hint[0]) <= 20 and abs(f.cy - hint[1]) <= 20]
         if near:
             return near[0]
     return max(cands, key=lambda f: f.pixels)
+
+
+PARTIAL_NEAR_HINT = 0.28     # couverture minimale de l'anneau près de la dernière position connue
+PARTIAL_ALONE = 0.33         # couverture minimale sans position connue
+PARTIAL_MARGIN = 1.4         # l'anneau retenu doit être nettement meilleur que le suivant
+
+
+def _find_me_partial(m: np.ndarray, hint: tuple[int, int] | None) -> Fighter | None:
+    """Anneau rouge à moitié caché (personnage derrière un décor) : on cherche la FORME de l'anneau.
+    Un arc visible suffit pour retrouver le centre, car la taille de l'ellipse est connue."""
+    rings = _find_rings_scored(m, min_cover=PARTIAL_NEAR_HINT)
+    if not rings:
+        return None
+    if hint is not None:                                   # tout près de la dernière position connue : on affine
+        near = [(f, c) for f, c in rings if abs(f.cx - hint[0]) <= 10 and abs(f.cy - hint[1]) <= 6]
+        if near:
+            return max(near, key=lambda fc: fc[1])[0]
+    rings.sort(key=lambda fc: -fc[1])                      # sinon : seulement si une seule forme se détache nettement
+    best, cover = rings[0]
+    if cover < PARTIAL_ALONE:
+        return None
+    if len(rings) > 1 and cover < PARTIAL_MARGIN * rings[1][1]:
+        return None                                        # ambigu : plusieurs formes semblables
+    return best
 
 
 def range_mask(scene: np.ndarray) -> np.ndarray:
