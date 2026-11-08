@@ -1,7 +1,10 @@
 """Phase 6 : fin du combat. Fermer la fenêtre « Résultat du combat » et attendre le retour à la carte."""
 import time
+from datetime import datetime
 
 from core import input as inp
+from core.imgio import save_image
+from core.paths import logs_dir
 from core.vision import scan
 from phases.base import Context
 from phases.p2_combat import find_ui
@@ -66,8 +69,11 @@ def close_result(ctx: Context, should_stop) -> bool:
         if not title:
             closed = True                                  # déjà fermée
             break
-        btn = find_ui(ctx, scene, "fermer_resultat")
-        if btn:
+        templates = [t for t in ctx.ui_templates if t.variant == "fermer_resultat"]
+        crosses = sorted(scan(scene, templates, ctx.config.ui_threshold).detections, key=lambda d: -d.score) if templates else []
+        if crosses:
+            # essai 1 : la meilleure croix ; essai 2 : la suivante (si une autre fenêtre bloque la première) ; essai 3 : la meilleure
+            btn = crosses[1] if (attempt == 1 and len(crosses) > 1) else crosses[0]
             inp.click(ox + btn.center[0], oy + btn.center[1])
         else:
             ctx.log("⚠ Croix de fermeture introuvable.")
@@ -83,6 +89,13 @@ def close_result(ctx: Context, should_stop) -> bool:
         ctx.log(f"La fenêtre est toujours là (essai {attempt + 1}/3).")
     if not closed:
         ctx.log("⚠ Impossible de fermer la fenêtre de résultat.")
+        try:                                               # capture automatique : montre ce qui bloque
+            scene, _ = ctx.capture.grab()
+            path = logs_dir() / f"fermeture_impossible_{datetime.now():%Y%m%d_%H%M%S}.png"
+            save_image(path, scene)
+            ctx.log(f"Capture de l'écran enregistrée : {path}")
+        except Exception:
+            pass
         return False
     # Retour à la carte : plus de fenêtre de résultat, plus de grille de sorts de combat
     t0 = time.time()

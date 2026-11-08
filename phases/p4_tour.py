@@ -174,6 +174,11 @@ def plan_move(ctx: Context, scene, enemies, me_pos: tuple[int, int]):
     return target, cands
 
 
+RANGE_MIN_PIXELS = 1500          # zone de portée assez grande pour être fiable
+HINT_MISMATCH = 2.5              # écart (en cases) entre la dernière position connue et le centre de la portée
+HINT_MISMATCH_UNVERIFIED = 2.2   # même chose quand la dernière position n'est qu'une supposition
+
+
 def _range_center(mask, enemies) -> tuple[int, int] | None:
     """Position approximative de mon personnage : centre de la zone violette du sort (qui l'entoure),
     recalé sur le centre d'une case (les adversaires servent de repère de grille)."""
@@ -188,12 +193,22 @@ def _range_center(mask, enemies) -> tuple[int, int] | None:
 def my_position(ctx: Context, scene, me, mask, enemies):
     """Ma position : anneau rouge si visible, sinon dernière position connue, sinon centre de la portée."""
     if me:
+        ctx.hint_unverified = False
         return me.center
     _diag(ctx, scene, enemies, None, label="perso_introuvable")
+    # La zone violette du sort entoure mon personnage : elle sert à recouper la dernière position connue, qui peut être
+    # fausse (déplacement qui s'est arrêté avant la case visée, personnage poussé…). Sinon le programme reste bloqué.
+    center = _range_center(mask, enemies) if mask is not None and int((mask > 0).sum()) >= RANGE_MIN_PIXELS else None
     if ctx.me_hint:
+        limit = HINT_MISMATCH_UNVERIFIED if ctx.hint_unverified else HINT_MISMATCH
+        if center and grid_distance(center, ctx.me_hint) > limit:
+            ctx.log(f"La dernière position connue {ctx.me_hint} ne correspond pas à la portée du sort : "
+                    f"je situe mon personnage en {center}.")
+            ctx.me_hint, ctx.hint_unverified = center, True
+            return center
         ctx.log(f"Anneau rouge de mon personnage non vu : j'utilise sa dernière position connue {ctx.me_hint}.")
         return ctx.me_hint
-    pos = _range_center(mask, enemies)
+    pos = center
     if pos:
         ctx.log(f"Anneau rouge de mon personnage non vu : je l'estime au centre de la portée du sort, en {pos}.")
     else:
@@ -247,11 +262,11 @@ def move_closer(ctx: Context, enemies, me_pos: tuple[int, int], should_stop) -> 
                 time.sleep(ctx.config.click_interval_ms / 1000)
         status, pos = _wait_moved(ctx, me_pos)
         if status == "moved":
-            ctx.me_hint = pos
+            ctx.me_hint, ctx.hint_unverified = pos, False
             ctx.log(f"✔ Personnage déplacé en {pos}.")
             return True
         if status == "unknown":
-            ctx.me_hint = (x, y)                       # on suppose le déplacement fait, sans le refaire
+            ctx.me_hint, ctx.hint_unverified = (x, y), True   # on suppose le déplacement fait, sans le refaire
             ctx.log("Déplacement non vérifiable (anneau rouge non vu) : je considère qu'il est fait.")
             return True
         ctx.failed_moves.append((x, y))                # on ne retentera pas cette case pendant ce tour
@@ -372,6 +387,7 @@ def play_turn(ctx: Context, should_stop, turn: int = 0) -> int:
             casts += 1
     if not should_stop():
         _release_spells(ctx)                          # aucun sort ne doit rester sélectionné au moment de finir le tour
+    ctx.progress += casts + int(moved) + int(opening_done)
     return casts
 
 
@@ -504,10 +520,13 @@ def end_turn(ctx: Context) -> bool:
     return False
 
 
+STALL_TURNS = 4                  # tours de suite sans aucune action réussie avant de remettre la position à zéro
+
+
 def run_turns(ctx: Context, should_stop) -> str:
     """Boucle des tours. Retourne 'over' (combat terminé), 'timeout' ou 'stopped'."""
     ctx.log("Phases 4-5 : je joue les tours (F12 pour arrêter).")
-    n = 0
+    n = idle = 0
     while not should_stop():
         status = wait_my_turn(ctx, should_stop)
         if status == "over":
@@ -520,7 +539,13 @@ def run_turns(ctx: Context, should_stop) -> str:
             break
         n += 1
         ctx.log(f"── Tour {n} ──")
+        before = ctx.progress
         play_turn(ctx, should_stop, turn=n)
+        idle = 0 if ctx.progress > before else idle + 1
+        if idle == STALL_TURNS and not should_stop():
+            ctx.log(f"⚠ Aucun lancer ni déplacement réussi depuis {idle} tours : j'oublie la dernière position connue "
+                    "et je la recalcule.")
+            ctx.me_hint, ctx.hint_unverified = None, False
         if should_stop():
             break
         end_turn(ctx)

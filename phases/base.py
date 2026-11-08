@@ -16,4 +16,6 @@ class Context:
     log: Callable[[str], None] = print
     select_unverified: bool = False                              # la dernière sélection du sort n'a pas pu être vérifiée
     me_hint: tuple[int, int] | None = None                       # dernière position connue de mon personnage
+    hint_unverified: bool = False                                # la dernière position connue est une supposition (déplacement non vérifié)
+    progress: int = 0                                            # compteur d'actions réussies (lancers, déplacements) : détecte un combat bloqué
     failed_moves: list = field(default_factory=list)             # cases visées sans succès pendant le tour en cours
