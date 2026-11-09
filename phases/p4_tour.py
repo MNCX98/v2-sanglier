@@ -304,7 +304,18 @@ def play_turn(ctx: Context, should_stop, turn: int = 0) -> int:
             ctx.me_hint = me.center
         if not enemies:
             ctx.log("Aucun adversaire visible.")
+            if casts == 0:                                 # compte les tours entiers sans adversaire repéré
+                ctx.no_enemy_streak += 1
+                if ctx.no_enemy_streak == 3:               # le combat ne se termine pas : une capture montre où il se cache
+                    try:
+                        path = logs_dir() / f"aucun_adversaire_{datetime.now():%Y%m%d_%H%M%S}.png"
+                        save_image(path, scene)
+                        ctx.log(f"⚠ Aucun adversaire visible depuis 3 tours alors que le combat continue. "
+                                f"Capture de l'écran enregistrée : {path}")
+                    except Exception:
+                        pass
             break
+        ctx.no_enemy_streak = 0
         mask = range_mask(scene)
         if me:
             origin = me.center

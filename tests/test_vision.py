@@ -275,6 +275,43 @@ def main():
         print(f"[{'OK' if all(found) else 'ÉCHEC'}] personnage à moitié caché : anneau partiel localisé sur {sum(found)}/2 captures réelles")
         failures += not all(found)
 
+    # 3p) combattant près d'un bord de la carte (zone auparavant ignorée) : mon anneau et un monstre doivent être vus
+    from core.combat import find_enemies as _fe, find_me as _fm
+    ref = load("10_sort_choisi.png")
+    r_me, r_en = _fm(ref), _fe(ref)
+    if r_me and r_en:
+        pm = ref[r_me.cy - 30:r_me.cy + 30, r_me.cx - 40:r_me.cx + 40].copy()
+        pe = ref[r_en[0].cy - 30:r_en[0].cy + 30, r_en[0].cx - 40:r_en[0].cx + 40].copy()
+        edge_ok = []
+        for (x, y) in ((860, 250), (900, 140), (700, 240), (760, 200), (1580, 360), (1585, 600)):
+            for patch, finder in ((pm, lambda sc: _fm(sc)), (pe, lambda sc: (_fe(sc) or [None])[0])):
+                sc = np.full((1020, 1920, 3), (150, 170, 120), np.uint8)
+                sc[y - 30:y + 30, x - 40:x + 40] = patch
+                f = finder(sc)
+                edge_ok.append(f is not None and abs(f.cx - x) <= 10 and abs(f.cy - y) <= 6)   # anneau coupé par le HUD : ±10 px
+        print(f"[{'OK' if all(edge_ok) else 'ÉCHEC'}] combattants près des bords de la carte : {sum(edge_ok)}/{len(edge_ok)} repérés")
+        failures += not all(edge_ok)
+
+    # 3q) monstres dont l'anneau est à moitié caché (dernier recours quand aucun adversaire n'est vu) : retrouvés, sans fausse alerte
+    from core.combat import _enemies_partial, _game_roi_wide, _hsv
+    def _blue_zone(img):
+        hh_, ss_, vv_ = _hsv(img)
+        return ((hh_ > 98) & (hh_ < 112) & (ss_ > 140) & (vv_ > 140) & _game_roi_wide(*img.shape[:2])).astype(np.uint8) * 255
+    found_n = total_n = 0
+    for name in ("07_fight.png", "10_sort_choisi.png", "17_tour_adverse.png", "18_nouvelle_carte_debut_tour.png"):
+        img = load(name); enemies = find_enemies(img); half = img.copy()
+        for e in enemies:
+            x0, y0 = e.cx - e.w // 2, e.cy - e.h // 2
+            half[y0 - 2:y0 + e.h + 3, e.cx:x0 + e.w + 3] = np.median(img[y0 - 12:y0 - 6, x0:x0 + e.w].reshape(-1, 3), axis=0)
+        got = _enemies_partial(_blue_zone(half))
+        total_n += len(enemies)
+        found_n += sum(any(abs(g.cx - e.cx) <= 12 and abs(g.cy - e.cy) <= 8 for g in got) for e in enemies)
+    quiet = all(_enemies_partial(_blue_zone(load(n))) == []
+                for n in ("27_hors_combat_vie_67.png", "28_montee_niveau.png", "29_inventaire_plein.png", "30_menu_transfert.png"))
+    ok = found_n >= 0.75 * total_n and quiet
+    print(f"[{'OK' if ok else 'ÉCHEC'}] monstres à moitié cachés : {found_n}/{total_n} retrouvés, aucune fausse alerte sans monstre : {quiet}")
+    failures += not ok
+
     # 4) vitesse
     t0 = time.time()
     for _ in range(5):

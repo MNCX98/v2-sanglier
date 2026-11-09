@@ -20,6 +20,19 @@ class Fighter:
         return self.cx, self.cy
 
 
+def _game_roi_wide(h: int, w: int) -> np.ndarray:
+    """Zone de jeu élargie : tout l'écran de jeu sauf les éléments d'interface connus (frise des tours et minuteur,
+    barre « Challenges », colonne d'icônes). Elle couvre le bord supérieur gauche de la carte et les fines bandes
+    le long des bords, que la zone habituelle ignore. Utilisée seulement quand rien n'a été trouvé dans la zone habituelle."""
+    sx, sy = w / 1920.0, h / 1020.0
+    roi = np.zeros((h, w), bool)
+    roi[int(78 * sy):int(976 * sy), int(316 * sx):int(1604 * sx)] = True
+    roi[:int(265 * sy), :int(612 * sx)] = False         # frise des tours, portraits, minuteur, « Fin du tour »
+    roi[:int(140 * sy), int(612 * sx):int(815 * sx)] = False   # barre « Challenges »
+    roi[:int(570 * sy), :int(412 * sx)] = False         # colonne d'icônes orange et rouges
+    return roi
+
+
 def _game_roi(h: int, w: int) -> np.ndarray:
     roi = np.zeros((h, w), bool)
     roi[int(0.05 * h):int(0.955 * h), int(0.17 * w):int(0.83 * w)] = True
@@ -107,7 +120,27 @@ def find_enemies(scene: np.ndarray) -> list[Fighter]:
     """
     h, w = scene.shape[:2]
     hh, ss, vv = _hsv(scene)
-    m = (((hh > 98) & (hh < 112) & (ss > 140) & (vv > 140)) & _game_roi(h, w)).astype(np.uint8) * 255
+    blue = (hh > 98) & (hh < 112) & (ss > 140) & (vv > 140)
+    out = _enemies_in(blue & _game_roi(h, w), h, w)
+    if not out:                                             # rien : un adversaire dans un angle de la carte ?
+        out = _enemies_in(blue & _game_roi_wide(h, w), h, w)
+    if not out:                                             # toujours rien : un anneau à moitié caché par un décor ?
+        out = _enemies_partial((blue & _game_roi_wide(h, w)).astype(np.uint8) * 255)
+    return out
+
+
+ENEMY_PARTIAL_COVER = 0.25      # couverture minimale d'un anneau bleu à moitié caché (dernier recours)
+
+
+def _enemies_partial(m: np.ndarray) -> list[Fighter]:
+    """Dernier recours quand AUCUN adversaire n'est vu : cherche la forme d'anneaux bleus en partie cachés."""
+    rings = [(f, c) for f, c in _find_rings_scored(m, min_cover=ENEMY_PARTIAL_COVER) if c >= ENEMY_PARTIAL_COVER]
+    rings.sort(key=lambda fc: -fc[1])
+    return [f for f, _ in rings[:6]]
+
+
+def _enemies_in(zone: np.ndarray, h: int, w: int) -> list[Fighter]:
+    m = zone.astype(np.uint8) * 255
     out: list[Fighter] = []
     for f, _ in _rings(m):
         if f.w <= RING_W + 10 and f.h <= RING_H + 8:
@@ -132,7 +165,14 @@ def find_me(scene: np.ndarray, hint: tuple[int, int] | None = None) -> Fighter |
     """
     h, w = scene.shape[:2]
     hh, ss, vv = _hsv(scene)
-    m = ((((hh < 8) | (hh > 172)) & (ss > 120) & (vv > 120)) & _game_roi(h, w)).astype(np.uint8) * 255
+    red = ((hh < 8) | (hh > 172)) & (ss > 120) & (vv > 120)
+    found = _find_me_in((red & _game_roi(h, w)).astype(np.uint8) * 255, hint)
+    if found is None:                                       # rien : mon personnage dans un angle de la carte ?
+        found = _find_me_in((red & _game_roi_wide(h, w)).astype(np.uint8) * 255, hint)
+    return found
+
+
+def _find_me_in(m: np.ndarray, hint: tuple[int, int] | None) -> Fighter | None:
     cands = [f for f, fill in _rings(m, min_pixels=120)
              if 120 <= f.pixels <= 650 and 40 <= f.w <= 60 and 15 <= f.h <= 40 and f.w / f.h >= 1.3 and fill < 0.6]
     if not cands:
@@ -174,7 +214,7 @@ def range_mask(scene: np.ndarray) -> np.ndarray:
     hh, ss, vv = _hsv(scene)
     # Le bleu de la portée varie un peu selon le sol de la carte (teinte 118 sur sol vert, 122-123 sur sable) :
     # on accepte toute la plage 113-130. Les anneaux bleus des monstres (teinte 98-112) restent à part.
-    m = ((hh >= 113) & (hh <= 130) & (ss > 100) & (vv > 130) & _game_roi(h, w)).astype(np.uint8)
+    m = ((hh >= 113) & (hh <= 130) & (ss > 100) & (vv > 130) & (_game_roi(h, w) | _game_roi_wide(h, w))).astype(np.uint8)
     return m
 
 
