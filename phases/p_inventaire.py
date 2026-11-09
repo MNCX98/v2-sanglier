@@ -10,12 +10,14 @@ Séquence (celle que le joueur fait à la main) :
   4. clic sur la flèche verte ◀ de la fenêtre Inventaire, puis sur « Transférer les objets visibles » (ou « tous ») ;
   5. fermer les fenêtres, refermer le menu si on l'a agrandi, vérifier que le badge a disparu."""
 import time
+from datetime import datetime
 
 import cv2
 import numpy as np
 
 from core import input as inp
-from core.paths import app_dir
+from core.imgio import save_image
+from core.paths import app_dir, logs_dir
 from core.vision import scan
 from phases.base import Context
 
@@ -99,6 +101,35 @@ def _wait(ctx: Context, finder, should_stop, timeout: float = 4.0):
     return None, origin
 
 
+def _snapshot(ctx: Context, step: str) -> None:
+    """Enregistre une capture de l'écran quand une étape échoue : elle montre ce qui bloque."""
+    try:
+        scene, _ = ctx.capture.grab()
+        path = logs_dir() / f"transfert_echec_{step}_{datetime.now():%Y%m%d_%H%M%S}.png"
+        save_image(path, scene)
+        ctx.log(f"Capture de l'écran enregistrée : {path}")
+    except Exception:
+        pass
+
+
+def _find_bag(ctx: Context, scene: np.ndarray):
+    """Bouton « sac » de la fenêtre de la monture. Reconnaissance stricte d'abord ; sinon recherche plus tolérante
+    dans la zone où il se trouve (bas de la fenêtre, à droite), au cas où le bouton est survolé ou légèrement différent."""
+    found = find_icons(ctx, scene, MOUNT_BAG)
+    if found:
+        return found[0]
+    h, w = scene.shape[:2]
+    sx, sy = w / 1920.0, h / 1020.0
+    x0, x1, y0, y1 = int(1400 * sx), int(1720 * sx), int(780 * sy), int(960 * sy)
+    zone = scene[y0:y1, x0:x1]
+    loose = scan(zone, [t for t in ctx.ui_templates if t.variant == MOUNT_BAG], 0.78).detections
+    if not loose:
+        return None
+    best = max(loose, key=lambda d: d.score)
+    best.center = (best.center[0] + x0, best.center[1] + y0)      # coordonnées de l'image entière
+    return best
+
+
 def close_windows(ctx: Context, should_stop, max_windows: int = 8) -> int:
     """Ferme toutes les fenêtres à croix verte (monture, inventaire, avertissement…)."""
     closed = 0
@@ -140,6 +171,7 @@ def unload_to_mount(ctx: Context, should_stop) -> str:
         mount, origin = _wait(ctx, lambda s: next(iter(find_icons(ctx, s, MOUNT_ICON)), None), should_stop, 3.0)
         if not mount:
             ctx.log("⚠ Icône de la monture introuvable après avoir agrandi le menu.")
+            _snapshot(ctx, "icone_monture")
             return "fail"
 
     def finish(result: str) -> str:
@@ -155,9 +187,17 @@ def unload_to_mount(ctx: Context, should_stop) -> str:
     # 2) fenêtre de la monture, puis son inventaire (bouton « sac »)
     ctx.log("J'ouvre la monture.")
     _click(ctx, origin, mount.center)
-    bag, origin = _wait(ctx, lambda s: next(iter(find_icons(ctx, s, MOUNT_BAG)), None), should_stop, 4.0)
+    bag, origin = _wait(ctx, lambda s: _find_bag(ctx, s), should_stop, 6.0)
+    if not bag and not should_stop():
+        ctx.log("Bouton « inventaire de la monture » introuvable : je reclique sur la monture.")
+        scene, org = ctx.capture.grab()
+        again = next(iter(find_icons(ctx, scene, MOUNT_ICON)), None)
+        if again:                                              # le premier clic n'a peut-être pas ouvert la fenêtre
+            _click(ctx, org, again.center)
+        bag, origin = _wait(ctx, lambda s: _find_bag(ctx, s), should_stop, 5.0)
     if not bag:
         ctx.log("⚠ Bouton « inventaire de la monture » introuvable.")
+        _snapshot(ctx, "bouton_sac")                           # avant de fermer les fenêtres : montre ce qui est affiché
         return finish("fail")
     _click(ctx, origin, bag.center)
 
@@ -169,6 +209,7 @@ def unload_to_mount(ctx: Context, should_stop) -> str:
     titles, origin = _wait(ctx, both_titles, should_stop, 4.0)
     if not titles:
         ctx.log("⚠ Les fenêtres Monture et Inventaire ne se sont pas ouvertes.")
+        _snapshot(ctx, "fenetres")
         return finish("fail")
     (inv_title, _), (mon_title, _) = titles
     chosen = None
@@ -180,6 +221,7 @@ def unload_to_mount(ctx: Context, should_stop) -> str:
             break
     if not chosen:
         ctx.log("⚠ Le menu de transfert n'est pas apparu.")
+        _snapshot(ctx, "menu_transfert")
         return finish("fail")
     label = "tous les objets" if cfg.unload_mode == "tous" else "des objets visibles"
     ctx.log(f"Transfert {'de ' if cfg.unload_mode == 'tous' else ''}{label}.")

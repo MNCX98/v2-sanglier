@@ -312,6 +312,25 @@ def main():
     print(f"[{'OK' if ok else 'ÉCHEC'}] monstres à moitié cachés : {found_n}/{total_n} retrouvés, aucune fausse alerte sans monstre : {quiet}")
     failures += not ok
 
+    # 3r) cases vertes de déplacement : la case visée doit être accessible (verte), proche du personnage et plus proche du monstre
+    import types as _types
+    from core.grid import grid_distance
+    from phases.p4_tour import plan_move_green
+    gctx = _types.SimpleNamespace(failed_moves=[])
+    green_ok, green_info = [], []
+    for name in ("09_mon_tour.png", "18_nouvelle_carte_debut_tour.png"):
+        img = load(name); en_g, me_g = find_enemies(img), find_me(img)
+        if not en_g or me_g is None:
+            continue
+        tgt, cells = plan_move_green(gctx, img, en_g, me_g.center)
+        ok = bool(cells) and grid_distance(cells[0], tgt.center) < grid_distance(me_g.center, tgt.center) + 0.5 \
+            and grid_distance(cells[0], me_g.center) <= 6
+        green_ok.append(ok)
+        green_info.append(f"{len(cells)} cases")
+    ok = bool(green_ok) and all(green_ok)
+    print(f"[{'OK' if ok else 'ÉCHEC'}] déplacement sur les cases vertes accessibles : {', '.join(green_info)} ; case visée accessible et plus proche du monstre")
+    failures += not ok
+
     # 4) vitesse
     t0 = time.time()
     for _ in range(5):

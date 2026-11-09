@@ -33,6 +33,32 @@ def _game_roi_wide(h: int, w: int) -> np.ndarray:
     return roi
 
 
+def movement_mask(scene: np.ndarray) -> np.ndarray:
+    """Cases de déplacement : le jeu colore en vert franc (teinte ~50) les cases où mon personnage peut aller ;
+    le sol est olive (teinte ~35) et l'herbe des blocs jaune-vert (teinte ~31)."""
+    h, w = scene.shape[:2]
+    hh, ss, vv = _hsv(scene)
+    return ((hh >= 44) & (hh <= 58) & (ss > 110) & (vv > 100) & (_game_roi(h, w) | _game_roi_wide(h, w))).astype(np.uint8)
+
+
+def reachable_cells(scene: np.ndarray, ref: tuple[int, int]) -> list[tuple[int, int]]:
+    """Centres (écran) des cases où mon personnage peut aller, alignés sur la grille dont `ref` est un centre de case
+    (typiquement un monstre). Liste vide si aucune case verte n'est visible (plus de PM, ou couleur non reconnue)."""
+    from core.grid import to_screen
+    m = movement_mask(scene)
+    if int(m.sum()) < 600:
+        return []
+    h, w = m.shape
+    frac = cv2.blur(m.astype(np.float32), (9, 5))
+    cells = []
+    for u in range(-45, 46):
+        for v in range(-45, 46):
+            x, y = to_screen((u, v), ref)
+            if 6 <= x < w - 6 and 4 <= y < h - 4 and frac[y, x] >= 0.7:
+                cells.append((x, y))
+    return cells
+
+
 def _game_roi(h: int, w: int) -> np.ndarray:
     roi = np.zeros((h, w), bool)
     roi[int(0.05 * h):int(0.955 * h), int(0.17 * w):int(0.83 * w)] = True

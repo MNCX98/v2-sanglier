@@ -7,7 +7,7 @@ import cv2
 import numpy as np
 
 from core import input as inp
-from core.combat import (find_enemies, find_me, range_fraction, range_mask, range_visible,
+from core.combat import (find_enemies, find_me, range_fraction, range_mask, range_visible, reachable_cells,
                          sort_by_distance, spell_border_pixels, spell_selected)
 from core.combat import _game_roi
 from core.grid import grid_distance, move_candidates, to_grid, to_screen
@@ -174,6 +174,25 @@ def plan_move(ctx: Context, scene, enemies, me_pos: tuple[int, int]):
     return target, cands
 
 
+def plan_move_green(ctx: Context, scene, enemies, me_pos: tuple[int, int]):
+    """Monstre visé et cases où le jeu me laisse aller (cases vertes), les plus proches du monstre d'abord.
+    Retourne (monstre, cases) ; cases est vide si aucune case verte fiable n'est visible (plus de PM, ou couleur
+    non reconnue) : l'appelant se rabat alors sur le calcul géométrique."""
+    target = sort_by_distance(enemies, me_pos)[0]
+    cells = reachable_cells(scene, target.center)
+    if len(cells) >= 2:                                        # ignore les taches vertes isolées : on garde la zone principale
+        mid = sorted(cells)[len(cells) // 2]
+        cells = [c for c in cells if grid_distance(c, mid) <= 8]
+    if len(cells) < 2:
+        return target, []
+    busy = [e.center for e in enemies]
+    cells = [c for c in cells
+             if not any(grid_distance(c, b) < 0.5 for b in busy)
+             and not any(grid_distance(c, f) < 0.5 for f in ctx.failed_moves)]
+    cells.sort(key=lambda c: (round(grid_distance(c, target.center), 1), grid_distance(c, me_pos)))
+    return target, cells
+
+
 RANGE_MIN_PIXELS = 1500          # zone de portée assez grande pour être fiable
 HINT_MISMATCH = 2.5              # écart (en cases) entre la dernière position connue et le centre de la portée
 HINT_MISMATCH_UNVERIFIED = 2.2   # même chose quand la dernière position n'est qu'une supposition
@@ -242,8 +261,14 @@ def move_closer(ctx: Context, enemies, me_pos: tuple[int, int], should_stop) -> 
     if not _deselect_spell(ctx):
         return False
     scene, (ox, oy) = ctx.capture.grab()
-    target, cands = plan_move(ctx, scene, enemies, me_pos)
-    dist = grid_distance(target.center, me_pos)
+    target, green = plan_move_green(ctx, scene, enemies, me_pos)
+    if green:                                                  # le jeu indique lui-même les cases accessibles
+        cands = [(round(grid_distance(c, me_pos)), c) for c in green]
+        dist = grid_distance(target.center, me_pos)
+        ctx.log(f"{len(green)} case(s) accessible(s) (vertes) : je vise la plus proche du monstre.")
+    else:
+        target, cands = plan_move(ctx, scene, enemies, me_pos)
+        dist = grid_distance(target.center, me_pos)
     if not cands:
         if ctx.failed_moves:
             ctx.log(f"Toutes les cases possibles ont déjà été essayées sans succès ({len(ctx.failed_moves)}).")
