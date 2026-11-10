@@ -1,6 +1,6 @@
-# DofusAuto 0.8.10
+# DofusAuto 0.8.11
 
-Projet Python Windows pour BlueStacks. Le détail des corrections 0.8.10 et des points restant à valider est dans [`CHANGELOG_CORRECTIONS.md`](CHANGELOG_CORRECTIONS.md).
+Projet Python Windows pour BlueStacks. Le détail des corrections 0.8.11 et des points restant à valider est dans [`CHANGELOG_CORRECTIONS.md`](CHANGELOG_CORRECTIONS.md).
 
 ## Pré-requis
 

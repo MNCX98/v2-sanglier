@@ -1,3 +1,11 @@
+VERSION 0.8.11 : amélioration de la détection locale de portée des sorts
+
+CORRECTIONS 0.8.11
+- La détection de portée vérifie désormais la couleur violette autour de chaque anneau ennemi.
+- Une petite zone violette clairement visible autour d’un ennemi peut confirmer qu’il est à portée, même si le masque global contient moins de 800 pixels.
+- Si la portée reste indéterminée, le programme ne clique plus les ennemis à l’aveugle : il tente le rapprochement si possible, puis passe le tour si la détection reste insuffisante.
+- Les seuils de couleur HSV et le seuil local de 5 % sont conservés ; ils ne sont pas recalibrés sans nouvelles captures réelles.
+
 VERSION 0.8.10 : calibration du repère vert de la détection de position et des déplacements
 
 CORRECTIONS 0.8.10

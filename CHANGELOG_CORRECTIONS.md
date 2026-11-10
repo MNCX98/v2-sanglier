@@ -179,3 +179,33 @@ Si le menu inférieur a été déplié par le programme mais que l'icône Montur
 `core/vision.py`, fonction `_peaks()` : le tri complet de tous les pixels au-dessus du seuil pouvait devenir coûteux sur des images bruitées. Le code sélectionne désormais les 2000 meilleurs candidats avec `numpy.argpartition`, puis trie uniquement ce sous-ensemble. Les seuils, scores et critères de séparation des détections restent inchangés.
 
 Cette optimisation n'a pas suffi à faire terminer `tests/test_vision.py` dans l'environnement de vérification : l'exécution s'arrête toujours après le contrôle de la nouvelle carte, au début du bloc 3j consacré aux modèles de monstres. Aucun résultat de réussite globale n'est revendiqué.
+
+
+# Complément 0.8.11 — détection locale de la portée
+
+## Problème observé dans les journaux 0.8.10
+
+Lorsque le masque violet contenait moins de 800 pixels, `play_turn` considérait la portée comme illisible puis mettait **tous les ennemis** dans la liste des cibles à cliquer. Cela pouvait produire des clics sur des monstres hors portée. À l'inverse, une petite zone violette réellement visible autour d'un ennemi pouvait être ignorée par le seuil global, même si les pixels locaux permettaient de confirmer la portée.
+
+## Modification
+
+- `core/combat.py` : ajout de `assess_targets_in_range`. La fonction calcule la fraction violette autour de chaque anneau ennemi, indépendamment du nombre total de pixels violets à l'écran.
+- Une cible est considérée à portée si sa fraction locale atteint le seuil configuré (`range_min_fraction`, 5 % par défaut).
+- La portée est considérée comme connue si le masque global contient au moins 800 pixels **ou** si au moins une cible est confirmée localement.
+- Si le masque est faible et qu'aucune cible n'est confirmée localement, la portée reste inconnue. Le programme ne tente alors aucun clic sur un ennemi ; il conserve la logique existante de rapprochement si possible.
+- `phases/p4_tour.py` : suppression du comportement dangereux consistant à essayer les ennemis un par un quand la portée est illisible.
+- Les seuils HSV de détection violette et le seuil local de 5 % ne sont pas modifiés : les captures disponibles ne justifient pas un recalibrage supplémentaire.
+
+## Tests effectués
+
+- `pytest tests/test_movement.py tests/test_range_detection.py` : 10 tests réussis, avec 3 sous-tests de fixtures inclus dans ce total.
+- `tests/test_range_detection.py` vérifie : petite zone violette locale sous 800 pixels, absence de confirmation lorsque les pixels violets sont éloignés de la cible, et conservation des résultats sur les captures `10_sort_choisi.png`, `09c_creature_sort_choisi.png` et `19_nouvelle_carte_sort_choisi.png`.
+- `python tests/test_vision.py` : exécution interrompue par expiration du délai ; suite complète non validée.
+- Aucune validation en combat réel n'a été effectuée dans BlueStacks.
+
+## Fichiers modifiés
+
+- `core/combat.py`
+- `phases/p4_tour.py`
+- `tests/test_range_detection.py` (nouveau)
+- `gui/app.py`, `README.md`, `LISEZMOI.txt` (version 0.8.11)
