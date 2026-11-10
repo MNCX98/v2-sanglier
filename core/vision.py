@@ -117,7 +117,15 @@ def _peaks(res: np.ndarray, thr: float, min_dist: int, limit: int = 30) -> list[
     if len(xs) == 0:
         return []
     scores = res[ys, xs]
-    order = np.argsort(-scores)[:2000]
+    # Un décor bruité peut produire énormément de pixels au-dessus du seuil grossier.
+    # Trier l'ensemble complet (parfois plusieurs centaines de milliers de points) était
+    # inutile et pouvait bloquer les tests/la reconnaissance. On ne garde que les 2000
+    # meilleurs avec argpartition, puis on trie ce petit sous-ensemble.
+    if len(scores) > 2000:
+        top = np.argpartition(scores, -2000)[-2000:]
+    else:
+        top = np.arange(len(scores))
+    order = top[np.argsort(-scores[top])]
     peaks: list[tuple[int, int, float]] = []
     for i in order:
         x, y = int(xs[i]), int(ys[i])

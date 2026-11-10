@@ -31,7 +31,6 @@ BADGE_MIN = 0.92
 ICON_MIN = 0.90
 TEXT_MIN = 0.85
 INV_ARROW_FROM_TITLE = (-171, 72)    # flèche ◀ de la fenêtre Inventaire, par rapport au centre de son titre
-MOUNT_ARROW_FROM_TITLE = (224, 72)   # flèche ▶ de la fenêtre Monture (essai de secours)
 
 _texts: dict[str, np.ndarray | None] = {}
 
@@ -159,6 +158,17 @@ def unload_to_mount(ctx: Context, should_stop) -> str:
     # 1) icône de la monture (menu du bas agrandi)
     mount, origin = _wait(ctx, lambda s: next(iter(find_icons(ctx, s, MOUNT_ICON)), None), should_stop, 0.6)
     expanded_by_us = False
+
+    def finish(result: str) -> str:
+        close_windows(ctx, should_stop)
+        if expanded_by_us:
+            scene, org = ctx.capture.grab()
+            tri = _bottom_triangle(ctx, scene)
+            if tri:
+                _click(ctx, org, tri.center)               # on remet le menu comme on l'a trouvé
+                _sleep(0.6, should_stop)
+        return result
+
     if not mount:
         scene, origin = ctx.capture.grab()
         tri = _bottom_triangle(ctx, scene)
@@ -172,36 +182,25 @@ def unload_to_mount(ctx: Context, should_stop) -> str:
         if not mount:
             ctx.log("⚠ Icône de la monture introuvable après avoir agrandi le menu.")
             _snapshot(ctx, "icone_monture")
-            return "fail"
+            return finish("fail")
 
-    def finish(result: str) -> str:
-        close_windows(ctx, should_stop)
-        if expanded_by_us:
-            scene, org = ctx.capture.grab()
-            tri = _bottom_triangle(ctx, scene)
-            if tri:
-                _click(ctx, org, tri.center)               # on remet le menu comme on l'a trouvé
-                _sleep(0.6, should_stop)
-        return result
-
-    # 2) fenêtre de la monture, puis son inventaire (bouton « sac »)
-    ctx.log("J'ouvre la monture.")
+    # 2) Ouvrir la fenêtre de l'emplacement de la monture, puis son inventaire.
+    # Le clic sur l'icône MOUNT_ICON n'ouvre PAS directement l'inventaire : il ouvre
+    # d'abord la fenêtre de la monture. Il faut ensuite cliquer sur son bouton-sac.
+    ctx.log("J'ouvre la fenêtre de l'emplacement de la monture.")
     _click(ctx, origin, mount.center)
+
+    ctx.log("Je cherche le bouton-sac dans la fenêtre de la monture.")
     bag, origin = _wait(ctx, lambda s: _find_bag(ctx, s), should_stop, 6.0)
-    if not bag and not should_stop():
-        ctx.log("Bouton « inventaire de la monture » introuvable : je reclique sur la monture.")
-        scene, org = ctx.capture.grab()
-        again = next(iter(find_icons(ctx, scene, MOUNT_ICON)), None)
-        if again:                                              # le premier clic n'a peut-être pas ouvert la fenêtre
-            _click(ctx, org, again.center)
-        bag, origin = _wait(ctx, lambda s: _find_bag(ctx, s), should_stop, 5.0)
     if not bag:
-        ctx.log("⚠ Bouton « inventaire de la monture » introuvable.")
-        _snapshot(ctx, "bouton_sac")                           # avant de fermer les fenêtres : montre ce qui est affiché
+        ctx.log("⚠ Fenêtre de l'emplacement de la monture ouverte, mais bouton-sac introuvable.")
+        _snapshot(ctx, "bouton_sac")
         return finish("fail")
+
+    ctx.log("Bouton-sac détecté : j'ouvre l'inventaire de la monture.")
     _click(ctx, origin, bag.center)
 
-    # 3) fenêtres Monture + Inventaire ouvertes : flèche verte, puis le choix de transfert
+    # 3) Attendre que les fenêtres Monture + Inventaire soient toutes les deux ouvertes.
     def both_titles(scene):
         inv, mon = find_text(scene, "inv_titre_inventaire"), find_text(scene, "inv_titre_monture")
         return (inv, mon) if inv and mon else None
@@ -211,14 +210,13 @@ def unload_to_mount(ctx: Context, should_stop) -> str:
         ctx.log("⚠ Les fenêtres Monture et Inventaire ne se sont pas ouvertes.")
         _snapshot(ctx, "fenetres")
         return finish("fail")
-    (inv_title, _), (mon_title, _) = titles
-    chosen = None
-    for label, title, off in (("Inventaire", inv_title, INV_ARROW_FROM_TITLE), ("Monture", mon_title, MOUNT_ARROW_FROM_TITLE)):
-        ctx.log(f"Clic sur la flèche verte de la fenêtre {label}.")
-        _click(ctx, origin, (title[0] + off[0], title[1] + off[1]))
-        chosen, origin = _wait(ctx, lambda s: find_text(s, option), should_stop, 2.5)
-        if chosen:
-            break
+    (inv_title, _), _ = titles
+    # Pour transférer DE L'INVENTAIRE VERS LA MONTURE, cliquer uniquement
+    # sur la flèche ◀ située dans la fenêtre Inventaire (à droite de l'écran).
+    # Ne jamais essayer la flèche ▶ de la fenêtre Monture : elle inverse le sens.
+    ctx.log("Clic sur la flèche ◀ de la fenêtre Inventaire (transfert vers la monture).")
+    _click(ctx, origin, (inv_title[0] + INV_ARROW_FROM_TITLE[0], inv_title[1] + INV_ARROW_FROM_TITLE[1]))
+    chosen, origin = _wait(ctx, lambda s: find_text(s, option), should_stop, 2.5)
     if not chosen:
         ctx.log("⚠ Le menu de transfert n'est pas apparu.")
         _snapshot(ctx, "menu_transfert")

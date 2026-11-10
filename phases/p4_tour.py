@@ -89,6 +89,8 @@ def _select_spell(ctx: Context, force: bool = False) -> bool:
         return True                                   # supposé sélectionné : recliquer sur l'icône le désélectionnerait
     scene, (ox, oy) = ctx.capture.grab()
     icon = _find(ctx, scene, "sort_attaque")
+    if icon:
+        ctx.attack_icon_hint = (icon.x, icon.y, icon.w, icon.h)
     if not force and _is_selected(scene, icon):
         return True                                   # déjà sélectionné
     if not icon:
@@ -114,6 +116,8 @@ def _deselect_spell(ctx: Context) -> bool:
     """Le jeu refuse de déplacer le personnage tant que le sort est sélectionné : on reclique dessus."""
     scene, (ox, oy) = ctx.capture.grab()
     icon = _find(ctx, scene, "sort_attaque")
+    if icon:
+        ctx.attack_icon_hint = (icon.x, icon.y, icon.w, icon.h)
     if ctx.select_unverified:                          # sélection supposée mais jamais vue : un clic la défait
         ctx.select_unverified = False
         if icon:
@@ -122,10 +126,17 @@ def _deselect_spell(ctx: Context) -> bool:
         return True
     if not _is_selected(scene, icon):
         return True
-    if not icon:
-        ctx.log("⚠ Icône du sort introuvable : impossible de désélectionner le sort.")
+    if not icon and ctx.attack_icon_hint:
+        # L'icône peut être masquée brièvement par une animation alors que la zone de portée
+        # prouve encore que le sort est sélectionné. La barre de sorts reste à position fixe.
+        x, y, w, h = ctx.attack_icon_hint
+        ctx.log("Icône de Coagulation non reconnue : j'utilise sa dernière position connue pour la désélection.")
+        inp.click(ox + x + w // 2, oy + y + h // 2)
+    elif not icon:
+        ctx.log("⚠ Icône du sort introuvable et aucune position précédente connue : désélection impossible.")
         return False
-    inp.click(ox + icon.center[0], oy + icon.center[1])
+    else:
+        inp.click(ox + icon.center[0], oy + icon.center[1])
     t0 = time.time()
     while time.time() - t0 < 1.8:
         time.sleep(0.3)
@@ -155,7 +166,8 @@ def _release_spells(ctx: Context) -> None:
         time.sleep(0.5)
     scene, _ = ctx.capture.grab()
     icon = _find(ctx, scene, "sort_attaque")
-    if icon and spell_selected(scene, icon.x, icon.y, icon.w, icon.h):   # cadre orange vu = sort vraiment sélectionné
+    selected = (spell_selected(scene, icon.x, icon.y, icon.w, icon.h) if icon else range_visible(scene))
+    if selected or ctx.select_unverified:
         ctx.log("Je désélectionne Coagulation avant de finir le tour.")
         _deselect_spell(ctx)
 
@@ -199,10 +211,14 @@ HINT_MISMATCH_UNVERIFIED = 2.2   # même chose quand la dernière position n'est
 
 
 def _range_center(mask, enemies) -> tuple[int, int] | None:
-    """Position approximative de mon personnage : centre de la zone violette du sort (qui l'entoure),
-    recalé sur le centre d'une case (les adversaires servent de repère de grille)."""
+    """Position approximative depuis le centre de la zone violette de Coagulation.
+
+    On conserve le centroïde des pixels : les captures de test en mode normal et créature
+    montrent qu'il est plus proche de l'anneau réel que la médiane des coordonnées de grille.
+    Le résultat est ensuite recalé sur le centre d'une case.
+    """
     ys, xs = np.where(mask > 0)
-    if len(xs) == 0 or not enemies:
+    if len(xs) < RANGE_MIN_PIXELS or not enemies:
         return None
     c = (int(xs.mean()), int(ys.mean()))
     ref = enemies[0].center
@@ -235,33 +251,116 @@ def my_position(ctx: Context, scene, me, mask, enemies):
     return pos
 
 
-def _wait_moved(ctx: Context, start: tuple[int, int], timeout: float = 4.0):
-    """Attend la fin du déplacement. Retourne ('moved', position), ('same', None) si le personnage est
-    toujours sur sa case, ou ('unknown', None) si l'anneau rouge n'est jamais visible."""
-    t0, last, seen_same = time.time(), None, False
+def _green_zone_center(scene, enemies) -> tuple[int, int] | None:
+    """Estime le centre de la zone de déplacement verte, donc la case du personnage.
+
+    Les cases accessibles forment normalement un losange centré sur le personnage. On
+    travaille en coordonnées de grille et utilise la médiane pour limiter l'effet des
+    obstacles qui coupent une partie du losange. Ce repère reste un indice secondaire :
+    il n'est accepté qu'avec assez de cases et une distribution dans les quatre directions.
+    """
+    if not enemies:
+        return None
+    ref = enemies[0].center
+    cells = reachable_cells(scene, ref)
+    if len(cells) < 7:
+        return None
+    uv = np.asarray([to_grid(c, ref) for c in cells], dtype=np.float32)
+    med = np.median(uv, axis=0)
+    # Il faut des cases de part et d'autre du centre sur les deux axes de la grille.
+    if any(int(np.count_nonzero(uv[:, axis] < med[axis])) < 2 or
+           int(np.count_nonzero(uv[:, axis] > med[axis])) < 2 for axis in (0, 1)):
+        return None
+    center_uv = (int(round(float(med[0]))), int(round(float(med[1]))))
+    return to_screen(center_uv, ref)
+
+
+def _wait_moved(ctx: Context, start: tuple[int, int], expected: tuple[int, int] | None = None,
+                enemies=None, before_green: tuple[int, int] | None = None, timeout: float = 5.0):
+    """Confirme un déplacement sans se limiter à une seule lecture de l'anneau rouge.
+
+    Priorité : anneau rouge entier/partiel stable sur deux captures. Secours : centre de la
+    zone verte stable sur deux captures, uniquement si le centre vert avant le clic était
+    cohérent avec la position de départ et si la nouvelle zone correspond à la case visée.
+    Une absence de preuve renvoie 'unknown' : il ne faut surtout pas cliquer une autre case,
+    car le premier déplacement a pu réussir malgré un anneau momentanément masqué.
+    """
+    t0 = time.time()
+    last_red = last_green = None
+    red_count = green_count = same_count = 0
     while time.time() - t0 < timeout:
-        time.sleep(0.4)
+        time.sleep(0.35)
         s, _ = ctx.capture.grab()
-        me = find_me(s)
-        if not me:
-            continue
-        if grid_distance(me.center, start) < 0.75:
-            seen_same, last = True, None
-            continue
-        if last and grid_distance(me.center, last) < 0.5:
-            return "moved", me.center
-        last = me.center
-    if last:
-        return "moved", last
-    return ("same", None) if seen_same else ("unknown", None)
+        me = find_me(s, expected or last_red or start)
+        if me:
+            if grid_distance(me.center, start) < 0.75:
+                same_count += 1
+                last_red, red_count = None, 0
+            else:
+                same_count = 0
+                if last_red and grid_distance(me.center, last_red) < 0.5:
+                    red_count += 1
+                else:
+                    last_red, red_count = me.center, 1
+                if red_count >= 2:
+                    return "moved", me.center
+        else:
+            red_count = 0
+            same_count = 0
+
+        # Les cases vertes sont une confirmation indépendante, pas une destination à cliquer.
+        green_center = _green_zone_center(s, enemies) if before_green is not None else None
+        if green_center is not None and enemies:
+            # Le centroïde des cases accessibles n'est pas exactement la position du joueur :
+            # les obstacles peuvent décaler la médiane d'une case. On mesure ce décalage
+            # AVANT le clic, quand la position de départ est connue, puis on le soustrait
+            # aux observations après déplacement. Sans cette calibration, on pouvait
+            # prendre le centre de la zone verte pour la position réelle du personnage.
+            grid_ref = enemies[0].center
+            before_offset = np.asarray(to_grid(before_green, grid_ref), dtype=np.float32) - \
+                            np.asarray(to_grid(start, grid_ref), dtype=np.float32)
+            corrected_grid = np.asarray(to_grid(green_center, grid_ref), dtype=np.float32) - before_offset
+            corrected = to_screen((int(round(corrected_grid[0])), int(round(corrected_grid[1]))), grid_ref)
+            green_is_new = grid_distance(corrected, start) >= 0.75
+            green_matches_target = expected is None or grid_distance(corrected, expected) <= 1.0
+            if green_is_new and green_matches_target:
+                if last_green and grid_distance(corrected, last_green) < 0.5:
+                    green_count += 1
+                else:
+                    last_green, green_count = corrected, 1
+                if green_count >= 2 and same_count < 2:
+                    return "moved_green", corrected
+            else:
+                last_green, green_count = None, 0
+
+    if last_red or last_green:
+        return "unknown", None
+    return ("same", None) if same_count >= 2 else ("unknown", None)
+
+
+GREEN_WAIT_S = 2.0              # attente maximale des cases vertes avant le calcul géométrique
 
 
 def move_closer(ctx: Context, enemies, me_pos: tuple[int, int], should_stop) -> bool:
     """Se rapproche du monstre le plus proche (double clic sur une case), au plus max_move_cells cases."""
+    ctx.move_uncertain = False
     if not _deselect_spell(ctx):
         return False
-    scene, (ox, oy) = ctx.capture.grab()
-    target, green = plan_move_green(ctx, scene, enemies, me_pos)
+    # Les cases vertes d'accessibilité apparaissent un instant après la désélection du sort : on les attend un peu
+    # avant de se rabattre sur le calcul géométrique (qui ignore les obstacles).
+    deadline = time.time() + GREEN_WAIT_S
+    while True:
+        scene, (ox, oy) = ctx.capture.grab()
+        target, green = plan_move_green(ctx, scene, enemies, me_pos)
+        if green or time.time() >= deadline or should_stop():
+            break
+        time.sleep(0.4)
+    if not green:
+        ctx.log("Aucune case verte d'accessibilité visible : je me rabats sur le calcul géométrique.")
+    before_green = _green_zone_center(scene, enemies) if green else None
+    if before_green and grid_distance(before_green, me_pos) > 1.5:
+        ctx.log("Le centre des cases vertes ne correspond pas assez à ma position connue : je ne l'utiliserai pas pour confirmer le déplacement.")
+        before_green = None
     if green:                                                  # le jeu indique lui-même les cases accessibles
         cands = [(round(grid_distance(c, me_pos)), c) for c in green]
         dist = grid_distance(target.center, me_pos)
@@ -285,17 +384,22 @@ def move_closer(ctx: Context, enemies, me_pos: tuple[int, int], should_stop) -> 
             inp.click(ox + x, oy + y)
             if i == 0:
                 time.sleep(ctx.config.click_interval_ms / 1000)
-        status, pos = _wait_moved(ctx, me_pos)
-        if status == "moved":
-            ctx.me_hint, ctx.hint_unverified = pos, False
-            ctx.log(f"✔ Personnage déplacé en {pos}.")
+        expected = (x, y) if green else None
+        status, pos = _wait_moved(ctx, me_pos, expected=expected, enemies=enemies,
+                                  before_green=before_green)
+        if status in ("moved", "moved_green"):
+            ctx.me_hint, ctx.hint_unverified = pos, status == "moved_green"
+            if status == "moved_green":
+                ctx.log(f"✔ Déplacement confirmé par les cases vertes en {pos} (anneau rouge masqué ou non reconnu).")
+            else:
+                ctx.log(f"✔ Personnage déplacé en {pos} (anneau rouge confirmé).")
             return True
         if status == "unknown":
-            ctx.me_hint, ctx.hint_unverified = (x, y), True   # on suppose le déplacement fait, sans le refaire
-            ctx.log("Déplacement non vérifiable (anneau rouge non vu) : je considère qu'il est fait.")
-            return True
-        ctx.failed_moves.append((x, y))                # on ne retentera pas cette case pendant ce tour
-        ctx.log("Le personnage n'a pas bougé (case inaccessible ?), j'essaie une autre case.")
+            ctx.move_uncertain = True
+            ctx.log("⚠ Déplacement incertain : aucune méthode n'a confirmé la nouvelle position. Je n'essaie pas une autre case pour éviter un second déplacement involontaire.")
+            return False
+        ctx.failed_moves.append((x, y))                # position de départ confirmée : cette case a réellement échoué
+        ctx.log("Le personnage est toujours à sa position de départ (case inaccessible ?) : j'essaie une autre case.")
     ctx.log("⚠ Déplacement impossible : je finis le tour.")
     return False
 
@@ -309,6 +413,7 @@ def play_turn(ctx: Context, should_stop, turn: int = 0) -> int:
     ctx.log("Mon tour.")
     ctx.select_unverified = False
     ctx.failed_moves = []                              # cases de déplacement ratées : repart de zéro à chaque tour
+    ctx.move_uncertain = False
     time.sleep(cfg.turn_start_delay_s)
     opening_done = False
     if turn == 1 and cfg.opening_spell and not should_stop():       # sort d'ouverture : premier tour uniquement
@@ -365,6 +470,9 @@ def play_turn(ctx: Context, should_stop, turn: int = 0) -> int:
                     moved = True
                     if _reselect_after_move(ctx):
                         continue                       # on retente le sort depuis la nouvelle position
+                elif ctx.move_uncertain:
+                    ctx.log("Je suspends les déplacements pour ce tour : ma position actuelle n'est pas suffisamment certaine.")
+                    break
                 elif not should_stop():
                     move_failures += 1
                     if move_failures < MAX_MOVE_ATTEMPTS:
@@ -372,6 +480,7 @@ def play_turn(ctx: Context, should_stop, turn: int = 0) -> int:
                         time.sleep(0.8)
                         continue                       # nouvelle observation, nouvelle estimation de ma position
                     ctx.log("⚠ Déplacement impossible après plusieurs essais : je passe le tour.")
+                    _snapshot_move(ctx)
             else:
                 ctx.log("Aucun adversaire à portée : je passe le tour.")
             break
@@ -406,6 +515,9 @@ def play_turn(ctx: Context, should_stop, turn: int = 0) -> int:
                     moved = True
                     if _reselect_after_move(ctx):
                         continue                       # on retente le sort depuis la nouvelle position
+                elif ctx.move_uncertain:
+                    ctx.log("Je suspends les déplacements pour ce tour : ma position actuelle n'est pas suffisamment certaine.")
+                    break
                 elif not should_stop():
                     move_failures += 1
                     if move_failures < MAX_MOVE_ATTEMPTS:
@@ -413,6 +525,7 @@ def play_turn(ctx: Context, should_stop, turn: int = 0) -> int:
                         time.sleep(0.8)
                         continue
                     ctx.log("⚠ Déplacement impossible après plusieurs essais : je passe le tour.")
+                    _snapshot_move(ctx)
             break
     if (cfg.second_spell and not opening_done and casts >= cfg.casts_per_turn and not should_stop()
             and not _find(ctx, ctx.capture.grab()[0], "resultat_titre")):
@@ -542,8 +655,22 @@ def end_turn(ctx: Context) -> bool:
         ctx.log("Le combat est terminé.")
         return False
     if not fin or not r.turn_active:
-        ctx.log("⚠ Bouton « Fin du tour » vert introuvable.")
-        return False
+        # Le dernier adversaire peut mourir pendant l'animation : la fenêtre de résultat
+        # n'est pas toujours détectable sur la toute première capture.
+        deadline = time.time() + 1.8
+        while time.time() < deadline:
+            time.sleep(0.3)
+            s, (ox, oy) = ctx.capture.grab()
+            rr = read_ui(s, ctx.ui_templates, ctx.config.ui_threshold)
+            if "resultat_titre" in rr.found:
+                ctx.log("Le combat est terminé (fenêtre de résultat apparue pendant la vérification).")
+                return False
+            if rr.turn_active:
+                fin = rr.found.get("fin_du_tour")
+                break
+        if not fin or not rr.turn_active:
+            ctx.log("⚠ Bouton « Fin du tour » vert introuvable : état de l'interface à vérifier.")
+            return False
     inp.click(ox + fin.center[0], oy + fin.center[1])
     t0 = time.time()
     while time.time() - t0 < 6:
@@ -559,10 +686,25 @@ def end_turn(ctx: Context) -> bool:
 STALL_TURNS = 4                  # tours de suite sans aucune action réussie avant de remettre la position à zéro
 
 
+def _snapshot_move(ctx: Context) -> None:
+    """Une capture par combat quand le déplacement est impossible : elle montre les cases vertes (ou leur absence)."""
+    if ctx.move_snapshot_done:
+        return
+    ctx.move_snapshot_done = True
+    try:
+        scene, _ = ctx.capture.grab()
+        path = logs_dir() / f"deplacement_impossible_{datetime.now():%Y%m%d_%H%M%S}.png"
+        save_image(path, scene)
+        ctx.log(f"Capture de l'écran enregistrée : {path}")
+    except Exception:
+        pass
+
+
 def run_turns(ctx: Context, should_stop) -> str:
     """Boucle des tours. Retourne 'over' (combat terminé), 'timeout' ou 'stopped'."""
     ctx.log("Phases 4-5 : je joue les tours (F12 pour arrêter).")
     n = idle = 0
+    ctx.move_snapshot_done = False
     while not should_stop():
         status = wait_my_turn(ctx, should_stop)
         if status == "over":
