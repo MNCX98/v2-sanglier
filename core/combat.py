@@ -274,5 +274,24 @@ def range_fraction(mask: np.ndarray, center: tuple[int, int], half=(34, 15)) -> 
     return float(patch.mean()) if patch.size else 0.0
 
 
+def assess_targets_in_range(mask: np.ndarray, enemies: list[Fighter], min_fraction: float = 0.05,
+                           min_total_pixels: int = 800) -> tuple[list[Fighter], bool, list[float]]:
+    """Évalue la portée localement autour de chaque anneau ennemi.
+
+    Le nombre total de pixels violets ne doit pas être le seul critère : une petite zone de portée,
+    partiellement masquée par le décor ou l'interface, peut contenir moins de 800 pixels tout en
+    recouvrant clairement la case d'un adversaire.
+
+    Retourne les cibles reconnues à portée, un indicateur de fiabilité globale et les fractions
+    locales (dans le même ordre que `enemies`). Si la zone violette est trop faible et ne recouvre
+    aucune cible, la portée reste inconnue : l'appelant ne doit alors pas tenter de clic à l'aveugle.
+    """
+    total = int(mask.sum())
+    fractions = [range_fraction(mask, enemy.center) for enemy in enemies]
+    in_range = [enemy for enemy, fraction in zip(enemies, fractions) if fraction >= min_fraction]
+    known = total >= min_total_pixels or bool(in_range)
+    return in_range, known, fractions
+
+
 def sort_by_distance(fighters: list[Fighter], origin: tuple[int, int]) -> list[Fighter]:
     return sorted(fighters, key=lambda f: grid_distance(f.center, origin))

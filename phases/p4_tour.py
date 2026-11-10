@@ -7,7 +7,7 @@ import cv2
 import numpy as np
 
 from core import input as inp
-from core.combat import (find_enemies, find_me, range_fraction, range_mask, range_visible, reachable_cells,
+from core.combat import (assess_targets_in_range, find_enemies, find_me, range_fraction, range_mask, range_visible, reachable_cells,
                          sort_by_distance, spell_border_pixels, spell_selected)
 from core.combat import _game_roi
 from core.grid import grid_distance, move_candidates, to_grid, to_screen
@@ -452,15 +452,17 @@ def play_turn(ctx: Context, should_stop, turn: int = 0) -> int:
         else:
             ys, xs = np.where(mask > 0)
             origin = (int(xs.mean()), int(ys.mean())) if len(xs) else enemies[0].center
-        range_known = int(mask.sum()) >= 800
+        # La portée est évaluée autour de chaque monstre, pas seulement au moyen du nombre
+        # total de pixels violets. Une petite zone violette visible sur la case d'un monstre
+        # reste une preuve locale même si elle contient moins de 800 pixels au total.
+        in_range, range_known, fractions = assess_targets_in_range(
+            mask, enemies, cfg.range_min_fraction, min_total_pixels=800)
+        in_range = sort_by_distance(in_range, origin)
         if range_known:
-            in_range = [f for f in sort_by_distance(enemies, origin)
-                        if range_fraction(mask, f.center) >= cfg.range_min_fraction]
             ctx.log(f"{len(enemies)} adversaire(s), {len(in_range)} à portée.")
         else:
-            in_range = sort_by_distance(enemies, origin)
-            ctx.log(f"{len(enemies)} adversaire(s). Portée du sort illisible à l'écran : j'essaie les adversaires "
-                    "un par un, du plus proche au plus loin (la fenêtre de confirmation vérifie).")
+            ctx.log(f"{len(enemies)} adversaire(s). Zone violette insuffisante pour déterminer la portée "
+                    "(masque trop faible et aucune case ennemie confirmée) : aucun clic à l'aveugle.")
         if not in_range:
             if cfg.move_when_out_of_range and not moved:
                 pos = my_position(ctx, scene, me, mask, enemies)
