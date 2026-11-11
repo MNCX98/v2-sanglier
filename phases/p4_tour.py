@@ -193,6 +193,7 @@ def plan_move_green(ctx: Context, scene, enemies, me_pos: tuple[int, int]):
     return target, cells
 
 
+RANGE_APPEAR_WAIT_S = 2.0            # attente maximale de l'affichage de la portée avant de la déclarer illisible
 RANGE_MIN_PIXELS = 1500          # zone de portée assez grande pour être fiable
 HINT_MISMATCH = 2.5              # écart (en cases) entre la dernière position connue et le centre de la portée
 HINT_MISMATCH_UNVERIFIED = 2.2   # même chose quand la dernière position n'est qu'une supposition
@@ -359,14 +360,32 @@ def play_turn(ctx: Context, should_stop, turn: int = 0) -> int:
             ys, xs = np.where(mask > 0)
             origin = (int(xs.mean()), int(ys.mean())) if len(xs) else enemies[0].center
         range_known = int(mask.sum()) >= 800
+        if not range_known:
+            # La zone de portée peut s'afficher avec retard (surtout juste après le sort d'ouverture, au 1er tour) :
+            # avant de conclure qu'elle est illisible — et de cliquer des adversaires peut-être hors de portée —
+            # on laisse l'écran se mettre à jour et on relit.
+            t_wait = time.time()
+            while time.time() - t_wait < RANGE_APPEAR_WAIT_S and not should_stop():
+                time.sleep(0.3)
+                scene, (ox, oy) = ctx.capture.grab()
+                mask = range_mask(scene)
+                if int(mask.sum()) >= 800:
+                    range_known = True
+                    ctx.log("La portée du sort s'est affichée avec un léger retard : je la lis maintenant.")
+                    enemies = find_enemies(scene) or enemies
+                    me = find_me(scene, ctx.me_hint) or me
+                    origin = me.center if me else origin
+                    break
         if range_known:
             in_range = [f for f in sort_by_distance(enemies, origin)
                         if range_fraction(mask, f.center) >= cfg.range_min_fraction]
             ctx.log(f"{len(enemies)} adversaire(s), {len(in_range)} à portée.")
         else:
-            in_range = sort_by_distance(enemies, origin)
-            ctx.log(f"{len(enemies)} adversaire(s). Portée du sort illisible à l'écran : j'essaie les adversaires "
-                    "un par un, du plus proche au plus loin (la fenêtre de confirmation vérifie).")
+            limit = cfg.blind_range_max_cells
+            in_range = [f for f in sort_by_distance(enemies, origin) if grid_distance(f.center, origin) <= limit]
+            ctx.log(f"{len(enemies)} adversaire(s). Portée du sort illisible à l'écran : j'essaie seulement ceux à "
+                    f"{limit} case(s) ou moins ({len(in_range)}), du plus proche au plus loin "
+                    "(la fenêtre de confirmation vérifie).")
         if not in_range:
             if cfg.move_when_out_of_range and not moved:
                 pos = my_position(ctx, scene, me, mask, enemies)
@@ -497,6 +516,18 @@ OPENING_SPELL = "sort_debut_combat"     # nom de l'image dans assets/ui (icône 
 OPENING_SPELL_LABEL = "sort d'ouverture"
 
 
+def _settle_after_opening(ctx: Context) -> None:
+    """Après le sort d'ouverture : laisse l'écran se stabiliser et désélectionne ce sort s'il est resté sélectionné,
+    sinon le clic suivant sur Coagulation peut être ignoré ou mal interprété (problème vu au 1er tour seulement)."""
+    time.sleep(0.8)
+    scene, (ox, oy) = ctx.capture.grab()
+    icon = _find(ctx, scene, OPENING_SPELL)
+    if icon and spell_selected(scene, icon.x, icon.y, icon.w, icon.h):
+        ctx.log(f"Le {OPENING_SPELL_LABEL} est resté sélectionné : je le désélectionne avant Coagulation.")
+        inp.click(ox + icon.center[0], oy + icon.center[1])
+        time.sleep(0.6)
+
+
 def cast_opening_spell(ctx: Context) -> bool:
     """Sélectionne le sort d'ouverture, clique sur mon propre personnage, puis confirme (coche verte)."""
     unverified = False                                  # sélection jamais vue : on ne reclique pas sur l'icône
@@ -535,6 +566,7 @@ def cast_opening_spell(ctx: Context) -> bool:
             inp.click(origin2[0] + ok.center[0], origin2[1] + ok.center[1])
             ctx.log(f"✔ {OPENING_SPELL_LABEL.capitalize()} lancé.")
             time.sleep(1.5)                             # animation
+            _settle_after_opening(ctx)
             return True
         ctx.log(f"Pas de confirmation pour le {OPENING_SPELL_LABEL} (essai {attempt}/2).")
     scene, (ox, oy) = ctx.capture.grab()                # échec : on ne laisse pas le sort sélectionné

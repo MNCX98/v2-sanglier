@@ -30,6 +30,7 @@ class Config:
     max_move_cells: int = 4                     # nombre maximum de cases parcourues pour se rapprocher
     turn_wait_s: int = 120                      # attente maximale de mon tour
     turn_start_delay_s: float = 2.5             # attente après le début du tour (bandeau « À toi de jouer »)
+    blind_range_max_cells: int = 5              # portée du sort illisible à l'écran : on n'essaie que les adversaires à cette distance maximale (en cases)
     range_min_fraction: float = 0.05            # part de violet autour d'un monstre pour le dire « à portée »
     loop_combats: bool = True                   # phase 6 : enchaîner les combats sans fin (False = un seul combat)
     sequence_seconds: int = 40                  # durée de l'enregistrement de séquence

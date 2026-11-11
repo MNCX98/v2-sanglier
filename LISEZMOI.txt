@@ -8,6 +8,15 @@ VERSION 0.8.8 : adversaire caché derrière un décor
     ignorée. Elle ne l'était que pour la colonne d'icônes du panneau « Challenges » déplié. Si tu gardes ce panneau
     déplié en combat et que le programme confond une icône avec ton personnage, mets "challenges_panel_open": true
     dans config.json. La frise des tours, « Fin du tour » et la barre « Challenges » restent ignorées : il n'y a pas de carte là.
+  - Premier tour : après le sort d'ouverture, le programme essayait parfois de lancer Coagulation sur des adversaires
+    hors de portée (clics dans le vide), puis se déplaçait. Corrections : (1) il vérifie que le sort d'ouverture est
+    bien désélectionné et laisse l'écran se stabiliser ; (2) si la zone de portée n'est pas encore affichée, il attend
+    jusqu'à 2 s qu'elle apparaisse avant de conclure qu'elle est illisible. Si le problème revient, envoie le journal du
+    1er tour (lignes « Portée du sort illisible » / « Diagnostic de sélection ») et l'image selection_sort_….png du dossier logs.
+  - Portée du sort illisible : le programme n'essaie plus des adversaires manifestement trop loin (il cliquait des
+    cibles à 7, 10 ou 17 cases). Il n'essaie que ceux à « blind_range_max_cells » cases ou moins (5 par défaut,
+    réglable dans config.json) et se rapproche sinon. Le point de départ des distances est maintenant la dernière
+    position connue du personnage quand sa portée n'est pas visible.
   - Limite : un arc presque plat (haut ou bas de l'anneau) ne permet pas de situer le monstre avec précision.
 
 VERSION 0.8.7 : copie pour les nouveaux monstres UNIQUEMENT (sangliers, pas de bouftous)
