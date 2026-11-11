@@ -21,7 +21,7 @@ from core.recorder import record_sequence
 from phases.p1_recherche import scan_once
 from phases.p2_combat import test_ui
 from phases.p3_placement import RULES, test_placement
-from core.combat import set_icon_column_excluded
+from core.combat import set_icon_column_excluded, set_turn_bar_compact
 from phases.p4_tour import test_combat
 from phases.runner import run_phases
 
@@ -82,6 +82,7 @@ class MainWindow(QMainWindow):
         self.cfg = load_config(config_path())
         self.ctx = Context(self.cfg, WindowCapture(self.cfg.window_title_contains))
         set_icon_column_excluded(self.cfg.challenges_panel_open)
+        set_turn_bar_compact(self.cfg.turn_bar_compact)
         self.worker: Worker | None = None
 
         central = QWidget()

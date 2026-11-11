@@ -193,7 +193,7 @@ def plan_move_green(ctx: Context, scene, enemies, me_pos: tuple[int, int]):
     return target, cells
 
 
-RANGE_APPEAR_WAIT_S = 2.0            # attente maximale de l'affichage de la portée avant de la déclarer illisible
+RANGE_APPEAR_WAIT_S = 1.5            # attente maximale de l'affichage de la portée avant de la déclarer illisible
 RANGE_MIN_PIXELS = 1500          # zone de portée assez grande pour être fiable
 HINT_MISMATCH = 2.5              # écart (en cases) entre la dernière position connue et le centre de la portée
 HINT_MISMATCH_UNVERIFIED = 2.2   # même chose quand la dernière position n'est qu'une supposition
@@ -354,13 +354,22 @@ def play_turn(ctx: Context, should_stop, turn: int = 0) -> int:
         ctx.no_enemy_streak = 0
         ctx.last_enemies = [e.center for e in enemies]
         mask = range_mask(scene)
+        range_known = int(mask.sum()) >= 800
         if me:
             origin = me.center
-        else:
+        elif range_known:
             ys, xs = np.where(mask > 0)
-            origin = (int(xs.mean()), int(ys.mean())) if len(xs) else enemies[0].center
-        range_known = int(mask.sum()) >= 800
-        if not range_known:
+            origin = (int(xs.mean()), int(ys.mean()))
+        else:                                              # portée illisible : le centre des quelques pixels bleus ne vaut rien
+            origin = ctx.me_hint or enemies[0].center
+        if me:                                             # jamais mon propre personnage pris pour un adversaire
+            own = [e for e in enemies if grid_distance(e.center, me.center) < 0.8]
+            if own:
+                ctx.log(f"J'ignore {len(own)} « adversaire(s) » situé(s) sur mon propre personnage.")
+                enemies = [e for e in enemies if e not in own]
+                if not enemies:
+                    break
+        if not range_known and casts == 0:
             # La zone de portée peut s'afficher avec retard (surtout juste après le sort d'ouverture, au 1er tour) :
             # avant de conclure qu'elle est illisible — et de cliquer des adversaires peut-être hors de portée —
             # on laisse l'écran se mettre à jour et on relit.
@@ -375,6 +384,8 @@ def play_turn(ctx: Context, should_stop, turn: int = 0) -> int:
                     enemies = find_enemies(scene) or enemies
                     me = find_me(scene, ctx.me_hint) or me
                     origin = me.center if me else origin
+                    if me:
+                        enemies = [e for e in enemies if grid_distance(e.center, me.center) >= 0.8] or enemies
                     break
         if range_known:
             in_range = [f for f in sort_by_distance(enemies, origin)

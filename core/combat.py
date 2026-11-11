@@ -25,6 +25,24 @@ class Fighter:
 # alors pas. Réglé au démarrage par config.challenges_panel_open.
 EXCLUDE_ICON_COLUMN = False
 
+# Barre d'ordre de jeu (portraits à barres bleues/rouges, minuteur, « Fin du tour », « Challenges ») en haut à gauche.
+# Disposition COMPACTE (un seul portrait, boutons rangés à gauche) : elle tient dans x < 605, y < 301 et la carte
+# commence juste à côté ; la détection voit alors tout le reste, y compris le bord haut de la carte.
+# Disposition LARGE (frise horizontale de portraits qui s'étire vers la droite) : on ignore tout le quart haut-gauche.
+TURN_BAR_COMPACT = True
+
+
+def set_turn_bar_compact(value: bool) -> None:
+    global TURN_BAR_COMPACT
+    TURN_BAR_COMPACT = bool(value)
+
+
+def _turn_bar_zone(h: int, w: int) -> tuple[int, int]:
+    """(largeur, hauteur) en pixels de la zone haut-gauche ignorée (barre d'ordre de jeu)."""
+    if TURN_BAR_COMPACT:
+        return int(0.315 * w), int(0.295 * h)
+    return int(0.48 * w), int(0.27 * h)
+
 
 def set_icon_column_excluded(value: bool) -> None:
     global EXCLUDE_ICON_COLUMN
@@ -38,8 +56,12 @@ def _game_roi_wide(h: int, w: int) -> np.ndarray:
     sx, sy = w / 1920.0, h / 1020.0
     roi = np.zeros((h, w), bool)
     roi[int(78 * sy):int(976 * sy), int(316 * sx):int(1604 * sx)] = True
-    roi[:int(265 * sy), :int(612 * sx)] = False         # frise des tours, portraits, minuteur, « Fin du tour »
-    roi[:int(140 * sy), int(612 * sx):int(815 * sx)] = False   # barre « Challenges »
+    if TURN_BAR_COMPACT:
+        zw, zh = _turn_bar_zone(h, w)
+        roi[:zh, :zw] = False                           # barre d'ordre de jeu, minuteur, « Fin du tour », « Challenges »
+    else:
+        roi[:int(265 * sy), :int(612 * sx)] = False     # frise des tours, portraits, minuteur, « Fin du tour »
+        roi[:int(140 * sy), int(612 * sx):int(815 * sx)] = False   # barre « Challenges »
     if EXCLUDE_ICON_COLUMN:
         roi[:int(570 * sy), :int(412 * sx)] = False     # colonne d'icônes du panneau Challenges déplié
     return roi
@@ -74,7 +96,8 @@ def reachable_cells(scene: np.ndarray, ref: tuple[int, int]) -> list[tuple[int, 
 def _game_roi(h: int, w: int) -> np.ndarray:
     roi = np.zeros((h, w), bool)
     roi[int(0.05 * h):int(0.955 * h), int(0.17 * w):int(0.83 * w)] = True
-    roi[:int(0.27 * h), :int(0.48 * w)] = False        # barre d'ordre de jeu (barres bleues/rouges des portraits)
+    zw, zh = _turn_bar_zone(h, w)
+    roi[:zh, :zw] = False                              # barre d'ordre de jeu (barres bleues/rouges des portraits)
     if EXCLUDE_ICON_COLUMN:
         roi[:int(0.5 * h), :int(0.215 * w)] = False    # colonne d'icônes du panneau Challenges déplié
     return roi

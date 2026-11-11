@@ -7,6 +7,7 @@ import cv2
 import numpy as np
 
 from core import input as inp
+from core.combat import find_enemies
 from core.grid import Cell, find_cells, grid_distance
 from core.imgio import save_image
 from core.paths import logs_dir
@@ -23,6 +24,7 @@ class Plan:
     mine: list[Cell] = field(default_factory=list)       # cases rouges cliquables
     enemies: list[Cell] = field(default_factory=list)    # cases bleues
     occupied: list[Cell] = field(default_factory=list)   # cases bleues où se tient un monstre
+    rings: list = field(default_factory=list)            # monstres repérés par leur anneau bleu (méthode la plus fiable)
     chosen: Cell | None = None
     distance: float | None = None
 
@@ -49,10 +51,13 @@ def make_plan(scene: np.ndarray, rule: str) -> Plan:
     plan.occupied = occupied_cells(plan.enemies) + merged      # tache fusionnée = un monstre sélectionné
     if not plan.mine or rule == "stay":
         return plan
-    if not plan.enemies:
+    # Les anneaux bleus sous les monstres sont visibles dès le placement et plus fiables que la taille des cases
+    # bleues (une case à moitié cachée par un décor passe pour « occupée », et parfois aucune case bleue n'est lue).
+    plan.rings = find_enemies(scene)
+    if not plan.enemies and not plan.rings:
         return plan                                       # pas de repère : on ne bouge pas
-    # Repères : les cases où se tiennent vraiment les monstres (toutes les cases bleues si on ne les voit pas)
-    marks = plan.occupied or plan.enemies
+    # Repères : les anneaux des monstres, sinon les cases bleues où se tient un monstre, sinon toutes les cases bleues
+    marks = plan.rings or plan.occupied or plan.enemies
     def nearest(c: Cell) -> float:
         return min(grid_distance(c.center, e.center) for e in marks)
     ex = sum(e.cx for e in marks) / len(marks)
@@ -72,6 +77,8 @@ def draw_plan(scene: np.ndarray, plan: Plan, clicked: bool = False) -> np.ndarra
         cv2.circle(out, c.center, 6, (255, 255, 0), -1)
     for c in plan.occupied:
         cv2.circle(out, c.center, 11, (0, 140, 255), 3)          # orange : un monstre est sur cette case
+    for r in plan.rings:
+        cv2.circle(out, r.center, 16, (255, 0, 255), 2)          # magenta : monstre repéré par son anneau
     if plan.chosen:
         cv2.circle(out, plan.chosen.center, 18, (0, 255, 0), 3)
         if clicked:
@@ -81,13 +88,13 @@ def draw_plan(scene: np.ndarray, plan: Plan, clicked: bool = False) -> np.ndarra
 
 def _describe(ctx: Context, plan: Plan, rule: str) -> None:
     ctx.log(f"Cases : {len(plan.mine)} à moi (rouges), {len(plan.enemies)} côté monstres (bleues), "
-            f"dont {len(plan.occupied)} occupée(s) par un monstre.")
+            f"dont {len(plan.occupied)} occupée(s) par un monstre ; {len(plan.rings)} monstre(s) repéré(s) par leur anneau.")
     if rule == "stay":
         ctx.log("Règle « ne pas bouger » : aucun déplacement.")
     elif plan.chosen:
         ctx.log(f"Case choisie ({RULES[rule].lower()}) en {plan.chosen.center}, "
                 f"à {plan.distance:.1f} case(s) du monstre le plus proche"
-                f"{'' if plan.occupied else ' (monstres non repérés : je vise la case bleue la plus proche)'}.")
+                f"{'' if (plan.rings or plan.occupied) else ' (monstres non repérés : je vise la case bleue la plus proche)'}.")
     else:
         ctx.log("Aucune case choisie (cases rouges ou bleues introuvables).")
 

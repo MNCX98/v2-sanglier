@@ -2,7 +2,7 @@
 tours (4-5), fin du combat (6), puis retour à la recherche."""
 import time
 
-from core.combat import set_icon_column_excluded
+from core.combat import set_icon_column_excluded, set_turn_bar_compact
 from phases.base import Context
 from phases.p1_recherche import scan_once
 from phases.p2_combat import wait_for_combat
@@ -45,6 +45,7 @@ def _fight(ctx: Context, should_stop, on_frame) -> str:
 def run_phases(ctx: Context, should_stop, on_frame=None) -> None:
     cfg = ctx.config
     set_icon_column_excluded(cfg.challenges_panel_open)
+    set_turn_bar_compact(cfg.turn_bar_compact)
     ctx.log("Démarré. Appuie sur F12 pour arrêter.")
     ctx.capture.viewport.log_hook = ctx.log                        # messages d'adaptation à l'échelle du jeu
     combats = 0

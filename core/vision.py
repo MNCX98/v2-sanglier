@@ -159,6 +159,7 @@ def _scan_template(t: Template, scene, small_gray_scene, threshold):
     hits = _peaks(coarse, coarse_thr, max(3, min(t.small_gray.shape) // 2), limit=6)
     # Temps 2 : vérification précise (couleur, pleine résolution) autour de chaque candidat
     m = 4
+    precise_best = None
     for hx, hy, _ in hits:
         cx, cy = 2 * hx, 2 * hy
         x0, y0 = max(0, cx - m), max(0, cy - m)
@@ -167,9 +168,12 @@ def _scan_template(t: Template, scene, small_gray_scene, threshold):
             continue
         res = _match(scene[y0:y1, x0:x1], t.image, t.mask)
         _, score, _, loc = cv2.minMaxLoc(res)
+        precise_best = float(score) if precise_best is None else max(precise_best, float(score))
         best = max(best, float(score)) if dets or score >= threshold else best
         if score >= threshold:
             dets.append(Detection(t.monster, t.variant, float(score), x0 + loc[0], y0 + loc[1], tw, th))
+    if not dets and precise_best is not None:
+        best = precise_best                          # candidat écarté à la vérification précise : on affiche CE score, pas celui du balayage grossier
     return key, best, dets
 
 

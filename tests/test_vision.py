@@ -102,7 +102,8 @@ def main():
     img = cv2.imdecode(np.fromfile(str(fx / "05_placement.png"), np.uint8), cv2.IMREAD_COLOR)
     near, far = make_plan(img, "closest"), make_plan(img, "farthest")
     ok = (len(near.mine) >= 10 and len(near.enemies) >= 7 and near.chosen is not None
-          and near.distance <= 1.5 and far.distance > 5 and make_plan(img, "stay").chosen is None)
+          and len(near.rings) == 3 and near.distance <= 2.0 and far.distance > 5
+          and make_plan(img, "stay").chosen is None)
     print(f"[{'OK' if ok else 'ÉCHEC'}] placement : {len(near.mine)} cases rouges, {len(near.enemies)} bleues, "
           f"plus proche à {near.distance:.1f} case, plus éloignée à {far.distance:.1f}")
     failures += not ok
@@ -348,6 +349,20 @@ def main():
     ok = ok and quiet
     print(f"[{'OK' if ok else 'ÉCHEC'}] monstre caché (arc d'anneau seul) : retrouvé en {[(e.cx, e.cy) for e in en_c]}, "
           f"déplacement vers lui prévu, aucune fausse alerte hors combat : {quiet}")
+    failures += not ok
+
+    # 3t) personnage collé au bord haut de la carte, entouré de monstres (zone auparavant ignorée par erreur)
+    from core.combat import set_turn_bar_compact
+    set_turn_bar_compact(True)
+    ok = True
+    for nm in ("33_bord_haut_entoure_1.png", "34_bord_haut_entoure_2.png"):
+        im_t = load(nm)
+        got = sorted((e.cx // 20, e.cy // 20) for e in find_enemies(im_t))
+        want = sorted((x // 20, y // 20) for x, y in ((978, 104), (761, 126), (848, 126), (1198, 301)))
+        me_t = find_me(im_t)
+        ok = ok and all(abs(g[0] - w_[0]) <= 1 and abs(g[1] - w_[1]) <= 1 for g, w_ in zip(got, want)) and len(got) == 4 \
+            and me_t is not None and abs(me_t.cx - 805) <= 8 and abs(me_t.cy - 105) <= 8
+    print(f"[{'OK' if ok else 'ÉCHEC'}] bord haut de la carte : 4 monstres (dont 2 collés au personnage) et le personnage retrouvés sur 2 captures")
     failures += not ok
 
     # 4) vitesse
