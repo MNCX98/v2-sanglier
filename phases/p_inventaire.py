@@ -99,6 +99,33 @@ def _wait(ctx: Context, finder, should_stop, timeout: float = 4.0):
     return None, origin
 
 
+def _wait_stable(ctx: Context, finder, pos_of, should_stop, timeout: float = 4.0, settle: float = 0.4, tol: int = 3):
+    """Comme _wait, mais n'accepte l'élément que lorsqu'il est apparu ET qu'il ne bouge plus (au moins `settle`
+    secondes à la même place). Un menu ou une fenêtre qui s'ouvre glisse pendant son animation : cliquer dès la
+    première détection tombe à côté, sur le bouton voisin (ex. « Compagnon » au lieu de la monture).
+    À l'expiration du délai, retourne le dernier élément vu s'il y en a un (mieux que rien), sinon None."""
+    end, origin = time.time() + timeout, (0, 0)
+    last_pos, since, last_found = None, 0.0, None
+    while not should_stop():
+        scene, origin = ctx.capture.grab()
+        found = finder(scene)
+        now = time.time()
+        if found:
+            pos = pos_of(found)
+            moved = last_pos is None or abs(pos[0] - last_pos[0]) > tol or abs(pos[1] - last_pos[1]) > tol
+            if moved:
+                last_pos, since = pos, now
+            elif now - since >= settle:
+                return found, origin
+            last_found = found
+        else:
+            last_pos, last_found = None, None
+        if now >= end:
+            break
+        time.sleep(0.12)
+    return last_found, origin
+
+
 def close_windows(ctx: Context, should_stop, max_windows: int = 8) -> int:
     """Ferme toutes les fenêtres à croix verte (monture, inventaire, avertissement…)."""
     closed = 0
@@ -126,7 +153,8 @@ def unload_to_mount(ctx: Context, should_stop) -> str:
     close_windows(ctx, should_stop)
 
     # 1) icône de la monture (menu du bas agrandi)
-    mount, origin = _wait(ctx, lambda s: next(iter(find_icons(ctx, s, MOUNT_ICON)), None), should_stop, 0.6)
+    find_mount = lambda s: next(iter(find_icons(ctx, s, MOUNT_ICON)), None)
+    mount, origin = _wait_stable(ctx, find_mount, lambda d: d.center, should_stop, 1.2)
     expanded_by_us = False
     if not mount:
         scene, origin = ctx.capture.grab()
@@ -137,7 +165,8 @@ def unload_to_mount(ctx: Context, should_stop) -> str:
         ctx.log("J'agrandis le menu du bas.")
         _click(ctx, origin, tri.center)
         expanded_by_us = True
-        mount, origin = _wait(ctx, lambda s: next(iter(find_icons(ctx, s, MOUNT_ICON)), None), should_stop, 3.0)
+        _sleep(0.9, should_stop)                           # animation de dépliage : les boutons glissent encore
+        mount, origin = _wait_stable(ctx, find_mount, lambda d: d.center, should_stop, 3.0)
         if not mount:
             ctx.log("⚠ Icône de la monture introuvable après avoir agrandi le menu.")
             return "fail"
@@ -153,9 +182,21 @@ def unload_to_mount(ctx: Context, should_stop) -> str:
         return result
 
     # 2) fenêtre de la monture, puis son inventaire (bouton « sac »)
-    ctx.log("J'ouvre la monture.")
-    _click(ctx, origin, mount.center)
-    bag, origin = _wait(ctx, lambda s: next(iter(find_icons(ctx, s, MOUNT_BAG)), None), should_stop, 4.0)
+    find_bag = lambda s: next(iter(find_icons(ctx, s, MOUNT_BAG)), None)
+    bag = None
+    for attempt in (1, 2):
+        ctx.log("J'ouvre la monture." if attempt == 1 else "Nouvel essai : j'ouvre la monture.")
+        _click(ctx, origin, mount.center)
+        bag, origin = _wait_stable(ctx, find_bag, lambda d: d.center, should_stop, 4.0)
+        if bag or attempt == 2 or should_stop():
+            break
+        # une autre fenêtre s'est probablement ouverte (ex. « Compagnon ») : on la ferme et on recommence
+        ctx.log("⚠ Bouton « inventaire de la monture » introuvable : je ferme la fenêtre ouverte et je réessaie.")
+        close_windows(ctx, should_stop)
+        _sleep(0.6, should_stop)
+        mount, origin = _wait_stable(ctx, find_mount, lambda d: d.center, should_stop, 3.0)
+        if not mount:
+            break
     if not bag:
         ctx.log("⚠ Bouton « inventaire de la monture » introuvable.")
         return finish("fail")
@@ -166,7 +207,7 @@ def unload_to_mount(ctx: Context, should_stop) -> str:
         inv, mon = find_text(scene, "inv_titre_inventaire"), find_text(scene, "inv_titre_monture")
         return (inv, mon) if inv and mon else None
 
-    titles, origin = _wait(ctx, both_titles, should_stop, 4.0)
+    titles, origin = _wait_stable(ctx, both_titles, lambda t: t[0][0], should_stop, 4.0)
     if not titles:
         ctx.log("⚠ Les fenêtres Monture et Inventaire ne se sont pas ouvertes.")
         return finish("fail")

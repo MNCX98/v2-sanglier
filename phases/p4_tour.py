@@ -564,6 +564,11 @@ def cast_opening_spell(ctx: Context) -> bool:
                 unverified = True
         scene, (ox, oy) = ctx.capture.grab()
         enemies, me = find_enemies(scene), find_me(scene, ctx.me_hint)
+        if me and ctx.me_hint and grid_distance(me.center, ctx.me_hint) > 2.0:
+            # Au 1er tour on sait exactement où l'on est (la case du placement) : un anneau rouge repéré loin de là
+            # (autre élément rouge de l'écran) n'est pas mon personnage, et on ne lui lance pas le sort.
+            ctx.log(f"Anneau rouge repéré en {me.center}, loin de ma case de départ {ctx.me_hint} : je garde ma case de départ.")
+            me = None
         if me:
             ctx.me_hint = me.center
         pos = my_position(ctx, scene, me, range_mask(scene), enemies)

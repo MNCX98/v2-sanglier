@@ -365,6 +365,28 @@ def main():
     print(f"[{'OK' if ok else 'ÉCHEC'}] bord haut de la carte : 4 monstres (dont 2 collés au personnage) et le personnage retrouvés sur 2 captures")
     failures += not ok
 
+    # 3u) monture : n'accepter le bouton que lorsqu'il a fini de glisser (animation de dépliage du menu)
+    import time as _time
+    from phases.p_inventaire import _wait_stable
+    class _Cap:
+        def __init__(self): self.i = 0
+        def grab(self):
+            self.i += 1
+            return self.i, (0, 0)
+    positions = [100, 112, 124, 136, 148, 160] + [170] * 80
+    cap = _Cap()
+    fake = _types.SimpleNamespace(capture=cap)
+    finder = lambda i: _types.SimpleNamespace(center=(positions[min(i, len(positions)) - 1], 50))
+    t0 = _time.time()
+    got, _o = _wait_stable(fake, finder, lambda d: d.center, lambda: False, 5.0)
+    still_cap = _Cap()
+    got_still, _o2 = _wait_stable(_types.SimpleNamespace(capture=still_cap), lambda i: _types.SimpleNamespace(center=(170, 50)),
+                                  lambda d: d.center, lambda: False, 5.0)
+    ok = got is not None and got.center[0] == 170 and got_still is not None and still_cap.i >= 3
+    print(f"[{'OK' if ok else 'ÉCHEC'}] monture : le bouton n'est accepté qu'une fois immobile "
+          f"(position finale {got.center if got else None}, {cap.i} captures, {_time.time() - t0:.1f} s)")
+    failures += not ok
+
     # 4) vitesse
     t0 = time.time()
     for _ in range(5):
