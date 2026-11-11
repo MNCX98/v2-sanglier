@@ -17,6 +17,17 @@ VERSION 0.8.8 : adversaire caché derrière un décor
     cibles à 7, 10 ou 17 cases). Il n'essaie que ceux à « blind_range_max_cells » cases ou moins (5 par défaut,
     réglable dans config.json) et se rapproche sinon. Le point de départ des distances est maintenant la dernière
     position connue du personnage quand sa portée n'est pas visible.
+  - Placement : les monstres sont maintenant repérés par leur anneau bleu (visible dès le placement) plutôt que par la
+    taille des cases bleues. Cela corrige les placements loin des monstres et le cas « 0 case bleue lue ».
+  - Un « adversaire » situé sur mon propre personnage (distance < 0,8 case) est ignoré : le programme lançait parfois
+    Coagulation sur lui-même.
+  - Recherche de monstre : le « meilleur score » du journal est maintenant le score de la vérification précise
+    (avant, c'était celui du balayage rapide, d'où « 0.83 pour un seuil de 0.80 » sans aucune cible).
+  - Haut gauche de la carte : la détection ignorait tout le quart haut-gauche de l'écran (x < 922, y < 275), pensé pour
+    une frise de portraits très large. Avec la disposition compacte (un portrait, « Fin du tour » à gauche), le personnage
+    et des monstres collés à lui, près du bord haut de la carte, n'étaient jamais vus : le programme ne les attaquait pas
+    et ne pouvait plus bouger (c'est ce qui a fait mourir le personnage). Nouveau réglage dans config.json :
+    "turn_bar_compact": true (défaut, zone ignorée réduite à x < 605, y < 301) ; false pour l'ancienne frise large.
   - Limite : un arc presque plat (haut ou bas de l'anneau) ne permet pas de situer le monstre avec précision.
 
 VERSION 0.8.7 : copie pour les nouveaux monstres UNIQUEMENT (sangliers, pas de bouftous)
