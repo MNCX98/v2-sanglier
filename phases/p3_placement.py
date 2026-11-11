@@ -120,6 +120,8 @@ def run_placement(ctx: Context, should_stop, on_frame=None) -> bool:
     cfg = ctx.config
     rule = cfg.placement_rule
     ctx.log(f"Phase 3 : placement ({RULES[rule].lower()})…")
+    ctx.last_enemies = []                                   # nouveau combat : on oublie les positions de l'ancien
+    ctx.no_enemy_streak = 0
     scene, (ox, oy), plan = _stable_plan(ctx, should_stop)
     if should_stop():
         return False

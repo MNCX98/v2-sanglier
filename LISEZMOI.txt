@@ -1,31 +1,16 @@
-VERSION 0.8.11 : amélioration de la détection locale de portée des sorts
+VERSION 0.8.8 : adversaire caché derrière un décor
+  - Correction : quand un monstre était presque entièrement caché derrière un bloc d'herbe (seul un petit arc de
+    son anneau bleu dépassait), le programme disait « Aucun adversaire visible », ne bougeait pas et passait son tour,
+    tour après tour. Il retrouve maintenant l'anneau à partir de ce simple arc (ajustement sur la forme de l'anneau).
+  - Filet de sécurité : si plus aucun adversaire n'est visible alors qu'il y en avait un plus tôt dans le combat,
+    le programme se rapproche de la dernière position connue au lieu de passer son tour sans bouger.
+  - Toute la carte est maintenant surveillée : la zone d'écran en haut à gauche (x < 412, y < 570) n'est plus
+    ignorée. Elle ne l'était que pour la colonne d'icônes du panneau « Challenges » déplié. Si tu gardes ce panneau
+    déplié en combat et que le programme confond une icône avec ton personnage, mets "challenges_panel_open": true
+    dans config.json. La frise des tours, « Fin du tour » et la barre « Challenges » restent ignorées : il n'y a pas de carte là.
+  - Limite : un arc presque plat (haut ou bas de l'anneau) ne permet pas de situer le monstre avec précision.
 
-CORRECTIONS 0.8.11
-- La détection de portée vérifie désormais la couleur violette autour de chaque anneau ennemi.
-- Une petite zone violette clairement visible autour d’un ennemi peut confirmer qu’il est à portée, même si le masque global contient moins de 800 pixels.
-- Si la portée reste indéterminée, le programme ne clique plus les ennemis à l’aveugle : il tente le rapprochement si possible, puis passe le tour si la détection reste insuffisante.
-- Les seuils de couleur HSV et le seuil local de 5 % sont conservés ; ils ne sont pas recalibrés sans nouvelles captures réelles.
-
-VERSION 0.8.10 : calibration du repère vert de la détection de position et des déplacements
-
-CORRECTIONS 0.8.10
-  - Position du personnage : conservation des trois niveaux déjà présents : anneau rouge entier,
-    anneau rouge partiellement masqué, puis estimation par la zone violette de Coagulation.
-  - Déplacement : après le double-clic, le programme confirme d'abord l'anneau rouge sur deux
-    observations cohérentes. Si l'anneau n'est pas reconnu, il peut utiliser le centre de la zone
-    des cases vertes, mais seulement si cette zone était cohérente avec la position de départ et
-    si son nouveau centre correspond à la case visée. Le décalage éventuel entre le centre vert et la position réelle est mesuré avant le clic puis compensé après le déplacement.
-  - Sécurité : si aucune méthode ne confirme le déplacement, le programme n'essaie plus une
-    deuxième case à l'aveugle. Il suspend les déplacements pour le tour afin d'éviter un double
-    déplacement involontaire.
-  - Position estimée : la zone violette de Coagulation reste un repère de secours ; son centroïde
-    est recalé sur la grille et comparé à la dernière position connue.
-  - Inventaire monture, désélection de Coagulation et détection de fin de combat : corrections
-    de la version 0.8.8 conservées.
-
-Le détail des causes, changements, tests et limites est dans CHANGELOG_CORRECTIONS.md.
-
-VERSION 0.8.7 (version de départ de cette copie) : nouveaux monstres UNIQUEMENT (sangliers, pas de bouftous)
+VERSION 0.8.7 : copie pour les nouveaux monstres UNIQUEMENT (sangliers, pas de bouftous)
   - Correction : sur certaines cartes (sol vert olive), le jeu affiche la portée du sort dans un bleu
     légèrement différent. Le programme ne le reconnaissait pas, croyait que le sort n'était pas
     sélectionné et passait son tour sans se déplacer ni attaquer. Il reconnaît maintenant la portée
@@ -34,7 +19,7 @@ VERSION 0.8.7 (version de départ de cette copie) : nouveaux monstres UNIQUEMENT
     un par un (la fenêtre de confirmation avec la coche verte dit si le lancer est possible), puis se
     rapproche si aucun ne répond. Il écrit alors dans le journal « Diagnostic de sélection » avec des
     chiffres, et enregistre une image « selection_sort_….png » dans le dossier logs.
-  - Le journal commence par la ligne « DofusAuto 0.8.10 » pour cette version corrigée.
+  - Le journal commence par la ligne « DofusAuto 0.8.7 » : si elle n'apparaît pas, ce n'est pas cette version.
   - Monstres : seulement les sangliers (assets\monsters\sanglier_blanc, _gris, _marron, _noir).
     Les images des bouftous ne sont plus dans cette copie (elles restent dans ta version d'origine).
 

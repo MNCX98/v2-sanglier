@@ -331,6 +331,25 @@ def main():
     print(f"[{'OK' if ok else 'ÉCHEC'}] déplacement sur les cases vertes accessibles : {', '.join(green_info)} ; case visée accessible et plus proche du monstre")
     failures += not ok
 
+    # 3s) monstre presque entièrement caché derrière un bloc d'herbe : seul un arc de ~28 px de l'anneau dépasse
+    img = load("32_ennemi_cache_arc.png")
+    en_c, me_c = find_enemies(img), find_me(img)
+    ok = (len(en_c) == 1 and abs(en_c[0].cx - 588) <= 6 and abs(en_c[0].cy - 518) <= 6 and me_c is not None)
+    if ok:
+        tgt, cells = plan_move_green(gctx, img, en_c, me_c.center)
+        from phases.p4_tour import plan_move
+        from core.config import Config
+        _, cands = plan_move(_types.SimpleNamespace(failed_moves=[], config=Config()), img, en_c, me_c.center)
+        ok = bool(cands) and grid_distance(cands[0][1], tgt.center) < grid_distance(me_c.center, tgt.center)
+    from core.combat import _enemies_arc
+    quiet = all(_enemies_arc(_blue_zone(load(n))) == [] for n in ("27_hors_combat_vie_67.png", "28_montee_niveau.png",
+                                                                  "29_inventaire_plein.png", "30_menu_transfert.png",
+                                                                  "26_resultat_combat.png", "31_perso_cache.png"))
+    ok = ok and quiet
+    print(f"[{'OK' if ok else 'ÉCHEC'}] monstre caché (arc d'anneau seul) : retrouvé en {[(e.cx, e.cy) for e in en_c]}, "
+          f"déplacement vers lui prévu, aucune fausse alerte hors combat : {quiet}")
+    failures += not ok
+
     # 4) vitesse
     t0 = time.time()
     for _ in range(5):

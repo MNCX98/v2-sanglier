@@ -20,6 +20,17 @@ class Fighter:
         return self.cx, self.cy
 
 
+# Colonne d'icônes du panneau « Challenges » quand il est DÉPLIÉ (grosses icônes orange à pastille rouge, à gauche) :
+# elle ressemble à un anneau rouge. Replié, le panneau n'affiche rien là et la carte y est visible : on ne l'exclut
+# alors pas. Réglé au démarrage par config.challenges_panel_open.
+EXCLUDE_ICON_COLUMN = False
+
+
+def set_icon_column_excluded(value: bool) -> None:
+    global EXCLUDE_ICON_COLUMN
+    EXCLUDE_ICON_COLUMN = bool(value)
+
+
 def _game_roi_wide(h: int, w: int) -> np.ndarray:
     """Zone de jeu élargie : tout l'écran de jeu sauf les éléments d'interface connus (frise des tours et minuteur,
     barre « Challenges », colonne d'icônes). Elle couvre le bord supérieur gauche de la carte et les fines bandes
@@ -29,7 +40,8 @@ def _game_roi_wide(h: int, w: int) -> np.ndarray:
     roi[int(78 * sy):int(976 * sy), int(316 * sx):int(1604 * sx)] = True
     roi[:int(265 * sy), :int(612 * sx)] = False         # frise des tours, portraits, minuteur, « Fin du tour »
     roi[:int(140 * sy), int(612 * sx):int(815 * sx)] = False   # barre « Challenges »
-    roi[:int(570 * sy), :int(412 * sx)] = False         # colonne d'icônes orange et rouges
+    if EXCLUDE_ICON_COLUMN:
+        roi[:int(570 * sy), :int(412 * sx)] = False     # colonne d'icônes du panneau Challenges déplié
     return roi
 
 
@@ -63,7 +75,8 @@ def _game_roi(h: int, w: int) -> np.ndarray:
     roi = np.zeros((h, w), bool)
     roi[int(0.05 * h):int(0.955 * h), int(0.17 * w):int(0.83 * w)] = True
     roi[:int(0.27 * h), :int(0.48 * w)] = False        # barre d'ordre de jeu (barres bleues/rouges des portraits)
-    roi[:int(0.5 * h), :int(0.215 * w)] = False        # colonne d'icônes orange/rouges à gauche
+    if EXCLUDE_ICON_COLUMN:
+        roi[:int(0.5 * h), :int(0.215 * w)] = False    # colonne d'icônes du panneau Challenges déplié
     return roi
 
 
@@ -152,6 +165,8 @@ def find_enemies(scene: np.ndarray) -> list[Fighter]:
         out = _enemies_in(blue & _game_roi_wide(h, w), h, w)
     if not out:                                             # toujours rien : un anneau à moitié caché par un décor ?
         out = _enemies_partial((blue & _game_roi_wide(h, w)).astype(np.uint8) * 255)
+    if not out:                                             # tout dernier recours : un simple arc d'anneau dépasse d'un décor
+        out = _enemies_arc((blue & _game_roi_wide(h, w)).astype(np.uint8) * 255)
     return out
 
 
@@ -163,6 +178,46 @@ def _enemies_partial(m: np.ndarray) -> list[Fighter]:
     rings = [(f, c) for f, c in _find_rings_scored(m, min_cover=ENEMY_PARTIAL_COVER) if c >= ENEMY_PARTIAL_COVER]
     rings.sort(key=lambda fc: -fc[1])
     return [f for f, _ in rings[:6]]
+
+
+ARC_MIN_PIXELS = 12          # un arc plus petit est confondu avec du bruit
+ARC_MAX_PIXELS = 400         # au-delà, ce n'est plus un anneau caché mais autre chose de bleu
+ARC_TOLERANCE = 1.6          # écart maximal (px) entre un pixel de l'arc et l'ellipse de l'anneau
+ARC_MIN_PRECISION = 0.85     # part des pixels bleus qui doivent être SUR l'ellipse (sinon : pas un anneau)
+
+
+def _enemies_arc(m: np.ndarray) -> list[Fighter]:
+    """Dernier recours : monstre presque entièrement caché par un décor (bloc d'herbe, rocher), dont seul un petit
+    arc de l'anneau bleu dépasse (quelques dizaines de pixels). La couverture de l'anneau est alors trop faible
+    pour _enemies_partial ; on mesure plutôt si les pixels bleus visibles se placent EXACTEMENT sur une ellipse de
+    la taille connue de l'anneau. Un arc, même court, donne alors un centre unique (la courbure fixe la position).
+    """
+    pts_mask = m > 0
+    if int(pts_mask.sum()) < ARC_MIN_PIXELS:
+        return []
+    a, b = RING_W / 2.0, RING_H / 2.0
+    joined = cv2.dilate(pts_mask.astype(np.uint8), cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (9, 9)))
+    n, lab = cv2.connectedComponents(joined)
+    found: list[tuple[Fighter, int]] = []
+    for i in range(1, n):
+        gy, gx = np.where((lab == i) & pts_mask)
+        if not (ARC_MIN_PIXELS <= len(gx) <= ARC_MAX_PIXELS):
+            continue
+        px, py = gx.astype(np.float32), gy.astype(np.float32)
+        best = None
+        for cx in range(int(px.max() - a - 3), int(px.min() + a + 4)):
+            dx = (px - cx) / a
+            for cy in range(int(py.max() - b - 3), int(py.min() + b + 4)):
+                dy = (py - cy) / b
+                r = np.hypot(dx, dy)
+                radius = np.hypot(dx * a, dy * b) / np.maximum(r, 1e-6)       # rayon local de l'ellipse, en px
+                on = int((np.abs(r - 1.0) * radius <= ARC_TOLERANCE).sum())
+                if best is None or on > best[0]:
+                    best = (on, cx, cy)
+        if best and best[0] >= ARC_MIN_PIXELS and best[0] / len(gx) >= ARC_MIN_PRECISION:
+            found.append((Fighter(best[1], best[2], best[0], RING_W, RING_H), best[0]))
+    found.sort(key=lambda fp: -fp[1])
+    return [f for f, _ in found[:6]]
 
 
 def _enemies_in(zone: np.ndarray, h: int, w: int) -> list[Fighter]:
@@ -272,25 +327,6 @@ def range_fraction(mask: np.ndarray, center: tuple[int, int], half=(34, 15)) -> 
     h, w = mask.shape
     patch = mask[max(0, y - half[1]):min(h, y + half[1]), max(0, x - half[0]):min(w, x + half[0])]
     return float(patch.mean()) if patch.size else 0.0
-
-
-def assess_targets_in_range(mask: np.ndarray, enemies: list[Fighter], min_fraction: float = 0.05,
-                           min_total_pixels: int = 800) -> tuple[list[Fighter], bool, list[float]]:
-    """Évalue la portée localement autour de chaque anneau ennemi.
-
-    Le nombre total de pixels violets ne doit pas être le seul critère : une petite zone de portée,
-    partiellement masquée par le décor ou l'interface, peut contenir moins de 800 pixels tout en
-    recouvrant clairement la case d'un adversaire.
-
-    Retourne les cibles reconnues à portée, un indicateur de fiabilité globale et les fractions
-    locales (dans le même ordre que `enemies`). Si la zone violette est trop faible et ne recouvre
-    aucune cible, la portée reste inconnue : l'appelant ne doit alors pas tenter de clic à l'aveugle.
-    """
-    total = int(mask.sum())
-    fractions = [range_fraction(mask, enemy.center) for enemy in enemies]
-    in_range = [enemy for enemy, fraction in zip(enemies, fractions) if fraction >= min_fraction]
-    known = total >= min_total_pixels or bool(in_range)
-    return in_range, known, fractions
 
 
 def sort_by_distance(fighters: list[Fighter], origin: tuple[int, int]) -> list[Fighter]:

@@ -33,6 +33,7 @@ class Config:
     range_min_fraction: float = 0.05            # part de violet autour d'un monstre pour le dire « à portée »
     loop_combats: bool = True                   # phase 6 : enchaîner les combats sans fin (False = un seul combat)
     sequence_seconds: int = 40                  # durée de l'enregistrement de séquence
+    challenges_panel_open: bool = False         # True si le panneau « Challenges » est déplié en combat (sa colonne d'icônes à gauche est alors ignorée)
     save_diagnostics: bool = True               # enregistre une image annotée à chaque clic
 
 

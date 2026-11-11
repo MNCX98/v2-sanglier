@@ -21,10 +21,11 @@ from core.recorder import record_sequence
 from phases.p1_recherche import scan_once
 from phases.p2_combat import test_ui
 from phases.p3_placement import RULES, test_placement
+from core.combat import set_icon_column_excluded
 from phases.p4_tour import test_combat
 from phases.runner import run_phases
 
-VERSION = "0.8.11"
+VERSION = "0.8.8"
 
 # Modes pendant lesquels DofusAuto se réduit pour ne pas cacher le jeu, puis revient.
 HIDE_MODES = {"test", "testui", "testplace", "testcombat", "snapshot", "sequence"}
@@ -80,6 +81,7 @@ class MainWindow(QMainWindow):
         self.resize(1000, 780)
         self.cfg = load_config(config_path())
         self.ctx = Context(self.cfg, WindowCapture(self.cfg.window_title_contains))
+        set_icon_column_excluded(self.cfg.challenges_panel_open)
         self.worker: Worker | None = None
 
         central = QWidget()
@@ -273,7 +275,7 @@ class MainWindow(QMainWindow):
         self.btn_logs.clicked.connect(lambda: self._open(logs_dir()))
         self.btn_caps.clicked.connect(lambda: self._open(captures_dir()))
 
-        self.log(f"DofusAuto {VERSION} (détection de portée, inventaire monture et déplacements)")
+        self.log(f"DofusAuto {VERSION} (copie sangliers uniquement : lecture de la portée du sort corrigée)")
         self._reload_templates()
         self._set_running(False)
         QTimer.singleShot(0, lambda: self.log("Prêt. Place BlueStacks bien visible (sans le recouvrir), "
