@@ -18,6 +18,17 @@ def ui_dir() -> Path:
     return app_dir() / "assets" / "ui"
 
 
+def spells_dir() -> Path:
+    """Icônes de sorts importées depuis des captures d'écran (inscriptible, à côté du .exe)."""
+    d = app_dir() / "spells"
+    d.mkdir(exist_ok=True)
+    return d
+
+
+def spells_profiles_path() -> Path:
+    return spells_dir() / "profiles.json"
+
+
 def logs_dir() -> Path:
     d = app_dir() / "logs"
     d.mkdir(exist_ok=True)

@@ -13,7 +13,7 @@ from PySide6.QtWidgets import (QApplication, QCheckBox, QComboBox, QDoubleSpinBo
 from core import input as inp
 from core.capture import WindowCapture
 from core.config import load_config, save_config
-from core.paths import captures_dir, config_path, logs_dir, monsters_dir, ui_dir
+from core.paths import captures_dir, config_path, logs_dir, monsters_dir, spells_dir, ui_dir
 from core.vision import load_templates, load_ui_templates
 from phases.base import Context
 from core.imgio import save_image
@@ -21,11 +21,13 @@ from core.recorder import record_sequence
 from phases.p1_recherche import scan_once
 from phases.p2_combat import test_ui
 from phases.p3_placement import RULES, test_placement
-from core.combat import set_icon_column_excluded, set_turn_bar_compact
+from core.combat import apply_layout
+from core.spells import resolve_spellbook
+from gui.spells_tab import SpellsTab
 from phases.p4_tour import test_combat
 from phases.runner import run_phases
 
-VERSION = "0.8.8"
+VERSION = "0.9.1"
 
 # Modes pendant lesquels DofusAuto se réduit pour ne pas cacher le jeu, puis revient.
 HIDE_MODES = {"test", "testui", "testplace", "testcombat", "snapshot", "sequence"}
@@ -81,8 +83,8 @@ class MainWindow(QMainWindow):
         self.resize(1000, 780)
         self.cfg = load_config(config_path())
         self.ctx = Context(self.cfg, WindowCapture(self.cfg.window_title_contains))
-        set_icon_column_excluded(self.cfg.challenges_panel_open)
-        set_turn_bar_compact(self.cfg.turn_bar_compact)
+        apply_layout(self.cfg)
+        self.ctx.spells = resolve_spellbook(self.cfg.spell_profile)
         self.worker: Worker | None = None
 
         central = QWidget()
@@ -202,6 +204,11 @@ class MainWindow(QMainWindow):
         lay.addWidget(steps, 1)
         tabs.addTab(tab_combat, "Combat")
 
+        # Onglet « Sorts »
+        self.spells_tab = SpellsTab(self.cfg, self._grab_game_image, self)
+        self.spells_tab.changed.connect(self._spells_changed)
+        tabs.addTab(self.spells_tab, "Sorts")
+
         # Onglet « Tests »
         tab_tests = QWidget()
         lay = QHBoxLayout(tab_tests)
@@ -294,9 +301,20 @@ class MainWindow(QMainWindow):
     def _threshold_changed(self, v: float):
         self.cfg.threshold = round(v, 2)
 
+    def _grab_game_image(self):
+        """Capture du jeu à l'échelle du programme (pour découper l'icône d'un sort)."""
+        self.ctx.capture.title_contains = self.cfg.window_title_contains
+        return self.ctx.capture.grab()[0]
+
+    def _spells_changed(self):
+        """Profil de sorts modifié ou changé : recharge les icônes et les sorts à jouer."""
+        self.ctx.ui_templates = load_ui_templates(ui_dir()) + load_ui_templates(spells_dir())
+        self.ctx.spells = resolve_spellbook(self.cfg.spell_profile)
+        self.log(f"Sorts : profil « {self.ctx.spells.name} ».")
+
     def _reload_templates(self):
         self.ctx.templates = load_templates(monsters_dir())
-        self.ctx.ui_templates = load_ui_templates(ui_dir())
+        self.ctx.ui_templates = load_ui_templates(ui_dir()) + load_ui_templates(spells_dir())
         monsters = {}
         for t in self.ctx.templates:
             monsters.setdefault(t.monster, 0)
@@ -321,6 +339,7 @@ class MainWindow(QMainWindow):
         if self.worker and self.worker.isRunning():
             return
         self.ctx.capture.title_contains = self.cfg.window_title_contains
+        self.ctx.spells = resolve_spellbook(self.cfg.spell_profile)
         self.worker = Worker(self.ctx, mode)
         self.worker.log.connect(self.log)
         self.worker.frame.connect(self._show_frame)

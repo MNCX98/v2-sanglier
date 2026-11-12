@@ -11,7 +11,7 @@ import cv2
 from core import input as inp
 from core.vie import read_hp_percent
 from phases.base import Context
-from phases.p4_tour import _find
+from phases.turn_helpers import find_icon as _find
 
 ANCHOR = "hud_oeil"        # repère du HUD (assets/ui/hud_oeil.png) : le cœur est à une position fixe par rapport à lui
 POTION = "potion_vie"      # image de la potion à boire (assets/ui/potion_vie.png)

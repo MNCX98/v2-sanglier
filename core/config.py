@@ -18,6 +18,7 @@ class Config:
     do_placement: bool = True                   # phase 3 : se placer puis cliquer sur « Prêt »
     placement_rule: str = "closest"             # closest = plus proche des monstres, farthest, stay
     do_turns: bool = True                       # phases 4-5 : jouer les tours (sorts + fin du tour)
+    spell_profile: str = ""                     # profil de sorts utilisé (vide = profil intégré : Coagulation + Pied du Sacrieur)
     casts_per_turn: int = 2                     # nombre de lancers de Coagulation par tour
     pause_between_casts_ms: int = 500           # pause supplémentaire entre deux lancers d'un même tour
     unload_enabled: bool = True                 # inventaire plein : transférer les objets dans la monture

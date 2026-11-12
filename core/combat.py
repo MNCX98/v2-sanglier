@@ -37,6 +37,12 @@ def set_turn_bar_compact(value: bool) -> None:
     TURN_BAR_COMPACT = bool(value)
 
 
+def apply_layout(cfg) -> None:
+    """Applique la disposition d'écran choisie dans la configuration (barre d'ordre de jeu, panneau Challenges)."""
+    set_icon_column_excluded(cfg.challenges_panel_open)
+    set_turn_bar_compact(cfg.turn_bar_compact)
+
+
 def _turn_bar_zone(h: int, w: int) -> tuple[int, int]:
     """(largeur, hauteur) en pixels de la zone haut-gauche ignorée (barre d'ordre de jeu)."""
     if TURN_BAR_COMPACT:
@@ -326,6 +332,8 @@ def spell_border_pixels(scene: np.ndarray, x: int, y: int, w: int, h: int, pad: 
     """Nombre de pixels orange du cadre qui entoure l'icône d'un sort sélectionné (0 si non sélectionné)."""
     sh, sw = scene.shape[:2]
     x0, y0, x1, y1 = max(0, x - pad), max(0, y - pad), min(sw, x + w + pad), min(sh, y + h + pad)
+    if x1 <= x0 or y1 <= y0:
+        return 0                                        # icône hors de l'image (fenêtre redimensionnée) : pas de cadre vu
     roi = cv2.cvtColor(scene[y0:y1, x0:x1], cv2.COLOR_BGR2HSV)
     orange = ((roi[:, :, 0] >= 8) & (roi[:, :, 0] <= 20) & (roi[:, :, 1] > 180) & (roi[:, :, 2] > 200)).astype(np.uint8)
     inner = np.zeros_like(orange)                       # on ne compte que le cadre, pas l'intérieur de l'icône

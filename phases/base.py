@@ -4,6 +4,7 @@ from typing import Callable
 
 from core.capture import WindowCapture
 from core.config import Config
+from core.spells import SpellBook
 from core.vision import Template
 
 
@@ -21,3 +22,4 @@ class Context:
     progress: int = 0                                            # compteur d'actions réussies (lancers, déplacements) : détecte un combat bloqué
     failed_moves: list = field(default_factory=list)             # cases visées sans succès pendant le tour en cours
     last_enemies: list = field(default_factory=list)             # dernières positions connues des adversaires (combat en cours) : repli si plus aucun n'est visible
+    spells: SpellBook | None = None                              # sorts à jouer (None = profil intégré)

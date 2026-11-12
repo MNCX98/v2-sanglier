@@ -39,26 +39,119 @@ def _white(img: np.ndarray) -> np.ndarray:
     return ((img.min(axis=2) > 185).astype(np.uint8)) * 255
 
 
-def _text_template(name: str):
-    if name not in _texts:
-        try:
-            img = cv2.imdecode(np.fromfile(str(app_dir() / "assets" / "texte" / f"{name}.png"), np.uint8), cv2.IMREAD_COLOR)
-        except OSError:
-            img = None
-        _texts[name] = None if img is None else _white(img)
-    return _texts[name]
+def _text_template(name: str, scale: float = 1.0):
+    """Masque blanc du texte (assets/texte) à l'échelle demandée (mis en cache). Pour une autre échelle, on remet
+    d'abord l'image COULEUR à l'échelle, puis on en tire le masque blanc, comme pour l'écran : réduire directement le
+    masque ferait disparaître les traits fins (le texte du menu n'a que 1 à 2 pixels d'épaisseur)."""
+    key = (name, round(scale, 3))
+    if key not in _texts:
+        if (name, "img") not in _texts:
+            try:
+                _texts[(name, "img")] = cv2.imdecode(np.fromfile(str(app_dir() / "assets" / "texte" / f"{name}.png"),
+                                                                 np.uint8), cv2.IMREAD_COLOR)
+            except OSError:
+                _texts[(name, "img")] = None
+        img = _texts[(name, "img")]
+        if img is None:
+            _texts[key] = None
+        else:
+            if abs(scale - 1.0) > 1e-6:
+                img = cv2.resize(img, None, fx=scale, fy=scale, interpolation=cv2.INTER_LINEAR)
+            _texts[key] = _white(img)
+    return _texts[key]
 
 
-def find_text(scene: np.ndarray, name: str, threshold: float = TEXT_MIN):
-    """Cherche un texte (image dans assets/texte). Retourne ((x, y) du centre, score) ou None."""
-    tpl = _text_template(name)
+def find_text(scene: np.ndarray, name: str, threshold: float = TEXT_MIN, scale: float = 1.0, white=None):
+    """Cherche un texte (image dans assets/texte) à l'échelle donnée.
+    Retourne ((x, y) du centre, score) ou None."""
+    tpl = _text_template(name, scale)
     if tpl is None or scene.shape[0] < tpl.shape[0] or scene.shape[1] < tpl.shape[1]:
         return None
-    res = cv2.matchTemplate(_white(scene), tpl, cv2.TM_CCOEFF_NORMED)
+    res = cv2.matchTemplate(_white(scene) if white is None else white, tpl, cv2.TM_CCOEFF_NORMED)
     _, score, _, loc = cv2.minMaxLoc(res)
     if score < threshold:
         return None
     return (loc[0] + tpl.shape[1] // 2, loc[1] + tpl.shape[0] // 2), float(score)
+
+
+TEXT_SCALES = tuple(round(0.90 + 0.01 * i, 2) for i in range(21))      # 0,90 … 1,10 : adaptation d'échelle imparfaite
+
+
+def find_text_any_scale(scene: np.ndarray, name: str, threshold: float = TEXT_MIN, around: float | None = None, white=None):
+    """Comme find_text, mais à plusieurs échelles : un texte fin n'est reconnu qu'à 1 % près (à 1 % d'écart son score
+    tombe de 1,00 à 0,5), or l'adaptation automatique à la taille du jeu n'est jamais parfaite partout.
+    Essaie d'abord autour de `around` (échelle déjà connue), puis toute la plage.
+    Retourne ((x, y) du centre, score, échelle du texte trouvé) ou None."""
+    white = _white(scene) if white is None else white
+    tried: set[float] = set()
+    ranges = []
+    if around is not None:
+        ranges.append(tuple(round(around + d, 2) for d in (0, -0.01, 0.01, -0.02, 0.02)))
+    ranges.append(TEXT_SCALES)
+    for scales in ranges:
+        best = None
+        for sc in scales:
+            if sc in tried:
+                continue
+            tried.add(sc)
+            r = find_text(scene, name, 0.0, sc, white)
+            if r and (best is None or r[1] > best[1]):
+                best = (r[0], r[1], sc)
+        if best and best[1] >= threshold:
+            return best
+    return None
+
+
+MENU_LINE_MIN = 0.50                 # score minimal de chaque ligne du menu quand les DEUX sont retrouvées, bien placées
+MENU_DY, MENU_DX = 43, 15           # « …les objets visibles » est 43 px plus bas et 15 px plus à droite que « …tous les objets »
+
+
+def _find_text_near(white: np.ndarray, name: str, scale: float, center: tuple[float, float], radius: int = 14):
+    """Meilleure correspondance d'un texte dans un petit rectangle autour de `center` : ((x, y), score) ou None."""
+    tpl = _text_template(name, scale)
+    if tpl is None:
+        return None
+    th, tw = tpl.shape[:2]
+    x0, y0 = max(0, int(center[0] - tw / 2 - radius)), max(0, int(center[1] - th / 2 - radius))
+    x1, y1 = min(white.shape[1], int(center[0] + tw / 2 + radius)), min(white.shape[0], int(center[1] + th / 2 + radius))
+    if x1 - x0 < tw or y1 - y0 < th:
+        return None
+    _, score, _, loc = cv2.minMaxLoc(cv2.matchTemplate(white[y0:y1, x0:x1], tpl, cv2.TM_CCOEFF_NORMED))
+    return (x0 + loc[0] + tw // 2, y0 + loc[1] + th // 2), float(score)
+
+
+def find_transfer_option(scene: np.ndarray, option: str, around: float | None = None):
+    """Retrouve la ligne `option` du menu de transfert, même si l'échelle de l'écran est un peu fausse.
+    Un texte fin est peu fiable seul : on exige soit un score élevé (0,85), soit les deux lignes « tous les objets » et
+    « les objets visibles » retrouvées à la même échelle et à la bonne distance l'une de l'autre.
+    Retourne ((x, y) du centre, score, échelle) ou None."""
+    white = _white(scene)
+    ranges = []
+    if around is not None:
+        ranges.append(tuple(round(around + d, 2) for d in (0, -0.01, 0.01, -0.02, 0.02)))
+    ranges.append(TEXT_SCALES)
+    done: set[float] = set()
+    for scales in ranges:
+        best = None
+        for sc in scales:
+            if sc in done:
+                continue
+            done.add(sc)
+            t = find_text(scene, "inv_menu_tous", 0.0, sc, white)
+            if not t:
+                continue
+            # la 2e ligne ressemble à la 3e (« …déjà présents ») : on ne la cherche qu'à la place attendue
+            v = _find_text_near(white, "inv_menu_visibles", sc, (t[0][0] + MENU_DX * sc, t[0][1] + MENU_DY * sc))
+            if not v:
+                continue
+            wanted = t if option == "inv_menu_tous" else v
+            alone = wanted[1] >= TEXT_MIN
+            paired = min(t[1], v[1]) >= MENU_LINE_MIN
+            if (alone or paired) and (best is None or wanted[1] > best[1]):
+                best = (wanted[0], wanted[1], sc)
+        if best:
+            return best
+    return None
 
 
 def find_icons(ctx: Context, scene: np.ndarray, variant: str, threshold: float = ICON_MIN):
@@ -71,7 +164,7 @@ def inventory_full(ctx: Context, scene: np.ndarray) -> bool:
     Le badge n'est cherché que sans fenêtre ouverte : la barre des pods d'une fenêtre porte un repère rouge semblable."""
     windows = find_icons(ctx, scene, CLOSE, 0.85)
     if windows:
-        return find_text(scene, "inv_plein_texte") is not None
+        return find_text_any_scale(scene, "inv_plein_texte") is not None
     return bool(find_icons(ctx, scene, BADGE, BADGE_MIN))
 
 
@@ -145,6 +238,30 @@ def _bottom_triangle(ctx: Context, scene: np.ndarray):
     return max(triangles, key=lambda d: d.center[1]) if triangles else None
 
 
+def _save_transfer_diag(ctx: Context, option: str, titles, clicked) -> None:
+    """Menu de transfert introuvable : meilleurs scores de lecture dans le journal + capture annotée (titres en
+    jaune, clics en rouge) enregistrée dans logs, pour voir si le menu est à l'écran ou si le clic a manqué."""
+    from datetime import datetime
+    from core.imgio import save_image
+    from core.paths import logs_dir
+    scene, _ = ctx.capture.grab()
+    white = _white(scene)
+    best = {n: max((find_text(scene, n, 0.0, sc, white) or (None, 0.0))[1] for sc in TEXT_SCALES)
+            for n in ("inv_menu_visibles", "inv_menu_tous")}
+    ctx.log("Diagnostic du menu de transfert : meilleur score de lecture de « " + option + " » = "
+            f"{best.get(option, 0.0):.2f} (0,85 demandé) ; clics aux positions {clicked}.")
+    if ctx.config.save_diagnostics:
+        out = scene.copy()
+        for t in titles:
+            cv2.circle(out, (int(t[0]), int(t[1])), 10, (0, 255, 255), 3)
+        for c in clicked:
+            cv2.circle(out, (int(c[0]), int(c[1])), 14, (0, 0, 255), 3)
+        try:
+            save_image(logs_dir() / f"transfert_menu_absent_{datetime.now():%Y%m%d_%H%M%S}.png", out)
+        except Exception:
+            pass
+
+
 def unload_to_mount(ctx: Context, should_stop) -> str:
     """Transfère les objets dans la monture. Retourne 'ok', 'full' (encore plein : monture pleine ?) ou 'fail'."""
     cfg = ctx.config
@@ -204,23 +321,31 @@ def unload_to_mount(ctx: Context, should_stop) -> str:
 
     # 3) fenêtres Monture + Inventaire ouvertes : flèche verte, puis le choix de transfert
     def both_titles(scene):
-        inv, mon = find_text(scene, "inv_titre_inventaire"), find_text(scene, "inv_titre_monture")
+        white = _white(scene)
+        inv = find_text_any_scale(scene, "inv_titre_inventaire", white=white)
+        mon = find_text_any_scale(scene, "inv_titre_monture", around=inv[2] if inv else None, white=white) if inv else None
         return (inv, mon) if inv and mon else None
 
     titles, origin = _wait_stable(ctx, both_titles, lambda t: t[0][0], should_stop, 4.0)
     if not titles:
         ctx.log("⚠ Les fenêtres Monture et Inventaire ne se sont pas ouvertes.")
         return finish("fail")
-    (inv_title, _), (mon_title, _) = titles
-    chosen = None
+    (inv_title, _, s_inv), (mon_title, _, s_mon) = titles
+    ui_scale = (s_inv + s_mon) / 2                             # échelle réelle des fenêtres (1,00 = mise en page d'origine)
+    ctx.log(f"Fenêtres Monture et Inventaire reconnues (échelle {ui_scale:.2f}).")
+    find_option = lambda s: find_transfer_option(s, option, around=ui_scale)
+    chosen, clicked = None, []
     for label, title, off in (("Inventaire", inv_title, INV_ARROW_FROM_TITLE), ("Monture", mon_title, MOUNT_ARROW_FROM_TITLE)):
         ctx.log(f"Clic sur la flèche verte de la fenêtre {label}.")
-        _click(ctx, origin, (title[0] + off[0], title[1] + off[1]))
-        chosen, origin = _wait(ctx, lambda s: find_text(s, option), should_stop, 2.5)
+        target = (int(title[0] + off[0] * ui_scale), int(title[1] + off[1] * ui_scale))
+        clicked.append(target)
+        _click(ctx, origin, target)
+        chosen, origin = _wait(ctx, find_option, should_stop, 2.5)
         if chosen:
             break
     if not chosen:
         ctx.log("⚠ Le menu de transfert n'est pas apparu.")
+        _save_transfer_diag(ctx, option, [inv_title, mon_title], clicked)
         return finish("fail")
     label = "tous les objets" if cfg.unload_mode == "tous" else "des objets visibles"
     ctx.log(f"Transfert {'de ' if cfg.unload_mode == 'tous' else ''}{label}.")
