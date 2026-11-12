@@ -387,6 +387,52 @@ def main():
           f"(position finale {got.center if got else None}, {cap.i} captures, {_time.time() - t0:.1f} s)")
     failures += not ok
 
+    # 3v) Pied du Sacrieur : personne au contact -> se rapprocher s'il reste des PM, puis lancer (logique de décision)
+    import phases.p4_tour as _p4
+    from core.config import Config as _Cfg
+    def _scenario(green_available, move_ok):
+        saved = {k: getattr(_p4, k) for k in ("_select_second_spell", "_deselect_second_spell", "find_enemies", "find_me",
+                 "range_mask", "range_fraction", "plan_move_green", "move_closer", "my_position", "_wait_confirm", "_diag")}
+        real_sleep, real_click = _p4.time.sleep, _p4.inp.click
+        state = {"moved": False, "moves": 0, "clicks": 0}
+        enemy = _types.SimpleNamespace(center=(500, 300), cx=500, cy=300)
+        class _Cap:
+            def grab(self): return None, (0, 0)
+        try:
+            _p4.time.sleep = lambda *_: None
+            _p4.inp.click = lambda *_: state.__setitem__("clicks", state["clicks"] + 1)
+            _p4._select_second_spell = lambda ctx: (True, _types.SimpleNamespace(center=(1, 1)))
+            _p4._deselect_second_spell = lambda ctx, icon: True
+            _p4.find_enemies = lambda sc: [enemy]
+            _p4.find_me = lambda sc, hint=None: _types.SimpleNamespace(center=(100, 100))
+            _p4.range_mask = lambda sc: None
+            _p4.range_fraction = lambda m, c: 1.0 if state["moved"] else 0.0       # à portée seulement après le déplacement
+            _p4.plan_move_green = lambda ctx, sc, en, pos: (enemy, [(200, 200), (250, 250)] if green_available else [])
+            def _mc(ctx, en, pos, stop):
+                state["moves"] += 1
+                state["moved"] = bool(move_ok)
+                return bool(move_ok)
+            _p4.move_closer = _mc
+            _p4.my_position = lambda ctx, sc, me, mask, en: (100, 100)
+            _p4._wait_confirm = lambda ctx: (_types.SimpleNamespace(center=(9, 9)), (0, 0))
+            _p4._diag = lambda *a, **k: None
+            ctx_ = _types.SimpleNamespace(config=_Cfg(), capture=_Cap(), me_hint=(100, 100), select_unverified=True,
+                                          log=lambda m: None, failed_moves=[])
+            res = _p4.cast_second_spell(ctx_, lambda: False)
+            return res, state["moves"]
+        finally:
+            _p4.time.sleep, _p4.inp.click = real_sleep, real_click
+            for k, v in saved.items():
+                setattr(_p4, k, v)
+    (a_res, a_moves) = _scenario(True, True)       # PM restants, déplacement réussi : on lance après avoir bougé
+    (b_res, b_moves) = _scenario(False, True)      # plus aucune case verte : on ne bouge pas
+    (c_res, c_moves) = _scenario(True, False)      # déplacement raté : on ne lance pas, on ne boucle pas
+    ok = (a_res == (True, True) and a_moves == 1 and b_res == (False, False) and b_moves == 0
+          and c_res == (False, False) and c_moves == 1)
+    print(f"[{'OK' if ok else 'ÉCHEC'}] Pied du Sacrieur : se rapproche s'il reste des PM puis lance ({a_res}), ne bouge pas sans PM ({b_res}), "
+          f"déplacement raté sans boucle ({c_res})")
+    failures += not ok
+
     # 4) vitesse
     t0 = time.time()
     for _ in range(5):

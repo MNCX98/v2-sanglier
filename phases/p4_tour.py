@@ -460,8 +460,11 @@ def play_turn(ctx: Context, should_stop, turn: int = 0) -> int:
         if cfg.pause_between_casts_ms > 0:
             ctx.log(f"Pause de {cfg.pause_between_casts_ms} ms avant le Pied du Sacrieur.")
             time.sleep(cfg.pause_between_casts_ms / 1000)
-        if cast_second_spell(ctx):
+        cast_ok, moved_for_foot = cast_second_spell(ctx, should_stop)
+        if cast_ok:
             casts += 1
+        if moved_for_foot:
+            moved = True
     if not should_stop():
         _release_spells(ctx)                          # aucun sort ne doit rester sélectionné au moment de finir le tour
     ctx.progress += casts + int(moved) + int(opening_done)
@@ -474,52 +477,95 @@ SECOND_SPELL_LABEL = "Pied du Sacrieur"
 SMALL_RANGE_PIXELS = 800                # portée de 4 cases seulement : peu de violet à l'écran
 
 
-def cast_second_spell(ctx: Context) -> bool:
-    """Sélectionne le Pied du Sacrieur, le lance sur l'adversaire à portée le plus proche et confirme."""
-    cfg = ctx.config
+def _select_second_spell(ctx: Context):
+    """Clique l'icône du Pied du Sacrieur et attend qu'il soit sélectionné. Retourne (sélectionné, icône)."""
     scene, (ox, oy) = ctx.capture.grab()
     icon = _find(ctx, scene, SECOND_SPELL)
     if not icon:
         ctx.log(f"⚠ Icône du {SECOND_SPELL_LABEL} introuvable ({SECOND_SPELL}.png dans assets/ui).")
-        return False
+        return False, None
     inp.click(ox + icon.center[0], oy + icon.center[1])
-    selected = False
     t0 = time.time()
     while time.time() - t0 < 1.8:
         time.sleep(0.3)
         if _is_selected(ctx.capture.grab()[0], icon, SMALL_RANGE_PIXELS):
-            selected = True
-            break
-    if not selected:
-        ctx.log(f"Le {SECOND_SPELL_LABEL} ne s'affiche pas (plus assez de PA ?).")
-        return False
+            return True, icon
+    ctx.log(f"Le {SECOND_SPELL_LABEL} ne s'affiche pas (plus assez de PA ?).")
+    return False, icon
+
+
+def _deselect_second_spell(ctx: Context, icon) -> bool:
+    """Reclique l'icône du Pied du Sacrieur pour le désélectionner (le jeu refuse de déplacer tant qu'il l'est)."""
     scene, (ox, oy) = ctx.capture.grab()
-    enemies, me = find_enemies(scene), find_me(scene, ctx.me_hint)
-    mask = range_mask(scene)
-    origin = me.center if me else (ctx.me_hint or (enemies[0].center if enemies else None))
-    in_range = [f for f in (sort_by_distance(enemies, origin) if origin else enemies)
-                if range_fraction(mask, f.center) >= cfg.range_min_fraction]
-    ctx.log(f"{SECOND_SPELL_LABEL} : {len(enemies)} adversaire(s), {len(in_range)} à portée.")
-    if not in_range:
-        ctx.log(f"Personne au contact : pas de {SECOND_SPELL_LABEL}.")
-        icon2 = _find(ctx, scene, SECOND_SPELL)        # on désélectionne le sort avant de finir le tour
-        if icon2:
-            inp.click(ox + icon2.center[0], oy + icon2.center[1])
-        return False
-    for target in in_range[:3]:
-        _diag(ctx, scene, enemies, me, target, label="pied")
-        inp.click(ox + target.cx, oy + target.cy - 4)
-        ok, origin2 = _wait_confirm(ctx)
-        if ok:
-            inp.click(origin2[0] + ok.center[0], origin2[1] + ok.center[1])
-            ctx.log(f"✔ {SECOND_SPELL_LABEL} lancé en {target.center}.")
-            time.sleep(1.5)
+    ic = _find(ctx, scene, SECOND_SPELL) or icon
+    inp.click(ox + ic.center[0], oy + ic.center[1])
+    t0 = time.time()
+    while time.time() - t0 < 1.8:
+        time.sleep(0.3)
+        s, _ = ctx.capture.grab()
+        if not _is_selected(s, _find(ctx, s, SECOND_SPELL) or ic, SMALL_RANGE_PIXELS):
             return True
-        ctx.log("Pas de confirmation sur cette cible.")
-        scene, (ox, oy) = ctx.capture.grab()
-        if not _is_selected(scene, _find(ctx, scene, SECOND_SPELL) or icon, SMALL_RANGE_PIXELS):
-            break
+    ctx.log(f"⚠ Le {SECOND_SPELL_LABEL} reste sélectionné.")
     return False
+
+
+def cast_second_spell(ctx: Context, should_stop=lambda: False) -> tuple[bool, bool]:
+    """Sélectionne le Pied du Sacrieur, le lance sur l'adversaire à portée le plus proche et confirme.
+    Si personne n'est à portée mais qu'il reste des PM (cases vertes de déplacement visibles), le personnage se
+    rapproche de l'adversaire le plus proche puis relance le Pied du Sacrieur, au lieu de passer.
+    Retourne (lancé, déplacé)."""
+    cfg = ctx.config
+    moved = False
+    for attempt in (1, 2):                              # 2e passage = après un déplacement
+        selected, icon = _select_second_spell(ctx)
+        if not selected:
+            return False, moved
+        scene, (ox, oy) = ctx.capture.grab()
+        enemies, me = find_enemies(scene), find_me(scene, ctx.me_hint)
+        mask = range_mask(scene)
+        origin = me.center if me else (ctx.me_hint or (enemies[0].center if enemies else None))
+        in_range = [f for f in (sort_by_distance(enemies, origin) if origin else enemies)
+                    if range_fraction(mask, f.center) >= cfg.range_min_fraction]
+        ctx.log(f"{SECOND_SPELL_LABEL} : {len(enemies)} adversaire(s), {len(in_range)} à portée.")
+        if in_range:
+            for target in in_range[:3]:
+                _diag(ctx, scene, enemies, me, target, label="pied")
+                inp.click(ox + target.cx, oy + target.cy - 4)
+                ok, origin2 = _wait_confirm(ctx)
+                if ok:
+                    inp.click(origin2[0] + ok.center[0], origin2[1] + ok.center[1])
+                    ctx.log(f"✔ {SECOND_SPELL_LABEL} lancé en {target.center}.")
+                    time.sleep(1.5)
+                    return True, moved
+                ctx.log("Pas de confirmation sur cette cible.")
+                scene, (ox, oy) = ctx.capture.grab()
+                if not _is_selected(scene, _find(ctx, scene, SECOND_SPELL) or icon, SMALL_RANGE_PIXELS):
+                    break
+            return False, moved
+        # Personne au contact : on désélectionne le sort, puis on regarde s'il reste des PM pour se rapprocher.
+        ctx.log(f"Personne au contact : pas de {SECOND_SPELL_LABEL} pour l'instant.")
+        deselected = _deselect_second_spell(ctx, icon)
+        if attempt == 2 or not deselected or not enemies or not cfg.move_when_out_of_range or should_stop():
+            return False, moved
+        time.sleep(0.4)
+        scene, _ = ctx.capture.grab()
+        me = find_me(scene, ctx.me_hint) or me
+        if me:
+            ctx.me_hint = me.center
+        pos = my_position(ctx, scene, me, range_mask(scene), enemies)
+        if not pos:
+            return False, moved
+        _, green = plan_move_green(ctx, scene, enemies, pos)
+        if not green:
+            ctx.log("Plus de PM (aucune case verte de déplacement) : je ne bouge pas.")
+            return False, moved
+        ctx.log(f"Il me reste des PM ({len(green)} cases vertes) : je me rapproche pour lancer le {SECOND_SPELL_LABEL}.")
+        ctx.select_unverified = False                   # Coagulation n'est plus sélectionnée à ce stade
+        if not move_closer(ctx, enemies, pos, should_stop):
+            return False, moved
+        moved = True
+        time.sleep(0.8)                                 # laisse le personnage s'arrêter avant de resélectionner le sort
+    return False, moved
 
 
 # --- Sort d'ouverture (1er tour) : se lance sur mon propre personnage ----------------------------
