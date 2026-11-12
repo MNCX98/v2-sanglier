@@ -28,6 +28,10 @@ VERSION 0.8.8 : adversaire caché derrière un décor
     et des monstres collés à lui, près du bord haut de la carte, n'étaient jamais vus : le programme ne les attaquait pas
     et ne pouvait plus bouger (c'est ce qui a fait mourir le personnage). Nouveau réglage dans config.json :
     "turn_bar_compact": true (défaut, zone ignorée réduite à x < 605, y < 301) ; false pour l'ancienne frise large.
+  - Pied du Sacrieur : si personne n'est à portée, le programme désélectionne le sort et regarde s'il reste des PM
+    (cases vertes de déplacement visibles). Si oui, il se rapproche de l'adversaire le plus proche (case verte la plus
+    proche de lui) puis relance le Pied du Sacrieur ; sinon il passe comme avant. Un seul déplacement par tentative,
+    pas de boucle. Réglage : "move_when_out_of_range" dans config.json (désactive aussi ce déplacement).
   - Monture : l'image « inv_monture.png » n'était pas l'icône de la monture (une patte sur un bouclier, très
     probablement « Compagnon ») : elle est remplacée par la vraie (tête de dragodinde jaune).
   - Monture : le programme cliquait sur l'icône de la monture dès qu'il la voyait apparaître pendant l'animation de
