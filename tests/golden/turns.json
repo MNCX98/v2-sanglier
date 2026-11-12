@@ -1,0 +1,6324 @@
+[
+{
+"case": "seed1-tour2-var1",
+"ret": 0,
+"err": null,
+"clicks": [
+[
+1024,
+821
+],
+[
+1640,
+674
+],
+[
+1024,
+778
+]
+],
+"logs": [
+"Mon tour.",
+"2 adversaire(s), 2 à portée.",
+"Cible à 1.0 case(s) en (1024, 825).",
+"Pas de confirmation sur cette cible.",
+"Cible à 1.0 case(s) en (1024, 782).",
+"Pas de confirmation sur cette cible."
+],
+"grabs": 26,
+"state": {
+"me_hint": [
+1067,
+804
+],
+"select_unverified": false,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [
+[
+1024,
+782
+],
+[
+1024,
+825
+]
+],
+"no_enemy_streak": 0,
+"progress": 0
+}
+},
+{
+"case": "seed2-tour1-var2",
+"ret": 0,
+"err": null,
+"clicks": [
+[
+1640,
+674
+],
+[
+848,
+122
+]
+],
+"logs": [
+"Mon tour.",
+"⚠ Icône du sort d'ouverture introuvable (sort_debut_combat.png dans assets/ui).",
+"4 adversaire(s), 3 à portée.",
+"Cible à 1.0 case(s) en (848, 126).",
+"Pas de confirmation sur cette cible.",
+"⚠ Icône du sort introuvable."
+],
+"grabs": 17,
+"state": {
+"me_hint": [
+805,
+105
+],
+"select_unverified": false,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [
+[
+978,
+104
+],
+[
+761,
+126
+],
+[
+848,
+126
+],
+[
+1198,
+301
+]
+],
+"no_enemy_streak": 0,
+"progress": 0
+}
+},
+{
+"case": "seed3-tour2-var3",
+"ret": 0,
+"err": null,
+"clicks": [
+[
+1024,
+821
+],
+[
+1640,
+674
+],
+[
+1024,
+778
+]
+],
+"logs": [
+"Mon tour.",
+"2 adversaire(s), 2 à portée.",
+"Cible à 1.0 case(s) en (1024, 825).",
+"Pas de confirmation sur cette cible.",
+"Diagnostic de sélection : cadre orange 0 px (150 attendus si le sort est sélectionné), bleu de portée 0 px (3000 attendus), icône en (1613, 646), score 1.00.",
+"Sélection du sort non vérifiée : j'essaie quand même, la fenêtre de confirmation dira si ça marche.",
+"Cible à 1.0 case(s) en (1024, 782).",
+"Pas de confirmation sur cette cible."
+],
+"grabs": 31,
+"state": {
+"me_hint": [
+1067,
+804
+],
+"select_unverified": true,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [
+[
+1024,
+782
+],
+[
+1024,
+825
+]
+],
+"no_enemy_streak": 0,
+"progress": 0
+}
+},
+{
+"case": "seed4-tour1-var4",
+"ret": 0,
+"err": null,
+"clicks": [],
+"logs": [
+"Mon tour.",
+"⚠ Icône du sort introuvable."
+],
+"grabs": 4,
+"state": {
+"me_hint": null,
+"select_unverified": false,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [],
+"no_enemy_streak": 0,
+"progress": 0
+}
+},
+{
+"case": "seed5-tour2-var0",
+"ret": 0,
+"err": null,
+"clicks": [
+[
+1198,
+821
+]
+],
+"logs": [
+"Mon tour.",
+"3 adversaire(s), 2 à portée.",
+"Cible à 1.0 case(s) en (1198, 825).",
+"Pas de confirmation sur cette cible.",
+"⚠ Icône du sort introuvable.",
+"Je désélectionne Coagulation avant de finir le tour."
+],
+"grabs": 15,
+"state": {
+"me_hint": [
+1240,
+848
+],
+"select_unverified": false,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [
+[
+1329,
+759
+],
+[
+1111,
+782
+],
+[
+1198,
+825
+]
+],
+"no_enemy_streak": 0,
+"progress": 0
+}
+},
+{
+"case": "seed6-tour1-var1",
+"ret": 0,
+"err": null,
+"clicks": [
+[
+1641,
+529
+],
+[
+1640,
+674
+],
+[
+980,
+801
+],
+[
+1640,
+674
+]
+],
+"logs": [
+"Mon tour.",
+"Sélection du sort d'ouverture non vérifiée : j'essaie quand même, la fenêtre de confirmation dira si ça marche.",
+"⚠ Position de mon personnage inconnue.",
+"⚠ Position de mon personnage inconnue : pas de sort d'ouverture.",
+"4 adversaire(s), 1 à portée.",
+"Cible à 3.0 case(s) en (980, 805).",
+"Pas de confirmation sur cette cible.",
+"Diagnostic de sélection : cadre orange 0 px (150 attendus si le sort est sélectionné), bleu de portée 0 px (3000 attendus), icône en (1613, 646), score 0.99.",
+"Sélection du sort non vérifiée : j'essaie quand même, la fenêtre de confirmation dira si ça marche."
+],
+"grabs": 34,
+"state": {
+"me_hint": [
+849,
+781
+],
+"select_unverified": true,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [
+[
+980,
+629
+],
+[
+1111,
+698
+],
+[
+1285,
+785
+],
+[
+980,
+805
+]
+],
+"no_enemy_streak": 0,
+"progress": 0
+}
+},
+{
+"case": "seed7-tour2-var2",
+"ret": 0,
+"err": null,
+"clicks": [
+[
+980,
+801
+],
+[
+1640,
+674
+],
+[
+1640,
+674
+]
+],
+"logs": [
+"Mon tour.",
+"4 adversaire(s), 1 à portée.",
+"Cible à 3.0 case(s) en (980, 805).",
+"Pas de confirmation sur cette cible.",
+"Je désélectionne Coagulation avant de finir le tour."
+],
+"grabs": 26,
+"state": {
+"me_hint": [
+849,
+785
+],
+"select_unverified": false,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [
+[
+980,
+629
+],
+[
+1111,
+698
+],
+[
+1285,
+785
+],
+[
+980,
+805
+]
+],
+"no_enemy_streak": 0,
+"progress": 0
+}
+},
+{
+"case": "seed8-tour1-var3",
+"ret": 0,
+"err": null,
+"clicks": [
+[
+1641,
+529
+],
+[
+805,
+105
+],
+[
+848,
+783
+]
+],
+"logs": [
+"Mon tour.",
+"Sélection du sort d'ouverture non vérifiée : j'essaie quand même, la fenêtre de confirmation dira si ça marche.",
+"Sort d'ouverture : clic sur mon personnage en (805, 105).",
+"Pas de confirmation pour le sort d'ouverture (essai 1/2).",
+"Anneau rouge repéré en (849, 785), loin de ma case de départ (805, 105) : je garde ma case de départ.",
+"La dernière position connue (805, 105) ne correspond pas à la portée du sort : je situe mon personnage en (848, 783).",
+"Sort d'ouverture : clic sur mon personnage en (848, 783).",
+"Pas de confirmation pour le sort d'ouverture (essai 2/2).",
+"1 adversaire(s), 0 à portée.",
+"Aucun adversaire à portée : je passe le tour."
+],
+"grabs": 33,
+"state": {
+"me_hint": [
+892,
+585
+],
+"select_unverified": false,
+"hint_unverified": true,
+"failed_moves": [],
+"last_enemies": [
+[
+588,
+518
+]
+],
+"no_enemy_streak": 0,
+"progress": 0
+}
+},
+{
+"case": "seed9-tour2-var4",
+"ret": 1,
+"err": null,
+"clicks": [
+[
+1640,
+674
+],
+[
+980,
+801
+],
+[
+1085,
+658
+],
+[
+928,
+775
+],
+[
+928,
+775
+],
+[
+928,
+819
+],
+[
+928,
+819
+],
+[
+1640,
+674
+],
+[
+1024,
+777
+]
+],
+"logs": [
+"Mon tour.",
+"4 adversaire(s), 1 à portée.",
+"Cible à 3.0 case(s) en (980, 805).",
+"✔ Lancer 1/3 confirmé.",
+"Pause de 500 ms avant le lancer suivant.",
+"2 adversaire(s), 0 à portée.",
+"Aucun adversaire à portée : je me rapproche.",
+"Déplacement de 2 case(s) vers le monstre en (980, 806) (à 3 case(s)) : double clic en (928, 775).",
+"Le personnage n'a pas bougé (case inaccessible ?), j'essaie une autre case.",
+"Déplacement de 2 case(s) vers le monstre en (980, 806) (à 3 case(s)) : double clic en (928, 819).",
+"✔ Personnage déplacé en (936, 563).",
+"Je resélectionne Coagulation après le déplacement.",
+"Diagnostic de sélection : cadre orange 0 px (150 attendus si le sort est sélectionné), bleu de portée 0 px (3000 attendus), icône en (1613, 646), score 0.99.",
+"Sélection du sort non vérifiée : j'essaie quand même, la fenêtre de confirmation dira si ça marche.",
+"1 adversaire(s). Portée du sort illisible à l'écran : j'essaie seulement ceux à 5 case(s) ou moins (1), du plus proche au plus loin (la fenêtre de confirmation vérifie).",
+"Cible à 1.0 case(s) en (1024, 781).",
+"Pas de confirmation sur cette cible."
+],
+"grabs": 47,
+"state": {
+"me_hint": [
+1067,
+803
+],
+"select_unverified": true,
+"hint_unverified": false,
+"failed_moves": [
+[
+928,
+775
+]
+],
+"last_enemies": [
+[
+1024,
+781
+]
+],
+"no_enemy_streak": 0,
+"progress": 2
+}
+},
+{
+"case": "seed10-tour1-var0",
+"ret": 0,
+"err": null,
+"clicks": [
+[
+1641,
+529
+],
+[
+849,
+781
+],
+[
+1085,
+658
+],
+[
+1640,
+674
+],
+[
+1198,
+821
+]
+],
+"logs": [
+"Mon tour.",
+"Sélection du sort d'ouverture non vérifiée : j'essaie quand même, la fenêtre de confirmation dira si ça marche.",
+"Sort d'ouverture : clic sur mon personnage en (849, 781).",
+"✔ Sort d'ouverture lancé.",
+"3 adversaire(s), 2 à portée.",
+"Cible à 1.0 case(s) en (1198, 825).",
+"Pas de confirmation sur cette cible.",
+"⚠ Icône du sort introuvable."
+],
+"grabs": 35,
+"state": {
+"me_hint": [
+1240,
+848
+],
+"select_unverified": false,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [
+[
+1329,
+759
+],
+[
+1111,
+782
+],
+[
+1198,
+825
+]
+],
+"no_enemy_streak": 0,
+"progress": 1
+}
+},
+{
+"case": "seed11-tour2-var1",
+"ret": 0,
+"err": null,
+"clicks": [
+[
+1640,
+674
+],
+[
+761,
+122
+],
+[
+1640,
+674
+],
+[
+848,
+122
+],
+[
+978,
+100
+]
+],
+"logs": [
+"Mon tour.",
+"4 adversaire(s), 3 à portée.",
+"Cible à 1.0 case(s) en (761, 126).",
+"Pas de confirmation sur cette cible.",
+"Diagnostic de sélection : cadre orange 0 px (150 attendus si le sort est sélectionné), bleu de portée 0 px (3000 attendus), icône en (1613, 646), score 1.00.",
+"Sélection du sort non vérifiée : j'essaie quand même, la fenêtre de confirmation dira si ça marche.",
+"Cible à 1.0 case(s) en (848, 126).",
+"Pas de confirmation sur cette cible.",
+"Cible à 3.9 case(s) en (978, 104).",
+"Pas de confirmation sur cette cible."
+],
+"grabs": 44,
+"state": {
+"me_hint": [
+805,
+104
+],
+"select_unverified": true,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [
+[
+978,
+104
+],
+[
+761,
+126
+],
+[
+848,
+126
+],
+[
+1198,
+301
+]
+],
+"no_enemy_streak": 0,
+"progress": 0
+}
+},
+{
+"case": "seed12-tour1-var2",
+"ret": 0,
+"err": null,
+"clicks": [
+[
+1641,
+529
+],
+[
+849,
+785
+]
+],
+"logs": [
+"Mon tour.",
+"Sélection du sort d'ouverture non vérifiée : j'essaie quand même, la fenêtre de confirmation dira si ça marche.",
+"Sort d'ouverture : clic sur mon personnage en (849, 785).",
+"Pas de confirmation pour le sort d'ouverture (essai 1/2).",
+"⚠ Icône du sort d'ouverture introuvable (sort_debut_combat.png dans assets/ui).",
+"Aucun adversaire visible."
+],
+"grabs": 23,
+"state": {
+"me_hint": [
+849,
+785
+],
+"select_unverified": false,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [],
+"no_enemy_streak": 1,
+"progress": 0
+}
+},
+{
+"case": "seed13-tour2-var3",
+"ret": 0,
+"err": null,
+"clicks": [
+[
+1640,
+674
+]
+],
+"logs": [
+"Mon tour.",
+"Aucun adversaire visible.",
+"Je désélectionne Coagulation avant de finir le tour."
+],
+"grabs": 7,
+"state": {
+"me_hint": null,
+"select_unverified": false,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [],
+"no_enemy_streak": 1,
+"progress": 0
+}
+},
+{
+"case": "seed14-tour1-var4",
+"ret": 0,
+"err": null,
+"clicks": [
+[
+1640,
+674
+]
+],
+"logs": [
+"Mon tour.",
+"Diagnostic de sélection : cadre orange 0 px (150 attendus si le sort est sélectionné), bleu de portée 0 px (3000 attendus), icône en (1613, 646), score 1.00.",
+"Sélection du sort non vérifiée : j'essaie quand même, la fenêtre de confirmation dira si ça marche.",
+"Aucun adversaire visible."
+],
+"grabs": 12,
+"state": {
+"me_hint": null,
+"select_unverified": true,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [],
+"no_enemy_streak": 1,
+"progress": 0
+}
+},
+{
+"case": "seed15-tour2-var0",
+"ret": 1,
+"err": null,
+"clicks": [
+[
+1640,
+674
+],
+[
+761,
+122
+],
+[
+848,
+122
+],
+[
+1085,
+658
+],
+[
+761,
+122
+],
+[
+848,
+122
+],
+[
+1640,
+674
+],
+[
+978,
+100
+],
+[
+1640,
+674
+]
+],
+"logs": [
+"Mon tour.",
+"4 adversaire(s), 3 à portée.",
+"Cible à 1.0 case(s) en (761, 126).",
+"Pas de confirmation sur cette cible.",
+"Cible à 1.0 case(s) en (848, 126).",
+"✔ Lancer 1/2 confirmé.",
+"Pause de 500 ms avant le lancer suivant.",
+"4 adversaire(s), 3 à portée.",
+"Cible à 1.0 case(s) en (761, 126).",
+"Pas de confirmation sur cette cible.",
+"Cible à 1.0 case(s) en (848, 126).",
+"Pas de confirmation sur cette cible.",
+"Diagnostic de sélection : cadre orange 0 px (150 attendus si le sort est sélectionné), bleu de portée 0 px (3000 attendus), icône en (1613, 646), score 1.00.",
+"Sélection du sort non vérifiée : j'essaie quand même, la fenêtre de confirmation dira si ça marche.",
+"Cible à 3.9 case(s) en (978, 104).",
+"Pas de confirmation sur cette cible.",
+"Je désélectionne Coagulation avant de finir le tour."
+],
+"grabs": 61,
+"state": {
+"me_hint": [
+805,
+104
+],
+"select_unverified": false,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [
+[
+978,
+104
+],
+[
+761,
+126
+],
+[
+848,
+126
+],
+[
+1198,
+301
+]
+],
+"no_enemy_streak": 0,
+"progress": 1
+}
+},
+{
+"case": "seed16-tour1-var1",
+"ret": 0,
+"err": null,
+"clicks": [
+[
+1641,
+529
+],
+[
+849,
+780
+],
+[
+980,
+801
+],
+[
+1640,
+674
+]
+],
+"logs": [
+"Mon tour.",
+"Sélection du sort d'ouverture non vérifiée : j'essaie quand même, la fenêtre de confirmation dira si ça marche.",
+"Sort d'ouverture : clic sur mon personnage en (849, 780).",
+"Pas de confirmation pour le sort d'ouverture (essai 1/2).",
+"⚠ Icône du sort d'ouverture introuvable (sort_debut_combat.png dans assets/ui).",
+"La portée du sort s'est affichée avec un léger retard : je la lis maintenant.",
+"4 adversaire(s), 1 à portée.",
+"Cible à 3.0 case(s) en (980, 805).",
+"Pas de confirmation sur cette cible."
+],
+"grabs": 42,
+"state": {
+"me_hint": [
+936,
+563
+],
+"select_unverified": false,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [
+[
+1111,
+301
+],
+[
+1067,
+367
+]
+],
+"no_enemy_streak": 0,
+"progress": 0
+}
+},
+{
+"case": "seed17-tour2-var2",
+"ret": 0,
+"err": null,
+"clicks": [
+[
+1640,
+674
+],
+[
+980,
+801
+],
+[
+1640,
+674
+]
+],
+"logs": [
+"Mon tour.",
+"Diagnostic de sélection : cadre orange 0 px (150 attendus si le sort est sélectionné), bleu de portée 0 px (3000 attendus), icône en (1613, 646), score 1.00.",
+"Sélection du sort non vérifiée : j'essaie quand même, la fenêtre de confirmation dira si ça marche.",
+"La portée du sort s'est affichée avec un léger retard : je la lis maintenant.",
+"4 adversaire(s), 1 à portée.",
+"Cible à 3.0 case(s) en (980, 805).",
+"Pas de confirmation sur cette cible.",
+"Je désélectionne Coagulation avant de finir le tour."
+],
+"grabs": 27,
+"state": {
+"me_hint": [
+849,
+781
+],
+"select_unverified": false,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [
+[
+980,
+629
+],
+[
+1111,
+698
+],
+[
+1285,
+785
+],
+[
+980,
+806
+]
+],
+"no_enemy_streak": 0,
+"progress": 0
+}
+},
+{
+"case": "seed18-tour1-var3",
+"ret": 0,
+"err": null,
+"clicks": [
+[
+1641,
+529
+],
+[
+936,
+563
+],
+[
+801,
+807
+],
+[
+1640,
+674
+],
+[
+1024,
+821
+],
+[
+1024,
+778
+],
+[
+1640,
+674
+]
+],
+"logs": [
+"Mon tour.",
+"Sélection du sort d'ouverture non vérifiée : j'essaie quand même, la fenêtre de confirmation dira si ça marche.",
+"Sort d'ouverture : clic sur mon personnage en (936, 563).",
+"Pas de confirmation pour le sort d'ouverture (essai 1/2).",
+"La dernière position connue (936, 563) ne correspond pas à la portée du sort : je situe mon personnage en (801, 807).",
+"Sort d'ouverture : clic sur mon personnage en (801, 807).",
+"Pas de confirmation pour le sort d'ouverture (essai 2/2).",
+"2 adversaire(s), 2 à portée.",
+"Cible à 1.0 case(s) en (1024, 825).",
+"Pas de confirmation sur cette cible.",
+"Cible à 1.0 case(s) en (1024, 782).",
+"Pas de confirmation sur cette cible.",
+"Je désélectionne Coagulation avant de finir le tour."
+],
+"grabs": 58,
+"state": {
+"me_hint": [
+1067,
+804
+],
+"select_unverified": false,
+"hint_unverified": true,
+"failed_moves": [],
+"last_enemies": [
+[
+1024,
+782
+],
+[
+1024,
+825
+]
+],
+"no_enemy_streak": 0,
+"progress": 0
+}
+},
+{
+"case": "seed19-tour2-var4",
+"ret": 0,
+"err": null,
+"clicks": [],
+"logs": [
+"Mon tour.",
+"⚠ Icône du sort introuvable."
+],
+"grabs": 4,
+"state": {
+"me_hint": null,
+"select_unverified": false,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [],
+"no_enemy_streak": 0,
+"progress": 0
+}
+},
+{
+"case": "seed20-tour1-var0",
+"ret": 1,
+"err": null,
+"clicks": [
+[
+761,
+122
+],
+[
+1640,
+674
+],
+[
+848,
+122
+],
+[
+1085,
+658
+],
+[
+1198,
+821
+],
+[
+1329,
+755
+]
+],
+"logs": [
+"Mon tour.",
+"⚠ Icône du sort d'ouverture introuvable (sort_debut_combat.png dans assets/ui).",
+"4 adversaire(s), 3 à portée.",
+"Cible à 1.0 case(s) en (761, 126).",
+"Pas de confirmation sur cette cible.",
+"Diagnostic de sélection : cadre orange 0 px (150 attendus si le sort est sélectionné), bleu de portée 0 px (3000 attendus), icône en (1613, 646), score 1.00.",
+"Sélection du sort non vérifiée : j'essaie quand même, la fenêtre de confirmation dira si ça marche.",
+"Cible à 1.0 case(s) en (848, 126).",
+"✔ Lancer 1/2 confirmé.",
+"Pause de 500 ms avant le lancer suivant.",
+"3 adversaire(s), 2 à portée.",
+"Cible à 1.0 case(s) en (1198, 825).",
+"Pas de confirmation sur cette cible.",
+"Cible à 4.0 case(s) en (1329, 759).",
+"Pas de confirmation sur cette cible."
+],
+"grabs": 46,
+"state": {
+"me_hint": [
+1240,
+848
+],
+"select_unverified": true,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [
+[
+1329,
+759
+],
+[
+1111,
+782
+],
+[
+1198,
+825
+]
+],
+"no_enemy_streak": 0,
+"progress": 1
+}
+},
+{
+"case": "seed21-tour2-var1",
+"ret": 0,
+"err": null,
+"clicks": [
+[
+1640,
+674
+],
+[
+761,
+122
+],
+[
+1640,
+674
+],
+[
+848,
+122
+],
+[
+1640,
+674
+],
+[
+978,
+100
+]
+],
+"logs": [
+"Mon tour.",
+"4 adversaire(s), 3 à portée.",
+"Cible à 1.0 case(s) en (761, 126).",
+"Pas de confirmation sur cette cible.",
+"Cible à 1.0 case(s) en (848, 126).",
+"Pas de confirmation sur cette cible.",
+"Cible à 3.9 case(s) en (978, 104).",
+"Pas de confirmation sur cette cible.",
+"⚠ Icône du sort introuvable."
+],
+"grabs": 50,
+"state": {
+"me_hint": [
+805,
+104
+],
+"select_unverified": false,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [
+[
+978,
+104
+],
+[
+761,
+126
+],
+[
+848,
+126
+],
+[
+1198,
+301
+]
+],
+"no_enemy_streak": 0,
+"progress": 0
+}
+},
+{
+"case": "seed22-tour1-var2",
+"ret": 1,
+"err": null,
+"clicks": [
+[
+1024,
+821
+],
+[
+1024,
+778
+],
+[
+1085,
+658
+],
+[
+1640,
+674
+],
+[
+936,
+784
+],
+[
+936,
+784
+],
+[
+1640,
+674
+],
+[
+1640,
+674
+]
+],
+"logs": [
+"Mon tour.",
+"⚠ Icône du sort d'ouverture introuvable (sort_debut_combat.png dans assets/ui).",
+"2 adversaire(s), 2 à portée.",
+"Cible à 1.0 case(s) en (1024, 825).",
+"Pas de confirmation sur cette cible.",
+"Cible à 1.0 case(s) en (1024, 782).",
+"✔ Lancer 1/2 confirmé.",
+"Pause de 500 ms avant le lancer suivant.",
+"2 adversaire(s), 0 à portée.",
+"La dernière position connue (1067, 804) ne correspond pas à la portée du sort : je situe mon personnage en (801, 807).",
+"Aucun adversaire à portée : je me rapproche.",
+"44 case(s) accessible(s) (vertes) : je vise la plus proche du monstre.",
+"Déplacement de 3 case(s) vers le monstre en (980, 806) (à 4 case(s)) : double clic en (936, 784).",
+"✔ Personnage déplacé en (849, 781).",
+"Je resélectionne Coagulation après le déplacement.",
+"3 adversaire(s). Portée du sort illisible à l'écran : j'essaie seulement ceux à 5 case(s) ou moins (0), du plus proche au plus loin (la fenêtre de confirmation vérifie).",
+"Aucun adversaire à portée : je passe le tour.",
+"Je désélectionne Coagulation avant de finir le tour."
+],
+"grabs": 41,
+"state": {
+"me_hint": [
+849,
+780
+],
+"select_unverified": false,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [
+[
+980,
+629
+],
+[
+1118,
+696
+],
+[
+1285,
+785
+]
+],
+"no_enemy_streak": 0,
+"progress": 2
+}
+},
+{
+"case": "seed23-tour2-var3",
+"ret": 2,
+"err": null,
+"clicks": [
+[
+1640,
+674
+],
+[
+1112,
+691
+],
+[
+1085,
+658
+],
+[
+1024,
+821
+],
+[
+1640,
+674
+],
+[
+1024,
+778
+],
+[
+1085,
+658
+],
+[
+1641,
+307
+],
+[
+1198,
+821
+]
+],
+"logs": [
+"Mon tour.",
+"3 adversaire(s). Portée du sort illisible à l'écran : j'essaie seulement ceux à 5 case(s) ou moins (3), du plus proche au plus loin (la fenêtre de confirmation vérifie).",
+"Cible à 0.0 case(s) en (1112, 695).",
+"✔ Lancer 1/2 confirmé.",
+"Pause de 500 ms avant le lancer suivant.",
+"2 adversaire(s), 2 à portée.",
+"Cible à 1.0 case(s) en (1024, 825).",
+"Pas de confirmation sur cette cible.",
+"Cible à 1.0 case(s) en (1024, 782).",
+"✔ Lancer 2/2 confirmé.",
+"Pause de 500 ms avant le Pied du Sacrieur.",
+"Pied du Sacrieur : 3 adversaire(s), 2 à portée.",
+"Pas de confirmation sur cette cible."
+],
+"grabs": 49,
+"state": {
+"me_hint": [
+1067,
+804
+],
+"select_unverified": false,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [
+[
+1024,
+782
+],
+[
+1024,
+825
+]
+],
+"no_enemy_streak": 0,
+"progress": 2
+}
+},
+{
+"case": "seed24-tour1-var4",
+"ret": 0,
+"err": null,
+"clicks": [],
+"logs": [
+"Mon tour.",
+"⚠ Icône du sort introuvable."
+],
+"grabs": 4,
+"state": {
+"me_hint": null,
+"select_unverified": false,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [],
+"no_enemy_streak": 0,
+"progress": 0
+}
+},
+{
+"case": "seed25-tour2-var0",
+"ret": 0,
+"err": null,
+"clicks": [
+[
+1024,
+821
+]
+],
+"logs": [
+"Mon tour.",
+"2 adversaire(s), 2 à portée.",
+"Cible à 1.0 case(s) en (1024, 825).",
+"Pas de confirmation sur cette cible.",
+"⚠ Icône du sort introuvable."
+],
+"grabs": 14,
+"state": {
+"me_hint": [
+1067,
+804
+],
+"select_unverified": false,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [
+[
+1024,
+782
+],
+[
+1024,
+825
+]
+],
+"no_enemy_streak": 0,
+"progress": 0
+}
+},
+{
+"case": "seed26-tour1-var1",
+"ret": 0,
+"err": null,
+"clicks": [],
+"logs": [
+"Mon tour.",
+"⚠ Icône du sort d'ouverture introuvable (sort_debut_combat.png dans assets/ui).",
+"⚠ Icône du sort introuvable."
+],
+"grabs": 5,
+"state": {
+"me_hint": null,
+"select_unverified": false,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [],
+"no_enemy_streak": 0,
+"progress": 0
+}
+},
+{
+"case": "seed27-tour2-var2",
+"ret": 0,
+"err": null,
+"clicks": [],
+"logs": [
+"Mon tour.",
+"⚠ Icône du sort introuvable."
+],
+"grabs": 4,
+"state": {
+"me_hint": null,
+"select_unverified": false,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [],
+"no_enemy_streak": 0,
+"progress": 0
+}
+},
+{
+"case": "seed28-tour1-var3",
+"ret": 0,
+"err": null,
+"clicks": [
+[
+1641,
+529
+],
+[
+892,
+585
+],
+[
+892,
+585
+],
+[
+1640,
+674
+],
+[
+1198,
+821
+],
+[
+1329,
+755
+]
+],
+"logs": [
+"Mon tour.",
+"Sélection du sort d'ouverture non vérifiée : j'essaie quand même, la fenêtre de confirmation dira si ça marche.",
+"Sort d'ouverture : clic sur mon personnage en (892, 585).",
+"Pas de confirmation pour le sort d'ouverture (essai 1/2).",
+"Anneau rouge de mon personnage non vu : j'utilise sa dernière position connue (892, 585).",
+"Sort d'ouverture : clic sur mon personnage en (892, 585).",
+"Pas de confirmation pour le sort d'ouverture (essai 2/2).",
+"Diagnostic de sélection : cadre orange 0 px (150 attendus si le sort est sélectionné), bleu de portée 0 px (3000 attendus), icône en (1613, 646), score 1.00.",
+"Sélection du sort non vérifiée : j'essaie quand même, la fenêtre de confirmation dira si ça marche.",
+"3 adversaire(s), 2 à portée.",
+"Cible à 1.0 case(s) en (1198, 825).",
+"Pas de confirmation sur cette cible.",
+"Cible à 4.0 case(s) en (1329, 759).",
+"Pas de confirmation sur cette cible."
+],
+"grabs": 58,
+"state": {
+"me_hint": [
+1240,
+848
+],
+"select_unverified": true,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [
+[
+1329,
+759
+],
+[
+1111,
+782
+],
+[
+1198,
+825
+]
+],
+"no_enemy_streak": 0,
+"progress": 0
+}
+},
+{
+"case": "seed29-tour2-var4",
+"ret": 0,
+"err": null,
+"clicks": [
+[
+1640,
+674
+],
+[
+1198,
+821
+],
+[
+1640,
+674
+],
+[
+1329,
+755
+],
+[
+1640,
+674
+],
+[
+1640,
+674
+]
+],
+"logs": [
+"Mon tour.",
+"3 adversaire(s), 2 à portée.",
+"Cible à 1.0 case(s) en (1198, 825).",
+"Pas de confirmation sur cette cible.",
+"Cible à 4.0 case(s) en (1329, 759).",
+"Pas de confirmation sur cette cible.",
+"Je désélectionne Coagulation avant de finir le tour."
+],
+"grabs": 35,
+"state": {
+"me_hint": [
+1240,
+848
+],
+"select_unverified": false,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [
+[
+1329,
+759
+],
+[
+1111,
+782
+],
+[
+1198,
+825
+]
+],
+"no_enemy_streak": 0,
+"progress": 0
+}
+},
+{
+"case": "seed30-tour1-var0",
+"ret": 0,
+"err": null,
+"clicks": [
+[
+1641,
+529
+],
+[
+980,
+801
+]
+],
+"logs": [
+"Mon tour.",
+"Sélection du sort d'ouverture non vérifiée : j'essaie quand même, la fenêtre de confirmation dira si ça marche.",
+"⚠ Position de mon personnage inconnue.",
+"⚠ Position de mon personnage inconnue : pas de sort d'ouverture.",
+"4 adversaire(s), 1 à portée.",
+"Cible à 3.0 case(s) en (980, 805).",
+"Pas de confirmation sur cette cible.",
+"⚠ Icône du sort introuvable."
+],
+"grabs": 24,
+"state": {
+"me_hint": [
+849,
+785
+],
+"select_unverified": false,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [
+[
+980,
+629
+],
+[
+1111,
+698
+],
+[
+1285,
+785
+],
+[
+980,
+805
+]
+],
+"no_enemy_streak": 0,
+"progress": 0
+}
+},
+{
+"case": "seed31-tour2-var1",
+"ret": 1,
+"err": null,
+"clicks": [
+[
+716,
+541
+],
+[
+716,
+541
+],
+[
+1640,
+674
+],
+[
+1640,
+674
+],
+[
+1024,
+821
+],
+[
+1640,
+674
+],
+[
+1024,
+778
+],
+[
+1085,
+658
+],
+[
+1641,
+307
+],
+[
+1198,
+821
+],
+[
+1329,
+755
+]
+],
+"logs": [
+"Mon tour.",
+"1 adversaire(s), 0 à portée.",
+"Aucun adversaire à portée : je me rapproche.",
+"Déplacement de 4 case(s) vers le monstre en (588, 518) (à 7 case(s)) : double clic en (716, 541).",
+"✔ Personnage déplacé en (936, 563).",
+"Je resélectionne Coagulation après le déplacement.",
+"2 adversaire(s), 2 à portée.",
+"Cible à 1.0 case(s) en (1024, 825).",
+"Pas de confirmation sur cette cible.",
+"Cible à 1.0 case(s) en (1024, 782).",
+"✔ Lancer 1/1 confirmé.",
+"Pause de 500 ms avant le Pied du Sacrieur.",
+"Pied du Sacrieur : 3 adversaire(s), 2 à portée.",
+"Pas de confirmation sur cette cible.",
+"Pas de confirmation sur cette cible."
+],
+"grabs": 53,
+"state": {
+"me_hint": [
+1067,
+804
+],
+"select_unverified": false,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [
+[
+1024,
+782
+],
+[
+1024,
+825
+]
+],
+"no_enemy_streak": 0,
+"progress": 2
+}
+},
+{
+"case": "seed32-tour1-var2",
+"ret": 0,
+"err": null,
+"clicks": [
+[
+1641,
+529
+],
+[
+849,
+780
+],
+[
+1085,
+658
+],
+[
+1640,
+674
+],
+[
+1199,
+821
+],
+[
+1640,
+674
+],
+[
+1111,
+777
+],
+[
+1330,
+755
+],
+[
+1640,
+674
+],
+[
+1024,
+821
+],
+[
+1024,
+778
+],
+[
+1640,
+674
+]
+],
+"logs": [
+"Mon tour.",
+"Sélection du sort d'ouverture non vérifiée : j'essaie quand même, la fenêtre de confirmation dira si ça marche.",
+"Sort d'ouverture : clic sur mon personnage en (849, 780).",
+"✔ Sort d'ouverture lancé.",
+"3 adversaire(s). Portée du sort illisible à l'écran : j'essaie seulement ceux à 5 case(s) ou moins (3), du plus proche au plus loin (la fenêtre de confirmation vérifie).",
+"Cible à 1.0 case(s) en (1199, 825).",
+"Pas de confirmation sur cette cible.",
+"Diagnostic de sélection : cadre orange 0 px (150 attendus si le sort est sélectionné), bleu de portée 0 px (3000 attendus), icône en (1613, 646), score 1.00.",
+"Sélection du sort non vérifiée : j'essaie quand même, la fenêtre de confirmation dira si ça marche.",
+"Cible à 3.0 case(s) en (1111, 781).",
+"Pas de confirmation sur cette cible.",
+"Cible à 4.0 case(s) en (1330, 759).",
+"Pas de confirmation sur cette cible.",
+"Aucune cible n'a répondu : je me rapproche.",
+"Monstre le plus proche à 1 case(s) : déjà au contact ou aucune case possible.",
+"Déplacement raté (essai 1/3) : je réessaie.",
+"2 adversaire(s), 2 à portée.",
+"Cible à 1.0 case(s) en (1024, 825).",
+"Pas de confirmation sur cette cible.",
+"Cible à 1.0 case(s) en (1024, 782).",
+"Pas de confirmation sur cette cible.",
+"Je désélectionne Coagulation avant de finir le tour."
+],
+"grabs": 88,
+"state": {
+"me_hint": [
+1067,
+804
+],
+"select_unverified": false,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [
+[
+1024,
+782
+],
+[
+1024,
+825
+]
+],
+"no_enemy_streak": 0,
+"progress": 1
+}
+},
+{
+"case": "seed33-tour2-var3",
+"ret": 0,
+"err": null,
+"clicks": [
+[
+1640,
+674
+],
+[
+848,
+122
+],
+[
+1640,
+674
+],
+[
+761,
+122
+],
+[
+978,
+100
+]
+],
+"logs": [
+"Mon tour.",
+"4 adversaire(s), 3 à portée.",
+"Cible à 1.0 case(s) en (848, 126).",
+"Pas de confirmation sur cette cible.",
+"Diagnostic de sélection : cadre orange 0 px (150 attendus si le sort est sélectionné), bleu de portée 0 px (3000 attendus), icône en (1613, 646), score 0.99.",
+"Sélection du sort non vérifiée : j'essaie quand même, la fenêtre de confirmation dira si ça marche.",
+"Cible à 1.0 case(s) en (761, 126).",
+"Pas de confirmation sur cette cible.",
+"Cible à 3.9 case(s) en (978, 104).",
+"Pas de confirmation sur cette cible."
+],
+"grabs": 41,
+"state": {
+"me_hint": [
+805,
+105
+],
+"select_unverified": true,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [
+[
+978,
+104
+],
+[
+761,
+126
+],
+[
+848,
+126
+],
+[
+1198,
+301
+]
+],
+"no_enemy_streak": 0,
+"progress": 0
+}
+},
+{
+"case": "seed34-tour1-var4",
+"ret": 0,
+"err": null,
+"clicks": [
+[
+1640,
+674
+],
+[
+1640,
+674
+],
+[
+1199,
+739
+],
+[
+1199,
+739
+],
+[
+1640,
+674
+],
+[
+848,
+122
+],
+[
+761,
+122
+],
+[
+978,
+100
+],
+[
+1640,
+674
+],
+[
+1640,
+674
+]
+],
+"logs": [
+"Mon tour.",
+"Diagnostic de sélection : cadre orange 0 px (150 attendus si le sort est sélectionné), bleu de portée 0 px (3000 attendus), icône en (1613, 646), score 1.00.",
+"Sélection du sort non vérifiée : j'essaie quand même, la fenêtre de confirmation dira si ça marche.",
+"La portée du sort s'est affichée avec un léger retard : je la lis maintenant.",
+"2 adversaire(s), 0 à portée.",
+"Aucun adversaire à portée : je me rapproche.",
+"Déplacement de 4 case(s) vers le monstre en (1285, 785) (à 6 case(s)) : double clic en (1199, 739).",
+"✔ Personnage déplacé en (1067, 803).",
+"Je resélectionne Coagulation après le déplacement.",
+"4 adversaire(s), 3 à portée.",
+"Cible à 1.0 case(s) en (848, 126).",
+"Pas de confirmation sur cette cible.",
+"Cible à 1.0 case(s) en (761, 126).",
+"Pas de confirmation sur cette cible.",
+"Cible à 3.9 case(s) en (978, 104).",
+"Pas de confirmation sur cette cible.",
+"Je désélectionne Coagulation avant de finir le tour.",
+"⚠ Le sort reste sélectionné : pas de déplacement."
+],
+"grabs": 72,
+"state": {
+"me_hint": [
+805,
+105
+],
+"select_unverified": false,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [
+[
+978,
+104
+],
+[
+761,
+126
+],
+[
+848,
+126
+],
+[
+1198,
+301
+]
+],
+"no_enemy_streak": 0,
+"progress": 1
+}
+},
+{
+"case": "seed35-tour2-var0",
+"ret": 0,
+"err": null,
+"clicks": [
+[
+1640,
+674
+],
+[
+1640,
+674
+],
+[
+1248,
+804
+],
+[
+1248,
+804
+],
+[
+1640,
+674
+]
+],
+"logs": [
+"Mon tour.",
+"1 adversaire(s), 0 à portée.",
+"Aucun adversaire à portée : je me rapproche.",
+"16 case(s) accessible(s) (vertes) : je vise la plus proche du monstre.",
+"Déplacement de 10 case(s) vers le monstre en (588, 518) (à 7 case(s)) : double clic en (1248, 804).",
+"✔ Personnage déplacé en (1242, 847).",
+"Je resélectionne Coagulation après le déplacement.",
+"Aucun adversaire visible."
+],
+"grabs": 18,
+"state": {
+"me_hint": [
+1242,
+847
+],
+"select_unverified": false,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [
+[
+588,
+518
+]
+],
+"no_enemy_streak": 1,
+"progress": 1
+}
+},
+{
+"case": "seed36-tour1-var1",
+"ret": 0,
+"err": null,
+"clicks": [
+[
+1641,
+529
+],
+[
+1067,
+804
+],
+[
+1085,
+658
+],
+[
+1640,
+674
+],
+[
+980,
+801
+],
+[
+1640,
+674
+]
+],
+"logs": [
+"Mon tour.",
+"Sélection du sort d'ouverture non vérifiée : j'essaie quand même, la fenêtre de confirmation dira si ça marche.",
+"Sort d'ouverture : clic sur mon personnage en (1067, 804).",
+"✔ Sort d'ouverture lancé.",
+"4 adversaire(s), 1 à portée.",
+"Cible à 3.0 case(s) en (980, 805).",
+"Pas de confirmation sur cette cible.",
+"Je désélectionne Coagulation avant de finir le tour."
+],
+"grabs": 35,
+"state": {
+"me_hint": [
+849,
+785
+],
+"select_unverified": false,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [
+[
+980,
+629
+],
+[
+1111,
+698
+],
+[
+1285,
+785
+],
+[
+980,
+805
+]
+],
+"no_enemy_streak": 0,
+"progress": 1
+}
+},
+{
+"case": "seed37-tour2-var2",
+"ret": 0,
+"err": null,
+"clicks": [
+[
+1640,
+674
+],
+[
+1198,
+821
+],
+[
+1329,
+755
+],
+[
+1640,
+674
+]
+],
+"logs": [
+"Mon tour.",
+"Diagnostic de sélection : cadre orange 0 px (150 attendus si le sort est sélectionné), bleu de portée 0 px (3000 attendus), icône en (1613, 646), score 0.99.",
+"Sélection du sort non vérifiée : j'essaie quand même, la fenêtre de confirmation dira si ça marche.",
+"La portée du sort s'est affichée avec un léger retard : je la lis maintenant.",
+"3 adversaire(s), 2 à portée.",
+"Cible à 1.0 case(s) en (1198, 825).",
+"Pas de confirmation sur cette cible.",
+"Cible à 4.0 case(s) en (1329, 759).",
+"Pas de confirmation sur cette cible.",
+"Je désélectionne Coagulation avant de finir le tour."
+],
+"grabs": 36,
+"state": {
+"me_hint": [
+849,
+780
+],
+"select_unverified": false,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [
+[
+980,
+629
+],
+[
+1118,
+696
+],
+[
+1285,
+785
+]
+],
+"no_enemy_streak": 0,
+"progress": 0
+}
+},
+{
+"case": "seed38-tour1-var3",
+"ret": 0,
+"err": null,
+"clicks": [],
+"logs": [
+"Mon tour.",
+"⚠ Icône du sort d'ouverture introuvable (sort_debut_combat.png dans assets/ui).",
+"Le combat est terminé."
+],
+"grabs": 3,
+"state": {
+"me_hint": null,
+"select_unverified": false,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [],
+"no_enemy_streak": 0,
+"progress": 0
+}
+},
+{
+"case": "seed39-tour2-var4",
+"ret": 0,
+"err": null,
+"clicks": [
+[
+1640,
+674
+],
+[
+980,
+801
+],
+[
+1640,
+674
+]
+],
+"logs": [
+"Mon tour.",
+"4 adversaire(s), 1 à portée.",
+"Cible à 3.0 case(s) en (980, 805).",
+"Pas de confirmation sur cette cible."
+],
+"grabs": 21,
+"state": {
+"me_hint": [
+849,
+785
+],
+"select_unverified": false,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [
+[
+980,
+629
+],
+[
+1111,
+698
+],
+[
+1285,
+785
+],
+[
+980,
+805
+]
+],
+"no_enemy_streak": 0,
+"progress": 0
+}
+},
+{
+"case": "seed40-tour1-var0",
+"ret": 0,
+"err": null,
+"clicks": [
+[
+1641,
+529
+],
+[
+1640,
+674
+],
+[
+980,
+801
+],
+[
+1640,
+674
+],
+[
+1640,
+674
+]
+],
+"logs": [
+"Mon tour.",
+"Sélection du sort d'ouverture non vérifiée : j'essaie quand même, la fenêtre de confirmation dira si ça marche.",
+"⚠ Position de mon personnage inconnue.",
+"⚠ Position de mon personnage inconnue : pas de sort d'ouverture.",
+"4 adversaire(s), 1 à portée.",
+"Cible à 3.0 case(s) en (980, 805).",
+"Pas de confirmation sur cette cible.",
+"Je désélectionne Coagulation avant de finir le tour."
+],
+"grabs": 32,
+"state": {
+"me_hint": [
+849,
+781
+],
+"select_unverified": false,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [
+[
+980,
+629
+],
+[
+1111,
+698
+],
+[
+1285,
+785
+],
+[
+980,
+805
+]
+],
+"no_enemy_streak": 0,
+"progress": 0
+}
+},
+{
+"case": "seed41-tour2-var1",
+"ret": 0,
+"err": null,
+"clicks": [
+[
+1287,
+785
+],
+[
+1287,
+785
+],
+[
+1640,
+674
+],
+[
+761,
+122
+],
+[
+1640,
+674
+],
+[
+848,
+122
+]
+],
+"logs": [
+"Mon tour.",
+"2 adversaire(s). Portée du sort illisible à l'écran : j'essaie seulement ceux à 5 case(s) ou moins (0), du plus proche au plus loin (la fenêtre de confirmation vérifie).",
+"Aucun adversaire à portée : je me rapproche.",
+"16 case(s) accessible(s) (vertes) : je vise la plus proche du monstre.",
+"Déplacement de 10 case(s) vers le monstre en (1067, 367) (à 9 case(s)) : double clic en (1287, 785).",
+"✔ Personnage déplacé en (1242, 847).",
+"Je resélectionne Coagulation après le déplacement.",
+"4 adversaire(s), 3 à portée.",
+"Cible à 1.0 case(s) en (761, 126).",
+"Pas de confirmation sur cette cible.",
+"Cible à 1.0 case(s) en (848, 126).",
+"Pas de confirmation sur cette cible.",
+"⚠ Icône du sort introuvable."
+],
+"grabs": 44,
+"state": {
+"me_hint": [
+805,
+104
+],
+"select_unverified": false,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [
+[
+978,
+104
+],
+[
+761,
+126
+],
+[
+848,
+126
+],
+[
+1198,
+301
+]
+],
+"no_enemy_streak": 0,
+"progress": 1
+}
+},
+{
+"case": "seed42-tour1-var2",
+"ret": 0,
+"err": null,
+"clicks": [
+[
+1024,
+821
+],
+[
+1640,
+674
+],
+[
+1024,
+778
+],
+[
+1640,
+674
+],
+[
+1640,
+674
+]
+],
+"logs": [
+"Mon tour.",
+"⚠ Icône du sort d'ouverture introuvable (sort_debut_combat.png dans assets/ui).",
+"2 adversaire(s), 2 à portée.",
+"Cible à 1.0 case(s) en (1024, 825).",
+"Pas de confirmation sur cette cible.",
+"Cible à 1.0 case(s) en (1024, 782).",
+"Pas de confirmation sur cette cible.",
+"Je désélectionne Coagulation avant de finir le tour."
+],
+"grabs": 37,
+"state": {
+"me_hint": [
+1067,
+804
+],
+"select_unverified": false,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [
+[
+1024,
+782
+],
+[
+1024,
+825
+]
+],
+"no_enemy_streak": 0,
+"progress": 0
+}
+},
+{
+"case": "seed43-tour2-var3",
+"ret": 0,
+"err": null,
+"clicks": [],
+"logs": [
+"Mon tour.",
+"⚠ Icône du sort introuvable."
+],
+"grabs": 4,
+"state": {
+"me_hint": null,
+"select_unverified": false,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [],
+"no_enemy_streak": 0,
+"progress": 0
+}
+},
+{
+"case": "seed44-tour1-var4",
+"ret": 0,
+"err": null,
+"clicks": [
+[
+980,
+801
+],
+[
+1640,
+674
+]
+],
+"logs": [
+"Mon tour.",
+"4 adversaire(s), 1 à portée.",
+"Cible à 3.0 case(s) en (980, 805).",
+"Pas de confirmation sur cette cible.",
+"Diagnostic de sélection : cadre orange 0 px (150 attendus si le sort est sélectionné), bleu de portée 0 px (3000 attendus), icône en (1613, 646), score 1.00.",
+"Sélection du sort non vérifiée : j'essaie quand même, la fenêtre de confirmation dira si ça marche."
+],
+"grabs": 22,
+"state": {
+"me_hint": [
+849,
+785
+],
+"select_unverified": true,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [
+[
+980,
+629
+],
+[
+1111,
+698
+],
+[
+1285,
+785
+],
+[
+980,
+805
+]
+],
+"no_enemy_streak": 0,
+"progress": 0
+}
+},
+{
+"case": "seed45-tour2-var0",
+"ret": 1,
+"err": null,
+"clicks": [
+[
+980,
+801
+],
+[
+1085,
+658
+],
+[
+935,
+741
+],
+[
+935,
+741
+],
+[
+1640,
+674
+],
+[
+1640,
+674
+],
+[
+1640,
+674
+]
+],
+"logs": [
+"Mon tour.",
+"4 adversaire(s), 1 à portée.",
+"Cible à 3.0 case(s) en (980, 805).",
+"✔ Lancer 1/2 confirmé.",
+"Pause de 500 ms avant le lancer suivant.",
+"2 adversaire(s). Portée du sort illisible à l'écran : j'essaie seulement ceux à 5 case(s) ou moins (0), du plus proche au plus loin (la fenêtre de confirmation vérifie).",
+"Aucun adversaire à portée : je me rapproche.",
+"37 case(s) accessible(s) (vertes) : je vise la plus proche du monstre.",
+"Déplacement de 8 case(s) vers le monstre en (1067, 367) (à 9 case(s)) : double clic en (935, 741).",
+"✔ Personnage déplacé en (1067, 804).",
+"Je resélectionne Coagulation après le déplacement.",
+"2 adversaire(s), 0 à portée.",
+"Aucun adversaire à portée : je passe le tour.",
+"Je désélectionne Coagulation avant de finir le tour."
+],
+"grabs": 32,
+"state": {
+"me_hint": [
+1067,
+804
+],
+"select_unverified": false,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [
+[
+1285,
+785
+],
+[
+980,
+806
+]
+],
+"no_enemy_streak": 0,
+"progress": 2
+}
+},
+{
+"case": "seed46-tour1-var1",
+"ret": 0,
+"err": null,
+"clicks": [
+[
+1641,
+529
+]
+],
+"logs": [
+"Mon tour.",
+"Sélection du sort d'ouverture non vérifiée : j'essaie quand même, la fenêtre de confirmation dira si ça marche.",
+"⚠ Position de mon personnage inconnue.",
+"⚠ Position de mon personnage inconnue : pas de sort d'ouverture.",
+"⚠ Icône du sort introuvable."
+],
+"grabs": 13,
+"state": {
+"me_hint": null,
+"select_unverified": false,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [],
+"no_enemy_streak": 0,
+"progress": 0
+}
+},
+{
+"case": "seed47-tour2-var2",
+"ret": 0,
+"err": null,
+"clicks": [
+[
+1640,
+674
+],
+[
+1112,
+872
+],
+[
+1112,
+872
+],
+[
+1640,
+674
+],
+[
+1640,
+674
+]
+],
+"logs": [
+"Mon tour.",
+"2 adversaire(s), 0 à portée.",
+"Anneau rouge de mon personnage non vu : je l'estime au centre de la portée du sort, en (801, 807).",
+"Aucun adversaire à portée : je me rapproche.",
+"15 case(s) accessible(s) (vertes) : je vise la plus proche du monstre.",
+"Déplacement de 7 case(s) vers le monstre en (980, 806) (à 4 case(s)) : double clic en (1112, 872).",
+"✔ Personnage déplacé en (1242, 847).",
+"Je resélectionne Coagulation après le déplacement.",
+"2 adversaire(s), 0 à portée.",
+"Aucun adversaire à portée : je passe le tour.",
+"Je désélectionne Coagulation avant de finir le tour."
+],
+"grabs": 20,
+"state": {
+"me_hint": [
+1242,
+847
+],
+"select_unverified": false,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [
+[
+1285,
+785
+],
+[
+980,
+806
+]
+],
+"no_enemy_streak": 0,
+"progress": 1
+}
+},
+{
+"case": "seed48-tour1-var3",
+"ret": 0,
+"err": null,
+"clicks": [
+[
+1641,
+529
+],
+[
+849,
+781
+],
+[
+849,
+781
+],
+[
+1640,
+674
+],
+[
+980,
+802
+]
+],
+"logs": [
+"Mon tour.",
+"Sélection du sort d'ouverture non vérifiée : j'essaie quand même, la fenêtre de confirmation dira si ça marche.",
+"Sort d'ouverture : clic sur mon personnage en (849, 781).",
+"Pas de confirmation pour le sort d'ouverture (essai 1/2).",
+"Anneau rouge repéré en (1067, 803), loin de ma case de départ (849, 781) : je garde ma case de départ.",
+"Anneau rouge de mon personnage non vu : j'utilise sa dernière position connue (849, 781).",
+"Sort d'ouverture : clic sur mon personnage en (849, 781).",
+"Pas de confirmation pour le sort d'ouverture (essai 2/2).",
+"Diagnostic de sélection : cadre orange 0 px (150 attendus si le sort est sélectionné), bleu de portée 0 px (3000 attendus), icône en (1613, 646), score 1.00.",
+"Sélection du sort non vérifiée : j'essaie quand même, la fenêtre de confirmation dira si ça marche.",
+"4 adversaire(s). Portée du sort illisible à l'écran : j'essaie seulement ceux à 5 case(s) ou moins (1), du plus proche au plus loin (la fenêtre de confirmation vérifie).",
+"Cible à 3.0 case(s) en (980, 806).",
+"Pas de confirmation sur cette cible."
+],
+"grabs": 55,
+"state": {
+"me_hint": [
+849,
+780
+],
+"select_unverified": true,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [
+[
+980,
+629
+],
+[
+1111,
+698
+],
+[
+1285,
+785
+],
+[
+980,
+806
+]
+],
+"no_enemy_streak": 0,
+"progress": 0
+}
+},
+{
+"case": "seed49-tour2-var4",
+"ret": 1,
+"err": null,
+"clicks": [
+[
+1640,
+674
+],
+[
+1640,
+674
+],
+[
+716,
+541
+],
+[
+716,
+541
+],
+[
+1640,
+674
+],
+[
+1024,
+821
+],
+[
+1640,
+674
+],
+[
+1024,
+778
+],
+[
+1085,
+658
+],
+[
+980,
+801
+]
+],
+"logs": [
+"Mon tour.",
+"1 adversaire(s), 0 à portée.",
+"Aucun adversaire à portée : je me rapproche.",
+"Déplacement de 4 case(s) vers le monstre en (588, 518) (à 7 case(s)) : double clic en (716, 541).",
+"✔ Personnage déplacé en (1240, 848).",
+"Je resélectionne Coagulation après le déplacement.",
+"2 adversaire(s), 2 à portée.",
+"Cible à 1.0 case(s) en (1024, 825).",
+"Pas de confirmation sur cette cible.",
+"Cible à 1.0 case(s) en (1024, 782).",
+"✔ Lancer 1/3 confirmé.",
+"Pause de 500 ms avant le lancer suivant.",
+"4 adversaire(s), 1 à portée.",
+"Cible à 3.0 case(s) en (980, 805).",
+"Pas de confirmation sur cette cible."
+],
+"grabs": 55,
+"state": {
+"me_hint": [
+849,
+781
+],
+"select_unverified": false,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [
+[
+980,
+629
+],
+[
+1111,
+698
+],
+[
+1285,
+785
+],
+[
+980,
+805
+]
+],
+"no_enemy_streak": 0,
+"progress": 2
+}
+},
+{
+"case": "seed50-tour1-var0",
+"ret": 0,
+"err": null,
+"clicks": [
+[
+1641,
+529
+],
+[
+849,
+780
+],
+[
+840,
+775
+],
+[
+1640,
+674
+],
+[
+848,
+122
+],
+[
+761,
+122
+],
+[
+978,
+100
+]
+],
+"logs": [
+"Mon tour.",
+"Sélection du sort d'ouverture non vérifiée : j'essaie quand même, la fenêtre de confirmation dira si ça marche.",
+"Sort d'ouverture : clic sur mon personnage en (849, 780).",
+"Pas de confirmation pour le sort d'ouverture (essai 1/2).",
+"Sort d'ouverture : clic sur mon personnage en (840, 775).",
+"Pas de confirmation pour le sort d'ouverture (essai 2/2).",
+"4 adversaire(s), 3 à portée.",
+"Cible à 1.0 case(s) en (848, 126).",
+"Pas de confirmation sur cette cible.",
+"Cible à 1.0 case(s) en (761, 126).",
+"Pas de confirmation sur cette cible.",
+"Cible à 3.9 case(s) en (978, 104).",
+"Pas de confirmation sur cette cible."
+],
+"grabs": 70,
+"state": {
+"me_hint": [
+805,
+105
+],
+"select_unverified": false,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [
+[
+978,
+104
+],
+[
+761,
+126
+],
+[
+848,
+126
+],
+[
+1198,
+301
+]
+],
+"no_enemy_streak": 0,
+"progress": 0
+}
+},
+{
+"case": "seed51-tour2-var1",
+"ret": 2,
+"err": null,
+"clicks": [
+[
+1024,
+821
+],
+[
+1085,
+658
+],
+[
+1641,
+307
+],
+[
+1198,
+821
+],
+[
+1085,
+658
+],
+[
+1640,
+674
+]
+],
+"logs": [
+"Mon tour.",
+"2 adversaire(s), 2 à portée.",
+"Cible à 1.0 case(s) en (1024, 825).",
+"✔ Lancer 1/1 confirmé.",
+"Pause de 500 ms avant le Pied du Sacrieur.",
+"Pied du Sacrieur : 3 adversaire(s), 2 à portée.",
+"✔ Pied du Sacrieur lancé en (1198, 825).",
+"Je désélectionne Coagulation avant de finir le tour.",
+"⚠ Le sort reste sélectionné : pas de déplacement."
+],
+"grabs": 27,
+"state": {
+"me_hint": [
+1067,
+804
+],
+"select_unverified": false,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [
+[
+1024,
+782
+],
+[
+1024,
+825
+]
+],
+"no_enemy_streak": 0,
+"progress": 2
+}
+},
+{
+"case": "seed52-tour1-var2",
+"ret": 0,
+"err": null,
+"clicks": [],
+"logs": [
+"Mon tour.",
+"⚠ Icône du sort d'ouverture introuvable (sort_debut_combat.png dans assets/ui).",
+"⚠ Icône du sort introuvable."
+],
+"grabs": 5,
+"state": {
+"me_hint": null,
+"select_unverified": false,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [],
+"no_enemy_streak": 0,
+"progress": 0
+}
+},
+{
+"case": "seed53-tour2-var3",
+"ret": 0,
+"err": null,
+"clicks": [
+[
+980,
+801
+],
+[
+1640,
+674
+]
+],
+"logs": [
+"Mon tour.",
+"4 adversaire(s), 1 à portée.",
+"Cible à 3.0 case(s) en (980, 805).",
+"Pas de confirmation sur cette cible.",
+"Je désélectionne Coagulation avant de finir le tour."
+],
+"grabs": 23,
+"state": {
+"me_hint": [
+849,
+781
+],
+"select_unverified": false,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [
+[
+980,
+629
+],
+[
+1111,
+698
+],
+[
+1285,
+785
+],
+[
+980,
+805
+]
+],
+"no_enemy_streak": 0,
+"progress": 0
+}
+},
+{
+"case": "seed54-tour1-var4",
+"ret": 1,
+"err": null,
+"clicks": [
+[
+980,
+801
+],
+[
+1085,
+658
+],
+[
+1640,
+674
+],
+[
+1640,
+674
+]
+],
+"logs": [
+"Mon tour.",
+"4 adversaire(s), 1 à portée.",
+"Cible à 3.0 case(s) en (980, 805).",
+"✔ Lancer 1/3 confirmé.",
+"Pause de 500 ms avant le lancer suivant.",
+"2 adversaire(s), 0 à portée.",
+"Aucun adversaire à portée : je me rapproche.",
+"⚠ Le sort reste sélectionné : pas de déplacement.",
+"Déplacement raté (essai 1/3) : je réessaie.",
+"⚠ Icône du sort introuvable.",
+"Je désélectionne Coagulation avant de finir le tour.",
+"⚠ Le sort reste sélectionné : pas de déplacement."
+],
+"grabs": 29,
+"state": {
+"me_hint": [
+840,
+775
+],
+"select_unverified": false,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [
+[
+1285,
+785
+],
+[
+980,
+806
+]
+],
+"no_enemy_streak": 0,
+"progress": 1
+}
+},
+{
+"case": "seed55-tour2-var0",
+"ret": 1,
+"err": null,
+"clicks": [
+[
+1640,
+674
+],
+[
+1024,
+821
+],
+[
+1085,
+658
+],
+[
+1640,
+674
+],
+[
+933,
+785
+],
+[
+933,
+785
+],
+[
+1640,
+674
+],
+[
+980,
+801
+],
+[
+1640,
+674
+]
+],
+"logs": [
+"Mon tour.",
+"2 adversaire(s), 2 à portée.",
+"Cible à 1.0 case(s) en (1024, 825).",
+"✔ Lancer 1/2 confirmé.",
+"Pause de 500 ms avant le lancer suivant.",
+"2 adversaire(s), 0 à portée.",
+"La dernière position connue (1067, 804) ne correspond pas à la portée du sort : je situe mon personnage en (801, 807).",
+"Aucun adversaire à portée : je me rapproche.",
+"Déplacement de 3 case(s) vers le monstre en (980, 806) (à 4 case(s)) : double clic en (933, 785).",
+"✔ Personnage déplacé en (1023, 651).",
+"Je resélectionne Coagulation après le déplacement.",
+"4 adversaire(s), 1 à portée.",
+"Cible à 3.0 case(s) en (980, 805).",
+"Pas de confirmation sur cette cible.",
+"Je désélectionne Coagulation avant de finir le tour."
+],
+"grabs": 52,
+"state": {
+"me_hint": [
+849,
+785
+],
+"select_unverified": false,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [
+[
+980,
+629
+],
+[
+1111,
+698
+],
+[
+1285,
+785
+],
+[
+980,
+805
+]
+],
+"no_enemy_streak": 0,
+"progress": 2
+}
+},
+{
+"case": "seed56-tour1-var1",
+"ret": 0,
+"err": null,
+"clicks": [
+[
+1640,
+674
+],
+[
+1024,
+821
+],
+[
+1024,
+778
+]
+],
+"logs": [
+"Mon tour.",
+"⚠ Icône du sort d'ouverture introuvable (sort_debut_combat.png dans assets/ui).",
+"Diagnostic de sélection : cadre orange 0 px (150 attendus si le sort est sélectionné), bleu de portée 0 px (3000 attendus), icône en (1613, 646), score 0.99.",
+"Sélection du sort non vérifiée : j'essaie quand même, la fenêtre de confirmation dira si ça marche.",
+"2 adversaire(s), 2 à portée.",
+"Cible à 1.0 case(s) en (1024, 825).",
+"Pas de confirmation sur cette cible.",
+"Cible à 1.0 case(s) en (1024, 782).",
+"Pas de confirmation sur cette cible."
+],
+"grabs": 31,
+"state": {
+"me_hint": [
+1067,
+804
+],
+"select_unverified": true,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [
+[
+1024,
+782
+],
+[
+1024,
+825
+]
+],
+"no_enemy_streak": 0,
+"progress": 0
+}
+},
+{
+"case": "seed57-tour2-var2",
+"ret": 1,
+"err": null,
+"clicks": [
+[
+1640,
+674
+],
+[
+1640,
+674
+],
+[
+980,
+801
+],
+[
+1085,
+658
+],
+[
+1640,
+674
+],
+[
+848,
+740
+],
+[
+848,
+740
+],
+[
+1640,
+674
+],
+[
+980,
+801
+],
+[
+1640,
+674
+],
+[
+1640,
+674
+]
+],
+"logs": [
+"Mon tour.",
+"2 adversaire(s), 0 à portée.",
+"Anneau rouge de mon personnage non vu : je l'estime au centre de la portée du sort, en (801, 807).",
+"Aucun adversaire à portée : je me rapproche.",
+"⚠ Le sort reste sélectionné : pas de déplacement.",
+"Déplacement raté (essai 1/3) : je réessaie.",
+"4 adversaire(s), 1 à portée.",
+"Cible à 3.0 case(s) en (980, 805).",
+"✔ Lancer 1/2 confirmé.",
+"Pause de 500 ms avant le lancer suivant.",
+"2 adversaire(s), 0 à portée.",
+"Anneau rouge de mon personnage non vu : j'utilise sa dernière position connue (849, 785).",
+"Aucun adversaire à portée : je me rapproche.",
+"35 case(s) accessible(s) (vertes) : je vise la plus proche du monstre.",
+"Déplacement de 2 case(s) vers le monstre en (980, 806) (à 3 case(s)) : double clic en (848, 740).",
+"✔ Personnage déplacé en (1023, 651).",
+"Je resélectionne Coagulation après le déplacement.",
+"4 adversaire(s), 1 à portée.",
+"Cible à 3.0 case(s) en (980, 805).",
+"Pas de confirmation sur cette cible.",
+"Diagnostic de sélection : cadre orange 0 px (150 attendus si le sort est sélectionné), bleu de portée 0 px (3000 attendus), icône en (1613, 646), score 1.00.",
+"Sélection du sort non vérifiée : j'essaie quand même, la fenêtre de confirmation dira si ça marche.",
+"Je désélectionne Coagulation avant de finir le tour."
+],
+"grabs": 59,
+"state": {
+"me_hint": [
+849,
+785
+],
+"select_unverified": false,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [
+[
+980,
+629
+],
+[
+1111,
+698
+],
+[
+1285,
+785
+],
+[
+980,
+805
+]
+],
+"no_enemy_streak": 0,
+"progress": 2
+}
+},
+{
+"case": "seed58-tour1-var3",
+"ret": 0,
+"err": null,
+"clicks": [
+[
+1641,
+529
+],
+[
+849,
+781
+],
+[
+980,
+801
+],
+[
+1640,
+674
+]
+],
+"logs": [
+"Mon tour.",
+"Sélection du sort d'ouverture non vérifiée : j'essaie quand même, la fenêtre de confirmation dira si ça marche.",
+"Sort d'ouverture : clic sur mon personnage en (849, 781).",
+"Pas de confirmation pour le sort d'ouverture (essai 1/2).",
+"⚠ Icône du sort d'ouverture introuvable (sort_debut_combat.png dans assets/ui).",
+"4 adversaire(s), 1 à portée.",
+"Cible à 3.0 case(s) en (980, 805).",
+"Pas de confirmation sur cette cible.",
+"Je désélectionne Coagulation avant de finir le tour."
+],
+"grabs": 35,
+"state": {
+"me_hint": [
+849,
+781
+],
+"select_unverified": false,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [
+[
+980,
+629
+],
+[
+1111,
+698
+],
+[
+1285,
+785
+],
+[
+980,
+805
+]
+],
+"no_enemy_streak": 0,
+"progress": 0
+}
+},
+{
+"case": "seed59-tour2-var4",
+"ret": 0,
+"err": null,
+"clicks": [
+[
+1024,
+821
+],
+[
+1024,
+778
+],
+[
+1640,
+674
+]
+],
+"logs": [
+"Mon tour.",
+"2 adversaire(s), 2 à portée.",
+"Cible à 1.0 case(s) en (1024, 825).",
+"Pas de confirmation sur cette cible.",
+"Cible à 1.0 case(s) en (1024, 782).",
+"Pas de confirmation sur cette cible.",
+"Je désélectionne Coagulation avant de finir le tour."
+],
+"grabs": 27,
+"state": {
+"me_hint": [
+1067,
+804
+],
+"select_unverified": false,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [
+[
+1024,
+782
+],
+[
+1024,
+825
+]
+],
+"no_enemy_streak": 0,
+"progress": 0
+}
+},
+{
+"case": "seed60-tour1-var0",
+"ret": 0,
+"err": null,
+"clicks": [
+[
+1641,
+529
+],
+[
+1242,
+847
+],
+[
+848,
+783
+],
+[
+1085,
+658
+],
+[
+936,
+783
+],
+[
+936,
+783
+]
+],
+"logs": [
+"Mon tour.",
+"Sélection du sort d'ouverture non vérifiée : j'essaie quand même, la fenêtre de confirmation dira si ça marche.",
+"Sort d'ouverture : clic sur mon personnage en (1242, 847).",
+"Pas de confirmation pour le sort d'ouverture (essai 1/2).",
+"Anneau rouge repéré en (849, 781), loin de ma case de départ (1242, 847) : je garde ma case de départ.",
+"La dernière position connue (1242, 847) ne correspond pas à la portée du sort : je situe mon personnage en (848, 783).",
+"Sort d'ouverture : clic sur mon personnage en (848, 783).",
+"✔ Sort d'ouverture lancé.",
+"2 adversaire(s), 0 à portée.",
+"Anneau rouge de mon personnage non vu : j'utilise sa dernière position connue (848, 783).",
+"Aucun adversaire à portée : je me rapproche.",
+"Déplacement de 2 case(s) vers le monstre en (980, 806) (à 3 case(s)) : double clic en (936, 783).",
+"✔ Personnage déplacé en (936, 563).",
+"Je resélectionne Coagulation après le déplacement.",
+"⚠ Icône du sort introuvable."
+],
+"grabs": 38,
+"state": {
+"me_hint": [
+936,
+563
+],
+"select_unverified": false,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [
+[
+1285,
+785
+],
+[
+980,
+806
+]
+],
+"no_enemy_streak": 0,
+"progress": 2
+}
+},
+{
+"case": "seed61-tour2-var1",
+"ret": 0,
+"err": null,
+"clicks": [
+[
+1640,
+674
+],
+[
+1640,
+674
+],
+[
+1024,
+821
+],
+[
+1640,
+674
+],
+[
+1024,
+778
+]
+],
+"logs": [
+"Mon tour.",
+"2 adversaire(s), 0 à portée.",
+"Anneau rouge de mon personnage non vu : je l'estime au centre de la portée du sort, en (801, 807).",
+"Aucun adversaire à portée : je me rapproche.",
+"⚠ Le sort reste sélectionné : pas de déplacement.",
+"Déplacement raté (essai 1/3) : je réessaie.",
+"2 adversaire(s), 2 à portée.",
+"Cible à 1.0 case(s) en (1024, 825).",
+"Pas de confirmation sur cette cible.",
+"Cible à 1.0 case(s) en (1024, 782).",
+"Pas de confirmation sur cette cible."
+],
+"grabs": 43,
+"state": {
+"me_hint": [
+1067,
+804
+],
+"select_unverified": false,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [
+[
+1024,
+782
+],
+[
+1024,
+825
+]
+],
+"no_enemy_streak": 0,
+"progress": 0
+}
+},
+{
+"case": "seed62-tour1-var2",
+"ret": 0,
+"err": null,
+"clicks": [
+[
+1641,
+529
+],
+[
+892,
+585
+],
+[
+980,
+801
+],
+[
+1640,
+674
+]
+],
+"logs": [
+"Mon tour.",
+"Sélection du sort d'ouverture non vérifiée : j'essaie quand même, la fenêtre de confirmation dira si ça marche.",
+"Sort d'ouverture : clic sur mon personnage en (892, 585).",
+"Pas de confirmation pour le sort d'ouverture (essai 1/2).",
+"⚠ Icône du sort d'ouverture introuvable (sort_debut_combat.png dans assets/ui).",
+"4 adversaire(s), 1 à portée.",
+"Cible à 3.0 case(s) en (980, 805).",
+"Pas de confirmation sur cette cible.",
+"Je désélectionne Coagulation avant de finir le tour.",
+"⚠ Le sort reste sélectionné : pas de déplacement."
+],
+"grabs": 41,
+"state": {
+"me_hint": [
+849,
+781
+],
+"select_unverified": false,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [
+[
+980,
+629
+],
+[
+1111,
+698
+],
+[
+1285,
+785
+],
+[
+980,
+805
+]
+],
+"no_enemy_streak": 0,
+"progress": 0
+}
+},
+{
+"case": "seed63-tour2-var3",
+"ret": 2,
+"err": null,
+"clicks": [
+[
+980,
+801
+],
+[
+1085,
+658
+],
+[
+1640,
+674
+],
+[
+1024,
+821
+],
+[
+1024,
+778
+],
+[
+1085,
+658
+],
+[
+1641,
+306
+],
+[
+980,
+801
+]
+],
+"logs": [
+"Mon tour.",
+"4 adversaire(s), 1 à portée.",
+"Cible à 3.0 case(s) en (980, 805).",
+"✔ Lancer 1/2 confirmé.",
+"Pause de 500 ms avant le lancer suivant.",
+"2 adversaire(s), 2 à portée.",
+"Cible à 1.0 case(s) en (1024, 825).",
+"Pas de confirmation sur cette cible.",
+"Cible à 1.0 case(s) en (1024, 782).",
+"✔ Lancer 2/2 confirmé.",
+"Pause de 500 ms avant le Pied du Sacrieur.",
+"Pied du Sacrieur : 4 adversaire(s), 1 à portée.",
+"Pas de confirmation sur cette cible."
+],
+"grabs": 42,
+"state": {
+"me_hint": [
+1067,
+804
+],
+"select_unverified": false,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [
+[
+1024,
+782
+],
+[
+1024,
+825
+]
+],
+"no_enemy_streak": 0,
+"progress": 2
+}
+},
+{
+"case": "seed64-tour1-var4",
+"ret": 0,
+"err": null,
+"clicks": [
+[
+980,
+801
+]
+],
+"logs": [
+"Mon tour.",
+"4 adversaire(s), 1 à portée.",
+"Cible à 3.0 case(s) en (980, 805).",
+"Pas de confirmation sur cette cible."
+],
+"grabs": 15,
+"state": {
+"me_hint": [
+849,
+781
+],
+"select_unverified": false,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [
+[
+980,
+629
+],
+[
+1111,
+698
+],
+[
+1285,
+785
+],
+[
+980,
+805
+]
+],
+"no_enemy_streak": 0,
+"progress": 0
+}
+},
+{
+"case": "seed65-tour2-var0",
+"ret": 1,
+"err": null,
+"clicks": [
+[
+980,
+801
+],
+[
+1085,
+658
+],
+[
+980,
+801
+]
+],
+"logs": [
+"Mon tour.",
+"4 adversaire(s), 1 à portée.",
+"Cible à 3.0 case(s) en (980, 805).",
+"✔ Lancer 1/2 confirmé.",
+"Pause de 500 ms avant le lancer suivant.",
+"4 adversaire(s), 1 à portée.",
+"Cible à 3.0 case(s) en (980, 805).",
+"Pas de confirmation sur cette cible."
+],
+"grabs": 19,
+"state": {
+"me_hint": [
+849,
+781
+],
+"select_unverified": false,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [
+[
+980,
+629
+],
+[
+1111,
+698
+],
+[
+1285,
+785
+],
+[
+980,
+805
+]
+],
+"no_enemy_streak": 0,
+"progress": 1
+}
+},
+{
+"case": "seed66-tour1-var1",
+"ret": 1,
+"err": null,
+"clicks": [
+[
+1641,
+529
+],
+[
+1067,
+804
+],
+[
+1067,
+804
+],
+[
+1640,
+674
+],
+[
+760,
+652
+],
+[
+760,
+652
+],
+[
+1640,
+674
+],
+[
+1640,
+674
+],
+[
+980,
+801
+],
+[
+1085,
+658
+],
+[
+1641,
+307
+]
+],
+"logs": [
+"Mon tour.",
+"Sélection du sort d'ouverture non vérifiée : j'essaie quand même, la fenêtre de confirmation dira si ça marche.",
+"Sort d'ouverture : clic sur mon personnage en (1067, 804).",
+"Pas de confirmation pour le sort d'ouverture (essai 1/2).",
+"Anneau rouge repéré en (849, 781), loin de ma case de départ (1067, 804) : je garde ma case de départ.",
+"Anneau rouge de mon personnage non vu : j'utilise sa dernière position connue (1067, 804).",
+"Sort d'ouverture : clic sur mon personnage en (1067, 804).",
+"Pas de confirmation pour le sort d'ouverture (essai 2/2).",
+"2 adversaire(s), 0 à portée.",
+"La dernière position connue (1067, 804) ne correspond pas à la portée du sort : je situe mon personnage en (801, 807).",
+"Aucun adversaire à portée : je me rapproche.",
+"39 case(s) accessible(s) (vertes) : je vise la plus proche du monstre.",
+"Déplacement de 7 case(s) vers le monstre en (980, 806) (à 4 case(s)) : double clic en (760, 652).",
+"✔ Personnage déplacé en (849, 785).",
+"Je resélectionne Coagulation après le déplacement.",
+"4 adversaire(s), 1 à portée.",
+"Cible à 3.0 case(s) en (980, 805).",
+"✔ Lancer 1/1 confirmé.",
+"Pause de 500 ms avant le Pied du Sacrieur.",
+"Le Pied du Sacrieur ne s'affiche pas (plus assez de PA ?)."
+],
+"grabs": 61,
+"state": {
+"me_hint": [
+849,
+785
+],
+"select_unverified": false,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [
+[
+980,
+629
+],
+[
+1111,
+698
+],
+[
+1285,
+785
+],
+[
+980,
+805
+]
+],
+"no_enemy_streak": 0,
+"progress": 2
+}
+},
+{
+"case": "seed67-tour2-var2",
+"ret": 0,
+"err": null,
+"clicks": [
+[
+1640,
+674
+],
+[
+1024,
+821
+],
+[
+1024,
+778
+],
+[
+1640,
+674
+]
+],
+"logs": [
+"Mon tour.",
+"2 adversaire(s), 2 à portée.",
+"Cible à 1.0 case(s) en (1024, 825).",
+"Pas de confirmation sur cette cible.",
+"Cible à 1.0 case(s) en (1024, 782).",
+"Pas de confirmation sur cette cible.",
+"Je désélectionne Coagulation avant de finir le tour."
+],
+"grabs": 39,
+"state": {
+"me_hint": [
+1067,
+804
+],
+"select_unverified": false,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [
+[
+1024,
+782
+],
+[
+1024,
+825
+]
+],
+"no_enemy_streak": 0,
+"progress": 0
+}
+},
+{
+"case": "seed68-tour1-var3",
+"ret": 1,
+"err": null,
+"clicks": [
+[
+1641,
+529
+],
+[
+849,
+781
+],
+[
+849,
+781
+],
+[
+1640,
+674
+],
+[
+1024,
+821
+],
+[
+1085,
+658
+],
+[
+1640,
+674
+]
+],
+"logs": [
+"Mon tour.",
+"Sélection du sort d'ouverture non vérifiée : j'essaie quand même, la fenêtre de confirmation dira si ça marche.",
+"Sort d'ouverture : clic sur mon personnage en (849, 781).",
+"Pas de confirmation pour le sort d'ouverture (essai 1/2).",
+"Sort d'ouverture : clic sur mon personnage en (849, 781).",
+"Pas de confirmation pour le sort d'ouverture (essai 2/2).",
+"Diagnostic de sélection : cadre orange 0 px (150 attendus si le sort est sélectionné), bleu de portée 0 px (3000 attendus), icône en (1613, 646), score 1.00.",
+"Sélection du sort non vérifiée : j'essaie quand même, la fenêtre de confirmation dira si ça marche.",
+"2 adversaire(s). Portée du sort illisible à l'écran : j'essaie seulement ceux à 5 case(s) ou moins (2), du plus proche au plus loin (la fenêtre de confirmation vérifie).",
+"Cible à 1.0 case(s) en (1024, 825).",
+"✔ Lancer 1/2 confirmé.",
+"Pause de 500 ms avant le lancer suivant.",
+"2 adversaire(s), 0 à portée.",
+"Aucun adversaire à portée : je passe le tour.",
+"Je désélectionne Coagulation avant de finir le tour."
+],
+"grabs": 56,
+"state": {
+"me_hint": [
+1067,
+804
+],
+"select_unverified": false,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [
+[
+1285,
+785
+],
+[
+980,
+806
+]
+],
+"no_enemy_streak": 0,
+"progress": 1
+}
+},
+{
+"case": "seed69-tour2-var4",
+"ret": 0,
+"err": null,
+"clicks": [
+[
+1640,
+674
+],
+[
+1640,
+674
+],
+[
+1640,
+674
+],
+[
+1640,
+674
+],
+[
+980,
+801
+],
+[
+1640,
+674
+],
+[
+1640,
+674
+]
+],
+"logs": [
+"Mon tour.",
+"2 adversaire(s), 0 à portée.",
+"Anneau rouge de mon personnage non vu : je l'estime au centre de la portée du sort, en (801, 807).",
+"Aucun adversaire à portée : je me rapproche.",
+"⚠ Le sort reste sélectionné : pas de déplacement.",
+"Déplacement raté (essai 1/3) : je réessaie.",
+"2 adversaire(s), 0 à portée.",
+"Anneau rouge de mon personnage non vu : je l'estime au centre de la portée du sort, en (801, 807).",
+"Aucun adversaire à portée : je me rapproche.",
+"⚠ Le sort reste sélectionné : pas de déplacement.",
+"Déplacement raté (essai 2/3) : je réessaie.",
+"4 adversaire(s), 1 à portée.",
+"Cible à 3.0 case(s) en (980, 805).",
+"Pas de confirmation sur cette cible.",
+"Je désélectionne Coagulation avant de finir le tour."
+],
+"grabs": 43,
+"state": {
+"me_hint": [
+849,
+781
+],
+"select_unverified": false,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [
+[
+980,
+629
+],
+[
+1111,
+698
+],
+[
+1285,
+785
+],
+[
+980,
+805
+]
+],
+"no_enemy_streak": 0,
+"progress": 0
+}
+},
+{
+"case": "seed70-tour1-var0",
+"ret": 0,
+"err": null,
+"clicks": [
+[
+1641,
+529
+],
+[
+849,
+781
+],
+[
+849,
+781
+],
+[
+1085,
+658
+],
+[
+980,
+801
+],
+[
+1640,
+674
+]
+],
+"logs": [
+"Mon tour.",
+"Sélection du sort d'ouverture non vérifiée : j'essaie quand même, la fenêtre de confirmation dira si ça marche.",
+"Sort d'ouverture : clic sur mon personnage en (849, 781).",
+"Pas de confirmation pour le sort d'ouverture (essai 1/2).",
+"Anneau rouge repéré en (1242, 847), loin de ma case de départ (849, 781) : je garde ma case de départ.",
+"Anneau rouge de mon personnage non vu : j'utilise sa dernière position connue (849, 781).",
+"Sort d'ouverture : clic sur mon personnage en (849, 781).",
+"✔ Sort d'ouverture lancé.",
+"4 adversaire(s), 1 à portée.",
+"Cible à 3.0 case(s) en (980, 805).",
+"Pas de confirmation sur cette cible."
+],
+"grabs": 42,
+"state": {
+"me_hint": [
+849,
+781
+],
+"select_unverified": false,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [
+[
+980,
+629
+],
+[
+1111,
+698
+],
+[
+1285,
+785
+],
+[
+980,
+805
+]
+],
+"no_enemy_streak": 0,
+"progress": 1
+}
+},
+{
+"case": "seed71-tour2-var1",
+"ret": 1,
+"err": null,
+"clicks": [
+[
+1024,
+821
+],
+[
+1024,
+778
+],
+[
+1085,
+658
+],
+[
+1641,
+307
+],
+[
+1641,
+307
+],
+[
+1241,
+807
+],
+[
+1241,
+807
+],
+[
+1641,
+307
+],
+[
+1641,
+307
+],
+[
+1640,
+674
+]
+],
+"logs": [
+"Mon tour.",
+"2 adversaire(s), 2 à portée.",
+"Cible à 1.0 case(s) en (1024, 825).",
+"Pas de confirmation sur cette cible.",
+"Cible à 1.0 case(s) en (1024, 782).",
+"✔ Lancer 1/1 confirmé.",
+"Pause de 500 ms avant le Pied du Sacrieur.",
+"Pied du Sacrieur : 4 adversaire(s), 0 à portée.",
+"Personne au contact : pas de Pied du Sacrieur pour l'instant.",
+"Il me reste des PM (15 cases vertes) : je me rapproche pour lancer le Pied du Sacrieur.",
+"15 case(s) accessible(s) (vertes) : je vise la plus proche du monstre.",
+"Déplacement de 2 case(s) vers le monstre en (1285, 785) (à 3 case(s)) : double clic en (1241, 807).",
+"✔ Personnage déplacé en (849, 781).",
+"Pied du Sacrieur : 3 adversaire(s), 0 à portée.",
+"Personne au contact : pas de Pied du Sacrieur pour l'instant.",
+"Je désélectionne Coagulation avant de finir le tour."
+],
+"grabs": 38,
+"state": {
+"me_hint": [
+849,
+781
+],
+"select_unverified": false,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [
+[
+1024,
+782
+],
+[
+1024,
+825
+]
+],
+"no_enemy_streak": 0,
+"progress": 2
+}
+},
+{
+"case": "seed72-tour1-var2",
+"ret": 0,
+"err": null,
+"clicks": [
+[
+1641,
+529
+],
+[
+849,
+781
+],
+[
+849,
+785
+],
+[
+980,
+801
+],
+[
+1640,
+674
+]
+],
+"logs": [
+"Mon tour.",
+"Sélection du sort d'ouverture non vérifiée : j'essaie quand même, la fenêtre de confirmation dira si ça marche.",
+"Sort d'ouverture : clic sur mon personnage en (849, 781).",
+"Pas de confirmation pour le sort d'ouverture (essai 1/2).",
+"Sort d'ouverture : clic sur mon personnage en (849, 785).",
+"Pas de confirmation pour le sort d'ouverture (essai 2/2).",
+"4 adversaire(s), 1 à portée.",
+"Cible à 3.0 case(s) en (980, 805).",
+"Pas de confirmation sur cette cible.",
+"⚠ Icône du sort introuvable.",
+"Je désélectionne Coagulation avant de finir le tour.",
+"⚠ Le sort reste sélectionné : pas de déplacement."
+],
+"grabs": 50,
+"state": {
+"me_hint": [
+849,
+781
+],
+"select_unverified": false,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [
+[
+980,
+629
+],
+[
+1111,
+698
+],
+[
+1285,
+785
+],
+[
+980,
+805
+]
+],
+"no_enemy_streak": 0,
+"progress": 0
+}
+},
+{
+"case": "seed73-tour2-var3",
+"ret": 2,
+"err": null,
+"clicks": [
+[
+1024,
+821
+],
+[
+1085,
+658
+],
+[
+980,
+801
+],
+[
+1085,
+658
+],
+[
+1641,
+307
+],
+[
+980,
+801
+]
+],
+"logs": [
+"Mon tour.",
+"2 adversaire(s), 2 à portée.",
+"Cible à 1.0 case(s) en (1024, 825).",
+"✔ Lancer 1/2 confirmé.",
+"Pause de 500 ms avant le lancer suivant.",
+"4 adversaire(s), 1 à portée.",
+"Cible à 3.0 case(s) en (980, 805).",
+"✔ Lancer 2/2 confirmé.",
+"Pause de 500 ms avant le Pied du Sacrieur.",
+"Pied du Sacrieur : 4 adversaire(s), 1 à portée.",
+"Pas de confirmation sur cette cible."
+],
+"grabs": 32,
+"state": {
+"me_hint": [
+849,
+781
+],
+"select_unverified": false,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [
+[
+980,
+629
+],
+[
+1111,
+698
+],
+[
+1285,
+785
+],
+[
+980,
+805
+]
+],
+"no_enemy_streak": 0,
+"progress": 2
+}
+},
+{
+"case": "seed74-tour1-var4",
+"ret": 0,
+"err": null,
+"clicks": [],
+"logs": [
+"Mon tour.",
+"⚠ Icône du sort introuvable."
+],
+"grabs": 4,
+"state": {
+"me_hint": null,
+"select_unverified": false,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [],
+"no_enemy_streak": 0,
+"progress": 0
+}
+},
+{
+"case": "seed75-tour2-var0",
+"ret": 0,
+"err": null,
+"clicks": [
+[
+980,
+801
+],
+[
+1640,
+674
+]
+],
+"logs": [
+"Mon tour.",
+"4 adversaire(s), 1 à portée.",
+"Cible à 3.0 case(s) en (980, 805).",
+"Pas de confirmation sur cette cible.",
+"Je désélectionne Coagulation avant de finir le tour."
+],
+"grabs": 17,
+"state": {
+"me_hint": [
+849,
+781
+],
+"select_unverified": false,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [
+[
+980,
+629
+],
+[
+1111,
+698
+],
+[
+1285,
+785
+],
+[
+980,
+805
+]
+],
+"no_enemy_streak": 0,
+"progress": 0
+}
+},
+{
+"case": "seed76-tour1-var1",
+"ret": 1,
+"err": null,
+"clicks": [
+[
+1641,
+529
+],
+[
+1067,
+804
+],
+[
+1085,
+658
+],
+[
+1024,
+821
+],
+[
+1024,
+778
+],
+[
+1085,
+658
+]
+],
+"logs": [
+"Mon tour.",
+"Sélection du sort d'ouverture non vérifiée : j'essaie quand même, la fenêtre de confirmation dira si ça marche.",
+"Sort d'ouverture : clic sur mon personnage en (1067, 804).",
+"✔ Sort d'ouverture lancé.",
+"2 adversaire(s), 2 à portée.",
+"Cible à 1.0 case(s) en (1024, 825).",
+"Pas de confirmation sur cette cible.",
+"Cible à 1.0 case(s) en (1024, 782).",
+"✔ Lancer 1/1 confirmé.",
+"Je désélectionne Coagulation avant de finir le tour."
+],
+"grabs": 32,
+"state": {
+"me_hint": [
+1067,
+804
+],
+"select_unverified": false,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [
+[
+1024,
+782
+],
+[
+1024,
+825
+]
+],
+"no_enemy_streak": 0,
+"progress": 2
+}
+},
+{
+"case": "seed77-tour2-var2",
+"ret": 1,
+"err": null,
+"clicks": [
+[
+1640,
+674
+],
+[
+1024,
+821
+],
+[
+1640,
+674
+],
+[
+1024,
+778
+],
+[
+1085,
+658
+],
+[
+1640,
+674
+],
+[
+936,
+784
+],
+[
+936,
+784
+],
+[
+1640,
+674
+],
+[
+1024,
+777
+],
+[
+1640,
+674
+]
+],
+"logs": [
+"Mon tour.",
+"2 adversaire(s), 2 à portée.",
+"Cible à 1.0 case(s) en (1024, 825).",
+"Pas de confirmation sur cette cible.",
+"Diagnostic de sélection : cadre orange 0 px (150 attendus si le sort est sélectionné), bleu de portée 0 px (3000 attendus), icône en (1613, 646), score 1.00.",
+"Sélection du sort non vérifiée : j'essaie quand même, la fenêtre de confirmation dira si ça marche.",
+"Cible à 1.0 case(s) en (1024, 782).",
+"✔ Lancer 1/2 confirmé.",
+"Pause de 500 ms avant le lancer suivant.",
+"2 adversaire(s), 0 à portée.",
+"La dernière position connue (1067, 804) ne correspond pas à la portée du sort : je situe mon personnage en (801, 807).",
+"Aucun adversaire à portée : je me rapproche.",
+"44 case(s) accessible(s) (vertes) : je vise la plus proche du monstre.",
+"Déplacement de 3 case(s) vers le monstre en (980, 806) (à 4 case(s)) : double clic en (936, 784).",
+"✔ Personnage déplacé en (849, 781).",
+"Je resélectionne Coagulation après le déplacement.",
+"Diagnostic de sélection : cadre orange 0 px (150 attendus si le sort est sélectionné), bleu de portée 0 px (3000 attendus), icône en (1613, 646), score 1.00.",
+"Sélection du sort non vérifiée : j'essaie quand même, la fenêtre de confirmation dira si ça marche.",
+"1 adversaire(s). Portée du sort illisible à l'écran : j'essaie seulement ceux à 5 case(s) ou moins (1), du plus proche au plus loin (la fenêtre de confirmation vérifie).",
+"Cible à 1.0 case(s) en (1024, 781).",
+"Pas de confirmation sur cette cible.",
+"Je désélectionne Coagulation avant de finir le tour."
+],
+"grabs": 56,
+"state": {
+"me_hint": [
+1067,
+803
+],
+"select_unverified": false,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [
+[
+1024,
+781
+]
+],
+"no_enemy_streak": 0,
+"progress": 2
+}
+},
+{
+"case": "seed78-tour1-var3",
+"ret": 0,
+"err": null,
+"clicks": [
+[
+1641,
+529
+],
+[
+849,
+785
+],
+[
+849,
+781
+],
+[
+980,
+801
+],
+[
+1640,
+674
+],
+[
+1640,
+674
+]
+],
+"logs": [
+"Mon tour.",
+"Sélection du sort d'ouverture non vérifiée : j'essaie quand même, la fenêtre de confirmation dira si ça marche.",
+"Sort d'ouverture : clic sur mon personnage en (849, 785).",
+"Pas de confirmation pour le sort d'ouverture (essai 1/2).",
+"Sort d'ouverture : clic sur mon personnage en (849, 781).",
+"Pas de confirmation pour le sort d'ouverture (essai 2/2).",
+"4 adversaire(s), 1 à portée.",
+"Cible à 3.0 case(s) en (980, 805).",
+"Pas de confirmation sur cette cible.",
+"Je désélectionne Coagulation avant de finir le tour.",
+"⚠ Le sort reste sélectionné : pas de déplacement."
+],
+"grabs": 58,
+"state": {
+"me_hint": [
+849,
+785
+],
+"select_unverified": false,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [
+[
+980,
+629
+],
+[
+1111,
+698
+],
+[
+1285,
+785
+],
+[
+980,
+805
+]
+],
+"no_enemy_streak": 0,
+"progress": 0
+}
+},
+{
+"case": "seed79-tour2-var4",
+"ret": 0,
+"err": null,
+"clicks": [
+[
+1640,
+674
+],
+[
+1640,
+674
+],
+[
+936,
+784
+],
+[
+936,
+784
+],
+[
+1640,
+674
+],
+[
+980,
+801
+],
+[
+1640,
+674
+],
+[
+1640,
+674
+]
+],
+"logs": [
+"Mon tour.",
+"2 adversaire(s), 0 à portée.",
+"Anneau rouge de mon personnage non vu : je l'estime au centre de la portée du sort, en (801, 807).",
+"Aucun adversaire à portée : je me rapproche.",
+"44 case(s) accessible(s) (vertes) : je vise la plus proche du monstre.",
+"Déplacement de 3 case(s) vers le monstre en (980, 806) (à 4 case(s)) : double clic en (936, 784).",
+"✔ Personnage déplacé en (849, 780).",
+"Je resélectionne Coagulation après le déplacement.",
+"4 adversaire(s), 1 à portée.",
+"Cible à 3.0 case(s) en (980, 805).",
+"Pas de confirmation sur cette cible.",
+"Je désélectionne Coagulation avant de finir le tour.",
+"⚠ Le sort reste sélectionné : pas de déplacement."
+],
+"grabs": 45,
+"state": {
+"me_hint": [
+849,
+781
+],
+"select_unverified": false,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [
+[
+980,
+629
+],
+[
+1111,
+698
+],
+[
+1285,
+785
+],
+[
+980,
+805
+]
+],
+"no_enemy_streak": 0,
+"progress": 1
+}
+},
+{
+"case": "seed80-tour1-var0",
+"ret": 2,
+"err": null,
+"clicks": [
+[
+1641,
+529
+],
+[
+892,
+585
+],
+[
+1085,
+658
+],
+[
+848,
+122
+],
+[
+1640,
+674
+],
+[
+761,
+122
+],
+[
+978,
+100
+],
+[
+1085,
+658
+],
+[
+848,
+122
+],
+[
+1085,
+658
+],
+[
+1640,
+674
+]
+],
+"logs": [
+"Mon tour.",
+"Sélection du sort d'ouverture non vérifiée : j'essaie quand même, la fenêtre de confirmation dira si ça marche.",
+"Sort d'ouverture : clic sur mon personnage en (892, 585).",
+"✔ Sort d'ouverture lancé.",
+"4 adversaire(s), 3 à portée.",
+"Cible à 1.0 case(s) en (848, 126).",
+"Pas de confirmation sur cette cible.",
+"Cible à 1.0 case(s) en (761, 126).",
+"Pas de confirmation sur cette cible.",
+"Cible à 3.9 case(s) en (978, 104).",
+"✔ Lancer 1/2 confirmé.",
+"Pause de 500 ms avant le lancer suivant.",
+"4 adversaire(s), 3 à portée.",
+"Cible à 1.0 case(s) en (848, 126).",
+"✔ Lancer 2/2 confirmé.",
+"Je désélectionne Coagulation avant de finir le tour.",
+"⚠ Le sort reste sélectionné : pas de déplacement."
+],
+"grabs": 67,
+"state": {
+"me_hint": [
+805,
+105
+],
+"select_unverified": false,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [
+[
+978,
+104
+],
+[
+761,
+126
+],
+[
+848,
+126
+],
+[
+1198,
+301
+]
+],
+"no_enemy_streak": 0,
+"progress": 3
+}
+},
+{
+"case": "seed81-tour2-var1",
+"ret": 0,
+"err": null,
+"clicks": [
+[
+1640,
+674
+],
+[
+936,
+784
+],
+[
+936,
+784
+],
+[
+1640,
+674
+],
+[
+980,
+801
+],
+[
+1640,
+674
+]
+],
+"logs": [
+"Mon tour.",
+"2 adversaire(s), 0 à portée.",
+"Anneau rouge de mon personnage non vu : je l'estime au centre de la portée du sort, en (801, 807).",
+"Aucun adversaire à portée : je me rapproche.",
+"44 case(s) accessible(s) (vertes) : je vise la plus proche du monstre.",
+"Déplacement de 3 case(s) vers le monstre en (980, 806) (à 4 case(s)) : double clic en (936, 784).",
+"✔ Personnage déplacé en (849, 781).",
+"Je resélectionne Coagulation après le déplacement.",
+"4 adversaire(s), 1 à portée.",
+"Cible à 3.0 case(s) en (980, 805).",
+"Pas de confirmation sur cette cible.",
+"Je désélectionne Coagulation avant de finir le tour."
+],
+"grabs": 33,
+"state": {
+"me_hint": [
+849,
+785
+],
+"select_unverified": false,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [
+[
+980,
+629
+],
+[
+1111,
+698
+],
+[
+1285,
+785
+],
+[
+980,
+805
+]
+],
+"no_enemy_streak": 0,
+"progress": 1
+}
+},
+{
+"case": "seed82-tour1-var2",
+"ret": 1,
+"err": null,
+"clicks": [
+[
+1641,
+529
+],
+[
+1023,
+651
+],
+[
+1285,
+869
+],
+[
+1198,
+821
+],
+[
+1085,
+658
+],
+[
+1640,
+674
+],
+[
+933,
+785
+],
+[
+933,
+785
+],
+[
+1640,
+674
+],
+[
+1640,
+674
+]
+],
+"logs": [
+"Mon tour.",
+"Sélection du sort d'ouverture non vérifiée : j'essaie quand même, la fenêtre de confirmation dira si ça marche.",
+"Sort d'ouverture : clic sur mon personnage en (1023, 651).",
+"Pas de confirmation pour le sort d'ouverture (essai 1/2).",
+"Anneau rouge repéré en (1240, 848), loin de ma case de départ (1023, 651) : je garde ma case de départ.",
+"La dernière position connue (1023, 651) ne correspond pas à la portée du sort : je situe mon personnage en (1285, 869).",
+"Sort d'ouverture : clic sur mon personnage en (1285, 869).",
+"Pas de confirmation pour le sort d'ouverture (essai 2/2).",
+"3 adversaire(s), 2 à portée.",
+"Cible à 1.0 case(s) en (1198, 825).",
+"✔ Lancer 1/2 confirmé.",
+"Pause de 500 ms avant le lancer suivant.",
+"2 adversaire(s), 0 à portée.",
+"La dernière position connue (1240, 848) ne correspond pas à la portée du sort : je situe mon personnage en (801, 807).",
+"Aucun adversaire à portée : je me rapproche.",
+"Déplacement de 3 case(s) vers le monstre en (980, 806) (à 4 case(s)) : double clic en (933, 785).",
+"✔ Personnage déplacé en (849, 781).",
+"Je resélectionne Coagulation après le déplacement.",
+"2 adversaire(s), 0 à portée.",
+"Aucun adversaire à portée : je passe le tour."
+],
+"grabs": 62,
+"state": {
+"me_hint": [
+840,
+775
+],
+"select_unverified": false,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [
+[
+1285,
+785
+],
+[
+980,
+806
+]
+],
+"no_enemy_streak": 0,
+"progress": 2
+}
+},
+{
+"case": "seed83-tour2-var3",
+"ret": 0,
+"err": null,
+"clicks": [],
+"logs": [
+"Mon tour.",
+"2 adversaire(s), 0 à portée.",
+"Aucun adversaire à portée : je passe le tour."
+],
+"grabs": 5,
+"state": {
+"me_hint": null,
+"select_unverified": false,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [
+[
+1285,
+785
+],
+[
+980,
+806
+]
+],
+"no_enemy_streak": 0,
+"progress": 0
+}
+},
+{
+"case": "seed84-tour1-var4",
+"ret": 0,
+"err": null,
+"clicks": [
+[
+1640,
+674
+],
+[
+760,
+652
+],
+[
+760,
+652
+],
+[
+1640,
+674
+]
+],
+"logs": [
+"Mon tour.",
+"2 adversaire(s), 0 à portée.",
+"Anneau rouge de mon personnage non vu : je l'estime au centre de la portée du sort, en (801, 807).",
+"Aucun adversaire à portée : je me rapproche.",
+"39 case(s) accessible(s) (vertes) : je vise la plus proche du monstre.",
+"Déplacement de 7 case(s) vers le monstre en (980, 806) (à 4 case(s)) : double clic en (760, 652).",
+"✔ Personnage déplacé en (1240, 848).",
+"Je resélectionne Coagulation après le déplacement.",
+"2 adversaire(s), 0 à portée.",
+"Aucun adversaire à portée : je passe le tour.",
+"Je désélectionne Coagulation avant de finir le tour."
+],
+"grabs": 19,
+"state": {
+"me_hint": [
+1240,
+848
+],
+"select_unverified": false,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [
+[
+1285,
+785
+],
+[
+980,
+806
+]
+],
+"no_enemy_streak": 0,
+"progress": 1
+}
+},
+{
+"case": "seed85-tour2-var0",
+"ret": 1,
+"err": null,
+"clicks": [
+[
+1640,
+674
+],
+[
+1198,
+821
+],
+[
+1085,
+658
+],
+[
+1640,
+674
+],
+[
+1640,
+674
+],
+[
+804,
+542
+],
+[
+804,
+542
+],
+[
+1640,
+674
+],
+[
+980,
+801
+]
+],
+"logs": [
+"Mon tour.",
+"3 adversaire(s), 2 à portée.",
+"Cible à 1.0 case(s) en (1198, 825).",
+"✔ Lancer 1/2 confirmé.",
+"Pause de 500 ms avant le lancer suivant.",
+"2 adversaire(s), 0 à portée.",
+"La dernière position connue (1240, 848) ne correspond pas à la portée du sort : je situe mon personnage en (801, 807).",
+"Aucun adversaire à portée : je me rapproche.",
+"⚠ Le sort reste sélectionné : pas de déplacement.",
+"Déplacement raté (essai 1/3) : je réessaie.",
+"2 adversaire(s), 0 à portée.",
+"Anneau rouge de mon personnage non vu : j'utilise sa dernière position connue (801, 807).",
+"Aucun adversaire à portée : je me rapproche.",
+"2 case(s) accessible(s) (vertes) : je vise la plus proche du monstre.",
+"Déplacement de 12 case(s) vers le monstre en (980, 806) (à 4 case(s)) : double clic en (804, 542).",
+"✔ Personnage déplacé en (849, 781).",
+"Je resélectionne Coagulation après le déplacement.",
+"4 adversaire(s), 1 à portée.",
+"Cible à 3.0 case(s) en (980, 805).",
+"Pas de confirmation sur cette cible."
+],
+"grabs": 57,
+"state": {
+"me_hint": [
+849,
+785
+],
+"select_unverified": false,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [
+[
+980,
+629
+],
+[
+1111,
+698
+],
+[
+1285,
+785
+],
+[
+980,
+805
+]
+],
+"no_enemy_streak": 0,
+"progress": 2
+}
+},
+{
+"case": "seed86-tour1-var1",
+"ret": 0,
+"err": null,
+"clicks": [
+[
+1641,
+529
+],
+[
+1240,
+848
+],
+[
+1240,
+848
+],
+[
+1640,
+674
+],
+[
+980,
+801
+]
+],
+"logs": [
+"Mon tour.",
+"Sélection du sort d'ouverture non vérifiée : j'essaie quand même, la fenêtre de confirmation dira si ça marche.",
+"Sort d'ouverture : clic sur mon personnage en (1240, 848).",
+"Pas de confirmation pour le sort d'ouverture (essai 1/2).",
+"Anneau rouge repéré en (849, 781), loin de ma case de départ (1240, 848) : je garde ma case de départ.",
+"Anneau rouge de mon personnage non vu : j'utilise sa dernière position connue (1240, 848).",
+"Sort d'ouverture : clic sur mon personnage en (1240, 848).",
+"Pas de confirmation pour le sort d'ouverture (essai 2/2).",
+"4 adversaire(s), 1 à portée.",
+"Cible à 3.0 case(s) en (980, 805).",
+"Pas de confirmation sur cette cible.",
+"Je désélectionne Coagulation avant de finir le tour."
+],
+"grabs": 46,
+"state": {
+"me_hint": [
+849,
+781
+],
+"select_unverified": false,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [
+[
+980,
+629
+],
+[
+1111,
+698
+],
+[
+1285,
+785
+],
+[
+980,
+805
+]
+],
+"no_enemy_streak": 0,
+"progress": 0
+}
+},
+{
+"case": "seed87-tour2-var2",
+"ret": 0,
+"err": null,
+"clicks": [
+[
+1640,
+674
+],
+[
+980,
+801
+],
+[
+1640,
+674
+]
+],
+"logs": [
+"Mon tour.",
+"Diagnostic de sélection : cadre orange 0 px (150 attendus si le sort est sélectionné), bleu de portée 0 px (3000 attendus), icône en (1613, 646), score 1.00.",
+"Sélection du sort non vérifiée : j'essaie quand même, la fenêtre de confirmation dira si ça marche.",
+"La portée du sort s'est affichée avec un léger retard : je la lis maintenant.",
+"4 adversaire(s), 1 à portée.",
+"Cible à 3.0 case(s) en (980, 805).",
+"Pas de confirmation sur cette cible.",
+"Je désélectionne Coagulation avant de finir le tour."
+],
+"grabs": 23,
+"state": {
+"me_hint": [
+849,
+781
+],
+"select_unverified": false,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [
+[
+980,
+629
+],
+[
+1111,
+698
+],
+[
+1285,
+785
+],
+[
+980,
+806
+]
+],
+"no_enemy_streak": 0,
+"progress": 0
+}
+},
+{
+"case": "seed88-tour1-var3",
+"ret": 0,
+"err": null,
+"clicks": [
+[
+1641,
+529
+],
+[
+849,
+785
+],
+[
+849,
+785
+],
+[
+1640,
+674
+],
+[
+980,
+801
+]
+],
+"logs": [
+"Mon tour.",
+"Sélection du sort d'ouverture non vérifiée : j'essaie quand même, la fenêtre de confirmation dira si ça marche.",
+"Sort d'ouverture : clic sur mon personnage en (849, 785).",
+"Pas de confirmation pour le sort d'ouverture (essai 1/2).",
+"Sort d'ouverture : clic sur mon personnage en (849, 785).",
+"Pas de confirmation pour le sort d'ouverture (essai 2/2).",
+"4 adversaire(s), 1 à portée.",
+"Cible à 3.0 case(s) en (980, 805).",
+"Pas de confirmation sur cette cible."
+],
+"grabs": 49,
+"state": {
+"me_hint": [
+849,
+781
+],
+"select_unverified": false,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [
+[
+980,
+629
+],
+[
+1111,
+698
+],
+[
+1285,
+785
+],
+[
+980,
+805
+]
+],
+"no_enemy_streak": 0,
+"progress": 0
+}
+},
+{
+"case": "seed89-tour2-var4",
+"ret": 0,
+"err": null,
+"clicks": [
+[
+1640,
+674
+],
+[
+980,
+801
+]
+],
+"logs": [
+"Mon tour.",
+"4 adversaire(s), 1 à portée.",
+"Cible à 3.0 case(s) en (980, 805).",
+"Pas de confirmation sur cette cible."
+],
+"grabs": 19,
+"state": {
+"me_hint": [
+849,
+785
+],
+"select_unverified": false,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [
+[
+980,
+629
+],
+[
+1111,
+698
+],
+[
+1285,
+785
+],
+[
+980,
+805
+]
+],
+"no_enemy_streak": 0,
+"progress": 0
+}
+},
+{
+"case": "seed90-tour1-var0",
+"ret": 0,
+"err": null,
+"clicks": [
+[
+1641,
+529
+],
+[
+801,
+807
+],
+[
+1067,
+804
+],
+[
+1640,
+674
+],
+[
+980,
+802
+],
+[
+1640,
+674
+],
+[
+1640,
+674
+],
+[
+937,
+781
+],
+[
+937,
+781
+],
+[
+937,
+825
+],
+[
+937,
+825
+],
+[
+1640,
+674
+],
+[
+980,
+801
+]
+],
+"logs": [
+"Mon tour.",
+"Sélection du sort d'ouverture non vérifiée : j'essaie quand même, la fenêtre de confirmation dira si ça marche.",
+"Anneau rouge de mon personnage non vu : je l'estime au centre de la portée du sort, en (801, 807).",
+"Sort d'ouverture : clic sur mon personnage en (801, 807).",
+"Pas de confirmation pour le sort d'ouverture (essai 1/2).",
+"Sort d'ouverture : clic sur mon personnage en (1067, 804).",
+"Pas de confirmation pour le sort d'ouverture (essai 2/2).",
+"4 adversaire(s). Portée du sort illisible à l'écran : j'essaie seulement ceux à 5 case(s) ou moins (1), du plus proche au plus loin (la fenêtre de confirmation vérifie).",
+"Cible à 3.0 case(s) en (980, 806).",
+"Pas de confirmation sur cette cible.",
+"Diagnostic de sélection : cadre orange 0 px (150 attendus si le sort est sélectionné), bleu de portée 0 px (3000 attendus), icône en (1613, 646), score 1.00.",
+"Sélection du sort non vérifiée : j'essaie quand même, la fenêtre de confirmation dira si ça marche.",
+"Aucune cible n'a répondu : je me rapproche.",
+"Déplacement de 2 case(s) vers le monstre en (980, 806) (à 3 case(s)) : double clic en (937, 781).",
+"Le personnage n'a pas bougé (case inaccessible ?), j'essaie une autre case.",
+"Déplacement de 2 case(s) vers le monstre en (980, 806) (à 3 case(s)) : double clic en (937, 825).",
+"✔ Personnage déplacé en (1023, 651).",
+"Je resélectionne Coagulation après le déplacement.",
+"4 adversaire(s), 1 à portée.",
+"Cible à 3.0 case(s) en (980, 805).",
+"Pas de confirmation sur cette cible."
+],
+"grabs": 96,
+"state": {
+"me_hint": [
+849,
+785
+],
+"select_unverified": false,
+"hint_unverified": false,
+"failed_moves": [
+[
+937,
+781
+]
+],
+"last_enemies": [
+[
+980,
+629
+],
+[
+1111,
+698
+],
+[
+1285,
+785
+],
+[
+980,
+805
+]
+],
+"no_enemy_streak": 0,
+"progress": 1
+}
+},
+{
+"case": "seed91-tour2-var1",
+"ret": 0,
+"err": null,
+"clicks": [
+[
+1640,
+674
+],
+[
+980,
+801
+],
+[
+1640,
+674
+]
+],
+"logs": [
+"Mon tour.",
+"4 adversaire(s), 1 à portée.",
+"Cible à 3.0 case(s) en (980, 805).",
+"Pas de confirmation sur cette cible.",
+"Je désélectionne Coagulation avant de finir le tour.",
+"⚠ Le sort reste sélectionné : pas de déplacement."
+],
+"grabs": 26,
+"state": {
+"me_hint": [
+849,
+781
+],
+"select_unverified": false,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [
+[
+980,
+629
+],
+[
+1111,
+698
+],
+[
+1285,
+785
+],
+[
+980,
+805
+]
+],
+"no_enemy_streak": 0,
+"progress": 0
+}
+},
+{
+"case": "seed92-tour1-var2",
+"ret": 0,
+"err": null,
+"clicks": [
+[
+1641,
+529
+],
+[
+801,
+807
+],
+[
+1085,
+658
+],
+[
+1640,
+674
+],
+[
+933,
+785
+],
+[
+933,
+785
+],
+[
+1640,
+674
+]
+],
+"logs": [
+"Mon tour.",
+"Sélection du sort d'ouverture non vérifiée : j'essaie quand même, la fenêtre de confirmation dira si ça marche.",
+"Anneau rouge de mon personnage non vu : je l'estime au centre de la portée du sort, en (801, 807).",
+"Sort d'ouverture : clic sur mon personnage en (801, 807).",
+"✔ Sort d'ouverture lancé.",
+"2 adversaire(s), 0 à portée.",
+"Anneau rouge de mon personnage non vu : je l'estime au centre de la portée du sort, en (801, 807).",
+"Aucun adversaire à portée : je me rapproche.",
+"Déplacement de 3 case(s) vers le monstre en (980, 806) (à 4 case(s)) : double clic en (933, 785).",
+"✔ Personnage déplacé en (849, 785).",
+"Je resélectionne Coagulation après le déplacement.",
+"⚠ Icône du sort introuvable.",
+"Je désélectionne Coagulation avant de finir le tour.",
+"⚠ Le sort reste sélectionné : pas de déplacement."
+],
+"grabs": 33,
+"state": {
+"me_hint": [
+849,
+785
+],
+"select_unverified": false,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [
+[
+1285,
+785
+],
+[
+980,
+806
+]
+],
+"no_enemy_streak": 0,
+"progress": 2
+}
+},
+{
+"case": "seed93-tour2-var3",
+"ret": 1,
+"err": null,
+"clicks": [
+[
+848,
+122
+],
+[
+761,
+122
+],
+[
+1085,
+658
+],
+[
+1640,
+674
+]
+],
+"logs": [
+"Mon tour.",
+"4 adversaire(s), 3 à portée.",
+"Cible à 1.0 case(s) en (848, 126).",
+"Pas de confirmation sur cette cible.",
+"Cible à 1.0 case(s) en (761, 126).",
+"✔ Lancer 1/2 confirmé.",
+"Pause de 500 ms avant le lancer suivant.",
+"2 adversaire(s), 0 à portée.",
+"Aucun adversaire à portée : je passe le tour.",
+"Je désélectionne Coagulation avant de finir le tour."
+],
+"grabs": 25,
+"state": {
+"me_hint": [
+805,
+105
+],
+"select_unverified": false,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [
+[
+1285,
+785
+],
+[
+980,
+806
+]
+],
+"no_enemy_streak": 0,
+"progress": 1
+}
+},
+{
+"case": "seed94-tour1-var4",
+"ret": 1,
+"err": null,
+"clicks": [
+[
+1198,
+821
+],
+[
+1329,
+755
+],
+[
+1085,
+658
+],
+[
+1640,
+674
+],
+[
+980,
+801
+],
+[
+1640,
+674
+]
+],
+"logs": [
+"Mon tour.",
+"3 adversaire(s), 2 à portée.",
+"Cible à 1.0 case(s) en (1198, 825).",
+"Pas de confirmation sur cette cible.",
+"Cible à 4.0 case(s) en (1329, 759).",
+"✔ Lancer 1/3 confirmé.",
+"Pause de 500 ms avant le lancer suivant.",
+"4 adversaire(s), 1 à portée.",
+"Cible à 3.0 case(s) en (980, 805).",
+"Pas de confirmation sur cette cible.",
+"Je désélectionne Coagulation avant de finir le tour."
+],
+"grabs": 37,
+"state": {
+"me_hint": [
+849,
+781
+],
+"select_unverified": false,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [
+[
+980,
+629
+],
+[
+1111,
+698
+],
+[
+1285,
+785
+],
+[
+980,
+805
+]
+],
+"no_enemy_streak": 0,
+"progress": 1
+}
+},
+{
+"case": "seed95-tour2-var0",
+"ret": 1,
+"err": null,
+"clicks": [
+[
+1640,
+674
+],
+[
+761,
+122
+],
+[
+1085,
+658
+],
+[
+1640,
+674
+],
+[
+933,
+785
+],
+[
+933,
+785
+],
+[
+1640,
+674
+],
+[
+980,
+802
+]
+],
+"logs": [
+"Mon tour.",
+"Diagnostic de sélection : cadre orange 0 px (150 attendus si le sort est sélectionné), bleu de portée 0 px (3000 attendus), icône en (1613, 646), score 1.00.",
+"Sélection du sort non vérifiée : j'essaie quand même, la fenêtre de confirmation dira si ça marche.",
+"La portée du sort s'est affichée avec un léger retard : je la lis maintenant.",
+"4 adversaire(s), 3 à portée.",
+"Cible à 1.0 case(s) en (761, 126).",
+"✔ Lancer 1/2 confirmé.",
+"Pause de 500 ms avant le lancer suivant.",
+"2 adversaire(s), 0 à portée.",
+"La dernière position connue (1023, 651) ne correspond pas à la portée du sort : je situe mon personnage en (801, 807).",
+"Aucun adversaire à portée : je me rapproche.",
+"Déplacement de 3 case(s) vers le monstre en (980, 806) (à 4 case(s)) : double clic en (933, 785).",
+"✔ Personnage déplacé en (849, 781).",
+"Je resélectionne Coagulation après le déplacement.",
+"4 adversaire(s). Portée du sort illisible à l'écran : j'essaie seulement ceux à 5 case(s) ou moins (1), du plus proche au plus loin (la fenêtre de confirmation vérifie).",
+"Cible à 3.0 case(s) en (980, 806).",
+"Pas de confirmation sur cette cible.",
+"Je désélectionne Coagulation avant de finir le tour."
+],
+"grabs": 44,
+"state": {
+"me_hint": [
+849,
+781
+],
+"select_unverified": false,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [
+[
+980,
+629
+],
+[
+1111,
+698
+],
+[
+1285,
+785
+],
+[
+980,
+806
+]
+],
+"no_enemy_streak": 0,
+"progress": 2
+}
+},
+{
+"case": "seed96-tour1-var1",
+"ret": 0,
+"err": null,
+"clicks": [
+[
+1641,
+529
+],
+[
+849,
+781
+],
+[
+1085,
+658
+]
+],
+"logs": [
+"Mon tour.",
+"Sélection du sort d'ouverture non vérifiée : j'essaie quand même, la fenêtre de confirmation dira si ça marche.",
+"Sort d'ouverture : clic sur mon personnage en (849, 781).",
+"✔ Sort d'ouverture lancé.",
+"Le combat est terminé."
+],
+"grabs": 19,
+"state": {
+"me_hint": [
+849,
+781
+],
+"select_unverified": false,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [],
+"no_enemy_streak": 0,
+"progress": 1
+}
+},
+{
+"case": "seed97-tour2-var2",
+"ret": 0,
+"err": null,
+"clicks": [
+[
+1640,
+674
+],
+[
+1640,
+674
+],
+[
+933,
+785
+],
+[
+933,
+785
+],
+[
+1640,
+674
+],
+[
+980,
+801
+],
+[
+1640,
+674
+]
+],
+"logs": [
+"Mon tour.",
+"2 adversaire(s), 0 à portée.",
+"Anneau rouge de mon personnage non vu : je l'estime au centre de la portée du sort, en (801, 807).",
+"Aucun adversaire à portée : je me rapproche.",
+"Déplacement de 3 case(s) vers le monstre en (980, 806) (à 4 case(s)) : double clic en (933, 785).",
+"✔ Personnage déplacé en (892, 585).",
+"Je resélectionne Coagulation après le déplacement.",
+"4 adversaire(s), 1 à portée.",
+"Cible à 3.0 case(s) en (980, 805).",
+"Pas de confirmation sur cette cible."
+],
+"grabs": 32,
+"state": {
+"me_hint": [
+849,
+785
+],
+"select_unverified": false,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [
+[
+980,
+629
+],
+[
+1111,
+698
+],
+[
+1285,
+785
+],
+[
+980,
+805
+]
+],
+"no_enemy_streak": 0,
+"progress": 1
+}
+},
+{
+"case": "seed98-tour1-var3",
+"ret": 0,
+"err": null,
+"clicks": [
+[
+1641,
+529
+],
+[
+849,
+785
+],
+[
+849,
+780
+],
+[
+1640,
+674
+],
+[
+1640,
+674
+]
+],
+"logs": [
+"Mon tour.",
+"Sélection du sort d'ouverture non vérifiée : j'essaie quand même, la fenêtre de confirmation dira si ça marche.",
+"Sort d'ouverture : clic sur mon personnage en (849, 785).",
+"Pas de confirmation pour le sort d'ouverture (essai 1/2).",
+"Sort d'ouverture : clic sur mon personnage en (849, 780).",
+"Pas de confirmation pour le sort d'ouverture (essai 2/2).",
+"2 adversaire(s), 0 à portée.",
+"Aucun adversaire à portée : je passe le tour.",
+"Je désélectionne Coagulation avant de finir le tour.",
+"⚠ Le sort reste sélectionné : pas de déplacement."
+],
+"grabs": 48,
+"state": {
+"me_hint": [
+840,
+775
+],
+"select_unverified": false,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [
+[
+1285,
+785
+],
+[
+980,
+806
+]
+],
+"no_enemy_streak": 0,
+"progress": 0
+}
+},
+{
+"case": "seed99-tour2-var4",
+"ret": 0,
+"err": null,
+"clicks": [
+[
+1640,
+674
+],
+[
+936,
+784
+],
+[
+936,
+784
+],
+[
+1640,
+674
+],
+[
+1640,
+674
+]
+],
+"logs": [
+"Mon tour.",
+"2 adversaire(s), 0 à portée.",
+"Anneau rouge de mon personnage non vu : je l'estime au centre de la portée du sort, en (801, 807).",
+"Aucun adversaire à portée : je me rapproche.",
+"⚠ Le sort reste sélectionné : pas de déplacement.",
+"Déplacement raté (essai 1/3) : je réessaie.",
+"2 adversaire(s), 0 à portée.",
+"Anneau rouge de mon personnage non vu : je l'estime au centre de la portée du sort, en (801, 807).",
+"Aucun adversaire à portée : je me rapproche.",
+"44 case(s) accessible(s) (vertes) : je vise la plus proche du monstre.",
+"Déplacement de 3 case(s) vers le monstre en (980, 806) (à 4 case(s)) : double clic en (936, 784).",
+"✔ Personnage déplacé en (849, 781).",
+"Je resélectionne Coagulation après le déplacement.",
+"2 adversaire(s), 0 à portée.",
+"Aucun adversaire à portée : je passe le tour.",
+"Je désélectionne Coagulation avant de finir le tour.",
+"⚠ Le sort reste sélectionné : pas de déplacement."
+],
+"grabs": 33,
+"state": {
+"me_hint": [
+840,
+775
+],
+"select_unverified": false,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [
+[
+1285,
+785
+],
+[
+980,
+806
+]
+],
+"no_enemy_streak": 0,
+"progress": 1
+}
+},
+{
+"case": "seed100-tour1-var0",
+"ret": 0,
+"err": null,
+"clicks": [
+[
+1641,
+529
+],
+[
+849,
+785
+],
+[
+1085,
+658
+],
+[
+1024,
+821
+],
+[
+1640,
+674
+],
+[
+1024,
+778
+]
+],
+"logs": [
+"Mon tour.",
+"Sélection du sort d'ouverture non vérifiée : j'essaie quand même, la fenêtre de confirmation dira si ça marche.",
+"Sort d'ouverture : clic sur mon personnage en (849, 785).",
+"✔ Sort d'ouverture lancé.",
+"La portée du sort s'est affichée avec un léger retard : je la lis maintenant.",
+"2 adversaire(s), 2 à portée.",
+"Cible à 1.0 case(s) en (1024, 825).",
+"Pas de confirmation sur cette cible.",
+"Cible à 1.0 case(s) en (1024, 782).",
+"Pas de confirmation sur cette cible.",
+"Je désélectionne Coagulation avant de finir le tour."
+],
+"grabs": 41,
+"state": {
+"me_hint": [
+1067,
+804
+],
+"select_unverified": false,
+"hint_unverified": false,
+"failed_moves": [],
+"last_enemies": [
+[
+1024,
+781
+],
+[
+1024,
+825
+]
+],
+"no_enemy_streak": 0,
+"progress": 1
+}
+}
+]

@@ -388,11 +388,12 @@ def main():
     failures += not ok
 
     # 3v) Pied du Sacrieur : personne au contact -> se rapprocher s'il reste des PM, puis lancer (logique de décision)
-    import phases.p4_tour as _p4
+    import phases.casting as _p4
     from core.config import Config as _Cfg
+    from core.spells import default_spellbook as _dsb
     def _scenario(green_available, move_ok):
-        saved = {k: getattr(_p4, k) for k in ("_select_second_spell", "_deselect_second_spell", "find_enemies", "find_me",
-                 "range_mask", "range_fraction", "plan_move_green", "move_closer", "my_position", "_wait_confirm", "_diag")}
+        saved = {k: getattr(_p4, k) for k in ("select_secondary", "deselect_secondary", "find_enemies", "find_me",
+                 "range_mask", "range_fraction", "plan_move_green", "move_closer", "my_position", "wait_confirm", "save_diag")}
         real_sleep, real_click = _p4.time.sleep, _p4.inp.click
         state = {"moved": False, "moves": 0, "clicks": 0}
         enemy = _types.SimpleNamespace(center=(500, 300), cx=500, cy=300)
@@ -401,8 +402,8 @@ def main():
         try:
             _p4.time.sleep = lambda *_: None
             _p4.inp.click = lambda *_: state.__setitem__("clicks", state["clicks"] + 1)
-            _p4._select_second_spell = lambda ctx: (True, _types.SimpleNamespace(center=(1, 1)))
-            _p4._deselect_second_spell = lambda ctx, icon: True
+            _p4.select_secondary = lambda ctx, sp: (True, _types.SimpleNamespace(center=(1, 1)))
+            _p4.deselect_secondary = lambda ctx, sp, icon: True
             _p4.find_enemies = lambda sc: [enemy]
             _p4.find_me = lambda sc, hint=None: _types.SimpleNamespace(center=(100, 100))
             _p4.range_mask = lambda sc: None
@@ -414,11 +415,11 @@ def main():
                 return bool(move_ok)
             _p4.move_closer = _mc
             _p4.my_position = lambda ctx, sc, me, mask, en: (100, 100)
-            _p4._wait_confirm = lambda ctx: (_types.SimpleNamespace(center=(9, 9)), (0, 0))
-            _p4._diag = lambda *a, **k: None
+            _p4.wait_confirm = lambda ctx: (_types.SimpleNamespace(center=(9, 9)), (0, 0))
+            _p4.save_diag = lambda *a, **k: None
             ctx_ = _types.SimpleNamespace(config=_Cfg(), capture=_Cap(), me_hint=(100, 100), select_unverified=True,
                                           log=lambda m: None, failed_moves=[])
-            res = _p4.cast_second_spell(ctx_, lambda: False)
+            res = _p4.cast_secondary(ctx_, _dsb().secondary[0], lambda: False)
             return res, state["moves"]
         finally:
             _p4.time.sleep, _p4.inp.click = real_sleep, real_click
@@ -431,6 +432,59 @@ def main():
           and c_res == (False, False) and c_moves == 1)
     print(f"[{'OK' if ok else 'ÉCHEC'}] Pied du Sacrieur : se rapproche s'il reste des PM puis lance ({a_res}), ne bouge pas sans PM ({b_res}), "
           f"déplacement raté sans boucle ({c_res})")
+    failures += not ok
+
+    # 3w) fenêtres Monture/Inventaire et menu de transfert : reconnus même si l'échelle de l'écran est un peu fausse
+    from phases.p_inventaire import find_text_any_scale, find_transfer_option
+    base = load("30_menu_transfert.png")
+    n_ok = n_tot = 0
+    for sc_ in (0.92, 0.95, 0.97, 0.99, 1.0, 1.005, 1.01, 1.02, 1.03, 1.045, 1.06, 1.08, 1.1):
+        img_s = cv2.resize(base, None, fx=sc_, fy=sc_, interpolation=cv2.INTER_LINEAR)
+        for opt, exp in (("inv_menu_visibles", (1184, 170)), ("inv_menu_tous", (1169, 127))):
+            r = find_transfer_option(img_s, opt)
+            n_tot += 1
+            n_ok += r is not None and abs(r[0][0] - exp[0] * sc_) <= 6 and abs(r[0][1] - exp[1] * sc_) <= 6
+        for nm in ("inv_titre_inventaire", "inv_titre_monture"):
+            r = find_text_any_scale(img_s, nm)
+            n_tot += 1
+            n_ok += r is not None and abs(r[2] - sc_) <= 0.012
+    no_false = not any(find_transfer_option(load(n), o) for n in ("27_hors_combat_vie_67.png", "09_mon_tour.png",
+                       "26_resultat_combat.png", "29_inventaire_plein.png", "28_montee_niveau.png") for o in ("inv_menu_visibles", "inv_menu_tous"))
+    ok = n_ok == n_tot and no_false
+    print(f"[{'OK' if ok else 'ÉCHEC'}] transfert vers la monture : menu et titres retrouvés à toutes les échelles de 0,92 à 1,10 "
+          f"({n_ok}/{n_tot}), aucune fausse alerte sur les écrans sans menu : {no_false}")
+    failures += not ok
+
+    # 3x) transfert vers la monture, de bout en bout (faux environnement) : clics sur la flèche et le menu, à plusieurs échelles
+    import phases.p_inventaire as _inv
+    ok = True
+    for sc_ in (1.0, 1.02, 1.045, 1.08, 0.96):
+        scene_ = cv2.resize(base, None, fx=sc_, fy=sc_, interpolation=cv2.INTER_LINEAR) if sc_ != 1 else base
+        clicks_, saved_ = [], {k: getattr(_inv, k) for k in ("find_icons", "close_windows", "_click", "_sleep", "_bottom_triangle", "inventory_full")}
+        real_ = (_time.time, _time.sleep)
+        clock_ = [1000.0]
+        class _Cap2:
+            def grab(self): return scene_, (0, 0)
+        cfg_ = Config()
+        cfg_.save_diagnostics = False
+        ctx_ = _types.SimpleNamespace(config=cfg_, capture=_Cap2(), ui_templates=[], log=lambda m: None)
+        try:
+            _time.time, _time.sleep = (lambda: clock_[0]), (lambda x: clock_.__setitem__(0, clock_[0] + x))
+            _inv.find_icons = lambda c, sc, v, th=0.9: [_types.SimpleNamespace(center=(100, 100), score=1.0)] if v in (_inv.MOUNT_ICON, _inv.MOUNT_BAG) else []
+            _inv.close_windows = lambda *a, **k: 0
+            _inv._click = lambda c, o, p: clicks_.append((int(p[0]), int(p[1])))
+            _inv._sleep = lambda *a, **k: None
+            _inv._bottom_triangle = lambda c, sc: None
+            _inv.inventory_full = lambda c, sc: False
+            res_ = _inv.unload_to_mount(ctx_, lambda: False)
+        finally:
+            for k_, v_ in saved_.items():
+                setattr(_inv, k_, v_)
+            _time.time, _time.sleep = real_
+        arrow_, menu_ = ((1609 - 171) * sc_, (147 + 72) * sc_), (1184 * sc_, 170 * sc_)
+        ok = ok and res_ == "ok" and len(clicks_) >= 4 and all(abs(a - b) <= 6 for a, b in zip(clicks_[2], arrow_)) \
+            and all(abs(a - b) <= 6 for a, b in zip(clicks_[3], menu_))
+    print(f"[{'OK' if ok else 'ÉCHEC'}] transfert vers la monture de bout en bout : flèche puis menu cliqués au bon endroit de 0,96 à 1,08")
     failures += not ok
 
     # 4) vitesse

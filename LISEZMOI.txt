@@ -1,3 +1,47 @@
+VERSION 0.9.1 : transfert vers la monture plus robuste
+  - Le menu « Transférer… » n'était pas reconnu alors que les fenêtres Monture et Inventaire l'étaient (« Le menu de
+    transfert n'est pas apparu ») : son texte, très fin, n'était lu qu'à l'échelle d'origine, à 1 % près (à 1 % d'écart
+    son score tombe de 1,00 à 0,5), alors que l'adaptation automatique à la taille de la fenêtre n'est jamais parfaite.
+    Les titres et le menu sont maintenant cherchés à plusieurs échelles (0,90 à 1,10), le menu est validé par ses deux
+    lignes (« tous les objets » et « les objets visibles ») bien placées l'une par rapport à l'autre, et la position des
+    flèches vertes suit l'échelle trouvée. Vérifié sur la capture de référence mise à l'échelle de 0,92 à 1,10 : 56/56.
+  - Si le menu n'apparaît toujours pas : capture annotée « transfert_menu_absent_….png » dans logs (titres en jaune,
+    clics en rouge) et meilleur score de lecture dans le journal.
+  - « Aucun tour à jouer pendant 120 s » : le programme enregistre maintenant « tour_introuvable_….png » (ce qu'il voit)
+    et note l'échelle d'affichage et les éléments reconnus dans le journal.
+
+VERSION 0.9.0 : code remis en ordre + choix des sorts par capture d'écran
+  1) Nettoyage SANS changement de comportement. phases/p4_tour.py (731 lignes) est découpé :
+       turn_helpers.py  outils communs (recherche d'icônes, confirmation, diagnostics)
+       primary_spell.py sort principal (Coagulation) : sélection, désélection, resélection
+       movement.py      choix de la case, ma position, déplacement
+       casting.py       sort d'ouverture, sorts secondaires (Pied du Sacrieur), fin de tour
+       p4_tour.py       l'enchaînement d'un tour, en petites étapes lisibles
+     Preuve d'équivalence : l'ancien code (tests/legacy/p4_tour_legacy.py, figé) et le nouveau jouent côte à côte
+     3000 tours simulés, 100 enchaînements d'écrans réels et chaque fonction déplacée sur de vraies captures :
+     mêmes clics, mêmes lignes de journal, mêmes décisions. Lancer toute la batterie :  python tests/run_all.py
+     (ou  python tests/run_all.py --fast  pour sauter les deux bancs les plus longs).
+     Réglages d'écran regroupés dans core.combat.apply_layout(). Petit défaut corrigé au passage : l'icône d'un sort
+     lue hors de l'image (fenêtre redimensionnée) faisait planter le tour.
+  2) Nouvel onglet « Sorts » : choisir les sorts à jouer, par classe, sans toucher au code.
+       - Le profil intégré (sort d'ouverture + Coagulation + Pied du Sacrieur) est en lecture seule et reste le
+         profil par défaut : sans rien changer, le programme fait exactement comme avant.
+       - « Nouveau profil… » ou « Dupliquer… » crée un profil modifiable (par exemple une autre classe).
+       - Pour chaque sort (ouverture, principal, secondaires) : « Choisir l'icône depuis une capture… » ouvre une
+         fenêtre où l'on ouvre une image, colle une capture (Win+Maj+S puis Ctrl+V) ou capture le jeu (dans 2 s), puis
+         où l'on entoure l'icône du sort à la souris. Le programme vérifie la zone : taille, sort non sélectionné
+         (pas de cadre orange), icône qui ne ressemble pas à une autre. Les icônes sont enregistrées dans le
+         dossier « spells » à côté du programme, les profils dans spells/profiles.json.
+       - Rôles : ouverture = 1er tour seulement, lancé sur soi ; principal = lancé sur l'adversaire le plus proche
+         à portée, « Lancers par tour » fois (onglet Combat) ; secondaires = ensuite, sur un adversaire au contact
+         (le personnage se rapproche s'il lui reste des PM).
+       - Le profil choisi s'applique au prochain « Démarrer » ou « Tester ». Les cases à cocher « Sort d'ouverture »
+         (onglet Combat) et le réglage « second_spell » de config.json restent valables pour tous les profils.
+     Limites : un sort se lance toujours sur l'adversaire à portée (ou sur soi pour l'ouverture) ; les sorts de zone,
+     d'invocation ou de soin sur un allié ne sont pas encore gérés. La portée est lue sur la zone colorée affichée par
+     le jeu quand le sort est sélectionné : un sort dont la zone n'apparaît pas à l'écran sera joué en « portée
+     illisible » (adversaires à blind_range_max_cells cases ou moins).
+
 VERSION 0.8.8 : adversaire caché derrière un décor
   - Correction : quand un monstre était presque entièrement caché derrière un bloc d'herbe (seul un petit arc de
     son anneau bleu dépassait), le programme disait « Aucun adversaire visible », ne bougeait pas et passait son tour,
