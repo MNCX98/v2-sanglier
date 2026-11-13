@@ -10,6 +10,8 @@ class Config:
     threshold: float = 0.80                     # confiance minimale (0.50 à 0.99)
     scan_interval_ms: int = 500                 # pause entre deux observations
     cooldown_after_click_s: float = 4.0         # pause après un clic (laisse le jeu réagir)
+    edge_margin_pct: int = 3                    # ne pas cliquer un monstre à moins de x % du bord de la carte (0 = désactivé) : un clic au bord change de carte
+    lost_stop_after_s: int = 0                  # aucun monstre reconnu pendant x secondes : le programme s'arrête avec une capture (0 = jamais)
     click_count: int = 2                        # 1 = simple clic, 2 = double clic
     click_interval_ms: int = 200                # délai entre deux clics d'un double clic
     detect_combat: bool = True                  # phase 2 : attendre le combat après le clic

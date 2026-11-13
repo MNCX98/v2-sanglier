@@ -43,6 +43,45 @@ def _fight(ctx: Context, should_stop, on_frame) -> str:
     return "done"
 
 
+def _stop_lost(ctx: Context, seconds: int) -> None:
+    """Aucun monstre reconnu depuis `seconds` s : le personnage est peut-être sur une autre carte (sortie par le bord)."""
+    from datetime import datetime
+    from core.imgio import save_image
+    from core.paths import logs_dir
+    ctx.log(f"Aucun monstre reconnu depuis {seconds} s : je suis peut-être sur une autre carte (sortie par le bord ?). "
+            "Le programme s'arrête, reprends la main.")
+    try:
+        scene, _ = ctx.capture.grab()
+        path = logs_dir() / f"aucun_monstre_{datetime.now():%Y%m%d_%H%M%S}.png"
+        save_image(path, scene)
+        ctx.log(f"Capture enregistrée : {path}")
+    except Exception:
+        pass
+
+
+_last_error_capture = 0.0
+
+
+def _save_error_capture(ctx: Context, error: Exception) -> None:
+    """Erreur inattendue : enregistre une capture « erreur_….png » (ce que le programme voyait) pour comprendre ce qui s'est passé.
+    Pas pour « fenêtre introuvable » (aucune image à prendre) ; au plus une capture toutes les 10 s pour ne pas en produire à la chaîne."""
+    global _last_error_capture
+    from datetime import datetime
+    from core.capture import WindowNotFound
+    from core.imgio import save_image
+    from core.paths import logs_dir
+    if isinstance(error, WindowNotFound) or time.time() - _last_error_capture < 10:
+        return
+    try:
+        scene, _ = ctx.capture.grab()
+        path = logs_dir() / f"erreur_{datetime.now():%Y%m%d_%H%M%S}.png"
+        save_image(path, scene)
+        _last_error_capture = time.time()
+        ctx.log(f"Capture de l'écran enregistrée : {path} ({type(error).__name__})")
+    except Exception:
+        pass                                                       # la capture d'erreur ne doit jamais provoquer une autre erreur
+
+
 def run_phases(ctx: Context, should_stop, on_frame=None) -> None:
     cfg = ctx.config
     apply_layout(cfg)
@@ -52,6 +91,7 @@ def run_phases(ctx: Context, should_stop, on_frame=None) -> None:
         ctx.log(f"Sorts : profil « {ctx.spells.name} ».")
     ctx.capture.viewport.log_hook = ctx.log                        # messages d'adaptation à l'échelle du jeu
     combats = 0
+    lost_since: float | None = None                                 # début d'une série de recherches sans monstre
     need_heal = True                                               # contrôle de la vie avant chaque combat
     while not should_stop():
         pause = cfg.scan_interval_ms / 1000
@@ -75,6 +115,13 @@ def run_phases(ctx: Context, should_stop, on_frame=None) -> None:
             out = scan_once(ctx, do_click=True)                    # phase 1
             if on_frame:
                 on_frame(out.frame)
+            if out.detection is not None:
+                lost_since = None
+            elif cfg.lost_stop_after_s > 0:
+                lost_since = lost_since or time.time()
+                if time.time() - lost_since >= cfg.lost_stop_after_s:
+                    _stop_lost(ctx, cfg.lost_stop_after_s)
+                    return
             if out.clicked:
                 if cfg.detect_combat:
                     result = _fight(ctx, should_stop, on_frame)
@@ -94,6 +141,7 @@ def run_phases(ctx: Context, should_stop, on_frame=None) -> None:
                     pause = cfg.cooldown_after_click_s
         except Exception as e:                                     # fenêtre introuvable, etc.
             ctx.log(f"⚠ {e}")
+            _save_error_capture(ctx, e)
             pause = 2.0
         _sleep(pause, should_stop)
     if combats:

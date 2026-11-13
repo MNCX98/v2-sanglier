@@ -27,7 +27,7 @@ from gui.spells_tab import SpellsTab
 from phases.p4_tour import test_combat
 from phases.runner import run_phases
 
-VERSION = "0.9.1"
+VERSION = "0.9.2"
 
 # Modes pendant lesquels DofusAuto se réduit pour ne pas cacher le jeu, puis revient.
 HIDE_MODES = {"test", "testui", "testplace", "testcombat", "snapshot", "sequence"}
@@ -249,6 +249,24 @@ class MainWindow(QMainWindow):
         self.clicks.setValue(self.cfg.click_count)
         self.clicks.valueChanged.connect(lambda v: setattr(self.cfg, "click_count", int(v)))
         form.addRow("Clics sur le monstre :", self.clicks)
+        self.edge_margin = QSpinBox()
+        self.edge_margin.setRange(0, 25)
+        self.edge_margin.setSuffix(" %")
+        self.edge_margin.setSpecialValueText("désactivé")
+        self.edge_margin.setToolTip("Un clic sur une case du bord de la carte fait changer de carte. Les monstres à moins de "
+                                    "x % du bord (de la zone de jeu) ne sont pas cliqués ; ils restent détectés ailleurs. 0 = désactivé.")
+        self.edge_margin.setValue(self.cfg.edge_margin_pct)
+        self.edge_margin.valueChanged.connect(lambda v: setattr(self.cfg, "edge_margin_pct", int(v)))
+        form.addRow("Marge de bord de carte :", self.edge_margin)
+        self.lost_stop = QSpinBox()
+        self.lost_stop.setRange(0, 3600)
+        self.lost_stop.setSuffix(" s")
+        self.lost_stop.setSpecialValueText("jamais")
+        self.lost_stop.setToolTip("Aucun monstre reconnu pendant ce délai : le programme s'arrête avec une capture "
+                                  "(peut-être sur une autre carte). « jamais » : il continue de chercher.")
+        self.lost_stop.setValue(self.cfg.lost_stop_after_s)
+        self.lost_stop.valueChanged.connect(lambda v: setattr(self.cfg, "lost_stop_after_s", int(v)))
+        form.addRow("Arrêt si aucun monstre :", self.lost_stop)
         lay.addWidget(box, 1)
         box = QGroupBox("Images et dossiers")
         grid = QGridLayout(box)
