@@ -73,6 +73,7 @@ def run_case(args):
     cfg = Config()
     cfg.save_diagnostics = False
     cfg.turn_start_delay_s = 0.0
+    cfg.opening_recast = False                     # ces bancs vérifient le comportement historique (sans relance)
     for k, v in VARIANTS[variant_idx].items():
         setattr(cfg, k, v)
     clicks, logs = [], []

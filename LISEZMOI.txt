@@ -1,3 +1,12 @@
+VERSION 0.9.3 : le sort d'ouverture est relancé quand il est rechargé
+  - Tant que le sort d'ouverture (le boost du 1er tour) se recharge, son icône est assombrie et porte un chiffre. Dès que
+    ce chiffre disparaît, le programme le relance sur son personnage au début du tour, exactement comme au 1er tour
+    (clic sur le sort, clic sur soi, confirmation). Comme au 1er tour, les sorts secondaires ne sont pas lancés ce tour-là.
+  - Réglage « Le relancer dès qu'il est rechargé » (onglet Combat, à côté de « Sort d'ouverture »), ou "opening_recast"
+    dans config.json : activé par défaut. Il ne fait rien si « Sort d'ouverture » est décoché.
+  - Si deux relances de suite échouent dans un même combat, le programme n'essaie plus jusqu'à la fin de ce combat.
+  - Nouveaux monstres : voir assets\monsters (kani, meulou, mili, troll).
+
 VERSION 0.9.2 : plus de sortie de carte involontaire
   - Un clic sur une case du bord de la carte fait changer de carte (le monstre a bougé, le personnage marche jusqu'à la
     case cliquée). Les monstres à moins de x % du bord de la zone de jeu ne sont plus cliqués ; ils restent détectés

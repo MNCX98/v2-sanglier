@@ -5,7 +5,7 @@ from pathlib import Path
 
 T = Path(__file__).resolve().parent
 STEPS = [("démarrage", ["test_imports.py"], False), ("reconnaissance d'images", ["test_vision.py"], False),
-         ("profils de sorts", ["test_spells.py"], False), ("tours : monde simulé", ["turn_model_harness.py", "3000"], False),
+         ("profils de sorts", ["test_spells.py"], False), ("relance du sort d'ouverture", ["test_opening_recast.py"], False), ("tours : monde simulé", ["turn_model_harness.py", "3000"], False),
          ("tours : écrans réels", ["turn_harness.py"], True), ("fonctions déplacées", ["function_harness.py", "14"], True)]
 
 

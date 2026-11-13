@@ -59,6 +59,7 @@ def run_case(module, which: int, seed: int):
     cfg = Config()
     cfg.save_diagnostics = False
     cfg.turn_start_delay_s = 0.0
+    cfg.opening_recast = False                     # ces bancs vérifient le comportement historique (sans relance)
     cfg.casts_per_turn = rng.choice([1, 2, 2, 3])
     cfg.move_when_out_of_range = rng.random() < 0.8
     cfg.second_spell = rng.random() < 0.8
