@@ -27,7 +27,7 @@ from gui.spells_tab import SpellsTab
 from phases.p4_tour import test_combat
 from phases.runner import run_phases
 
-VERSION = "0.9.2"
+VERSION = "0.9.3"
 
 # Modes pendant lesquels DofusAuto se réduit pour ne pas cacher le jeu, puis revient.
 HIDE_MODES = {"test", "testui", "testplace", "testcombat", "snapshot", "sequence"}
@@ -159,10 +159,18 @@ class MainWindow(QMainWindow):
         self.chk_loop.setChecked(self.cfg.loop_combats)
         self.chk_loop.toggled.connect(lambda v: setattr(self.cfg, "loop_combats", bool(v)))
         grid.addWidget(self.chk_loop, 3, 0)
-        self.chk_open = QCheckBox("Sort d'ouverture (1er tour seulement)")
+        self.chk_open = QCheckBox("Sort d'ouverture (1er tour)")
         self.chk_open.setChecked(self.cfg.opening_spell)
         self.chk_open.toggled.connect(lambda v: setattr(self.cfg, "opening_spell", bool(v)))
         grid.addWidget(self.chk_open, 4, 0)
+        self.chk_recast = QCheckBox("Le relancer dès qu'il est rechargé")
+        self.chk_recast.setToolTip("Tant que le sort d'ouverture se recharge, son icône porte un chiffre. Dès que le chiffre "
+                                   "disparaît, le programme le relance sur son personnage, comme au premier tour.")
+        self.chk_recast.setChecked(self.cfg.opening_recast)
+        self.chk_recast.setEnabled(self.cfg.opening_spell)
+        self.chk_recast.toggled.connect(lambda v: setattr(self.cfg, "opening_recast", bool(v)))
+        self.chk_open.toggled.connect(self.chk_recast.setEnabled)
+        grid.addWidget(self.chk_recast, 4, 1)
         self.chk_heal = QCheckBox("Contrôler la vie avant chaque combat")
         self.chk_heal.setChecked(self.cfg.heal_enabled)
         self.chk_heal.toggled.connect(lambda v: setattr(self.cfg, "heal_enabled", bool(v)))

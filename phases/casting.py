@@ -119,8 +119,16 @@ def settle_after_opening(ctx: Context, spell: Spell) -> None:
         time.sleep(0.6)
 
 
-def cast_opening(ctx: Context, spell: Spell) -> bool:
-    """Sélectionne le sort d'ouverture, clique sur mon propre personnage, puis confirme (coche verte)."""
+def opening_available(ctx: Context, spell: Spell) -> bool:
+    """Le sort d'ouverture peut-il être relancé ? Tant qu'il se recharge, son icône est assombrie et porte un chiffre :
+    elle ne ressemble plus au modèle (≈ 0,5 contre ≥ 0,95 quand il est disponible) et n'est donc pas retrouvée."""
+    scene, _ = ctx.capture.grab()
+    return find_icon(ctx, scene, spell.icon) is not None
+
+
+def cast_opening(ctx: Context, spell: Spell, first_turn: bool = True) -> bool:
+    """Sélectionne le sort d'ouverture, clique sur mon propre personnage, puis confirme (coche verte).
+    first_turn=False : relance aux tours suivants (le personnage a pu bouger, on se fie à l'anneau rouge vu)."""
     unverified = False                                  # sélection jamais vue : on ne reclique pas sur l'icône
     for attempt in range(1, 3):
         scene, (ox, oy) = ctx.capture.grab()
@@ -144,7 +152,7 @@ def cast_opening(ctx: Context, spell: Spell) -> bool:
                 unverified = True
         scene, (ox, oy) = ctx.capture.grab()
         enemies, me = find_enemies(scene), find_me(scene, ctx.me_hint)
-        if me and ctx.me_hint and grid_distance(me.center, ctx.me_hint) > 2.0:
+        if first_turn and me and ctx.me_hint and grid_distance(me.center, ctx.me_hint) > 2.0:
             # Au 1er tour on sait exactement où l'on est (la case du placement) : un anneau rouge repéré loin de là
             # (autre élément rouge de l'écran) n'est pas mon personnage, et on ne lui lance pas le sort.
             ctx.log(f"Anneau rouge repéré en {me.center}, loin de ma case de départ {ctx.me_hint} : je garde ma case de départ.")

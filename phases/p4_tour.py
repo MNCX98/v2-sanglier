@@ -17,7 +17,7 @@ from core.grid import grid_distance
 from core.imgio import save_image
 from core.paths import logs_dir
 from phases.base import Context
-from phases.casting import cast_opening, cast_secondary, release_spells
+from phases.casting import cast_opening, cast_secondary, opening_available, release_spells
 from phases.movement import MAX_MOVE_ATTEMPTS, move_closer, my_position, plan_move, plan_move_green   # noqa: F401 (réexportés)
 from phases.p2_combat import read_ui
 from phases.primary_spell import reselect_primary, select_primary
@@ -249,8 +249,16 @@ def play_turn(ctx: Context, should_stop, turn: int = 0) -> int:
     ctx.failed_moves = []                              # cases de déplacement ratées : repart de zéro à chaque tour
     time.sleep(cfg.turn_start_delay_s)
     st = TurnState()
-    if turn == 1 and cfg.opening_spell and spells.opening and not should_stop():      # sort d'ouverture : 1er tour seulement
-        st.opening_done = cast_opening(ctx, spells.opening)
+    if cfg.opening_spell and spells.opening:
+        if turn == 1:                                                              # sort d'ouverture au 1er tour
+            if not should_stop():
+                ctx.opening_recast_fails = 0
+                st.opening_done = cast_opening(ctx, spells.opening)
+        elif turn > 1 and cfg.opening_recast and ctx.opening_recast_fails < 2 and not should_stop() \
+                and opening_available(ctx, spells.opening):                        # rechargé : on le relance
+            ctx.log(f"Le {spells.opening.name} est de nouveau disponible : je le relance (comme au 1er tour).")
+            st.opening_done = cast_opening(ctx, spells.opening, first_turn=False)
+            ctx.opening_recast_fails = 0 if st.opening_done else ctx.opening_recast_fails + 1
     while st.casts < cfg.casts_per_turn and not should_stop():
         if not _primary_step(ctx, st, should_stop):
             break

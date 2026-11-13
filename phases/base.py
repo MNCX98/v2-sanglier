@@ -22,4 +22,5 @@ class Context:
     progress: int = 0                                            # compteur d'actions réussies (lancers, déplacements) : détecte un combat bloqué
     failed_moves: list = field(default_factory=list)             # cases visées sans succès pendant le tour en cours
     last_enemies: list = field(default_factory=list)             # dernières positions connues des adversaires (combat en cours) : repli si plus aucun n'est visible
+    opening_recast_fails: int = 0                                # relances ratées du sort d'ouverture dans ce combat (2 de suite : on arrête d'essayer)
     spells: SpellBook | None = None                              # sorts à jouer (None = profil intégré)

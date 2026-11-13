@@ -28,6 +28,7 @@ class Config:
     heal_enabled: bool = True                   # avant chaque combat : vérifier la vie et boire des potions si besoin
     min_hp_percent: int = 70                    # vie minimale (%) pour lancer un combat
     opening_spell: bool = True                  # 1er tour du combat uniquement : lancer le sort d'ouverture sur soi, avant Coagulation
+    opening_recast: bool = True                 # aux tours suivants : relancer le sort d'ouverture dès qu'il est de nouveau disponible (plus de chiffre sur l'icône)
     second_spell: bool = True                   # après les Coagulations réussies : lancer le Pied du Sacrieur
     move_when_out_of_range: bool = True         # personne à portée : se rapprocher du monstre le plus proche
     max_move_cells: int = 4                     # nombre maximum de cases parcourues pour se rapprocher
