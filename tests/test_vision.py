@@ -487,6 +487,48 @@ def main():
     print(f"[{'OK' if ok else 'ÉCHEC'}] transfert vers la monture de bout en bout : flèche puis menu cliqués au bon endroit de 0,96 à 1,08")
     failures += not ok
 
+    # 3y) monstres au bord de la carte : jamais cliqués, ceux de l'intérieur restent détectés comme avant
+    from core.maparea import map_area as _ma, near_border as _nb
+    from core.paths import monsters_dir as _md
+    from core.vision import load_templates as _lt, scan as _scan
+    import phases.p1_recherche as _p1
+    from core import input as _inp
+    scene_m = load("27_hors_combat_vie_67.png")
+    tpls_ = _lt(_md())
+    base_det = _scan(scene_m, tpls_, 0.8).detections
+    d0 = base_det[0]
+    crop_ = scene_m[d0.y:d0.y + d0.h, d0.x:d0.x + d0.w].copy()
+    scene_b = scene_m.copy()
+    scene_b[500 - d0.h // 2:500 - d0.h // 2 + d0.h, 335 - d0.w // 2:335 - d0.w // 2 + d0.w] = crop_       # copie parfaite au bord gauche
+    def _run(scene, margin):
+        clicks_m, logs_m = [], []
+        cfg_m = Config()
+        cfg_m.save_diagnostics = False
+        cfg_m.edge_margin_pct = margin
+        ctx_m = _types.SimpleNamespace(config=cfg_m, templates=tpls_, log=logs_m.append,
+                                       capture=_types.SimpleNamespace(grab=lambda: (scene, (0, 0))))
+        real_c, real_s = _inp.click, _time.sleep
+        _inp.click, _time.sleep = (lambda x, y, *a, **k: clicks_m.append((int(x), int(y)))), (lambda *_: None)
+        try:
+            out_m = _p1.scan_once(ctx_m, True)
+        finally:
+            _inp.click, _time.sleep = real_c, real_s
+        return out_m, clicks_m, logs_m
+    o_ref, c_ref, _ = _run(scene_m, 0)                      # marge désactivée : comportement d'avant
+    o_3, c_3, _ = _run(scene_m, 3)                          # aucun monstre de cette capture n'est au bord
+    o_b0, c_b0, l_b0 = _run(scene_b, 0)                      # une copie de monstre est collée au bord : comptée sans marge
+    o_b3, c_b3, l_b3 = _run(scene_b, 3)                     # … ignorée avec la marge, on prend le meilleur de l'intérieur
+    o_all, c_all, l_all = _run(scene_m, 45)                 # marge énorme : tous « au bord » -> aucun clic
+    area_m = _ma(scene_m)
+    ok = (c_ref and c_3 == c_ref and o_ref.detection.center == o_3.detection.center == d0.center
+          and c_b0 and "6 détection(s)" in l_b0[0] and c_b3 and c_b3[0] == d0.center
+          and "5 détection(s)" in l_b3[0] and "1 ignorée(s) près du bord" in l_b3[0]
+          and not c_all and o_all.detection is None and "bord de la carte" in l_all[0]
+          and _nb((335, 520), area_m, 3) and not _nb((900, 560), area_m, 3) and not _nb((335, 520), area_m, 0))
+    print(f"[{'OK' if ok else 'ÉCHEC'}] bord de carte : monstre de l'intérieur cliqué comme avant (marge 3 %), monstre au bord ignoré, "
+          f"marge 0 = comportement d'avant, tous au bord = aucun clic")
+    failures += not ok
+
     # 4) vitesse
     t0 = time.time()
     for _ in range(5):

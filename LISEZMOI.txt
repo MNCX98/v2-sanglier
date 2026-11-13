@@ -1,3 +1,15 @@
+VERSION 0.9.2 : plus de sortie de carte involontaire
+  - Un clic sur une case du bord de la carte fait changer de carte (le monstre a bougé, le personnage marche jusqu'à la
+    case cliquée). Les monstres à moins de x % du bord de la zone de jeu ne sont plus cliqués ; ils restent détectés
+    et ignorés seulement pour le clic. Réglage « Marge de bord de carte » (onglet Réglages) ou "edge_margin_pct" dans
+    config.json : 3 % par défaut (environ une case), 0 = désactivé. Une case fait environ 2,5 % de la hauteur et 3,4 %
+    de la largeur de la zone. Si tous les monstres sont au bord, le programme attend qu'ils s'éloignent.
+    L'aperçu montre la zone cliquable (cadre jaune) et marque d'une croix rouge les monstres ignorés.
+    La zone de jeu est repérée automatiquement (bandeau de publicité BlueStacks affiché ou non, bandes noires).
+  - Option « Arrêt si aucun monstre » (onglet Réglages) ou "lost_stop_after_s" : si aucun monstre n'est reconnu pendant
+    ce nombre de secondes, le programme s'arrête avec la capture « aucun_monstre_….png » (peut-être sur une autre
+    carte). 0 = jamais (comportement d'avant). Le retour automatique sur la carte d'origine n'est pas géré.
+
 VERSION 0.9.1 : transfert vers la monture plus robuste
   - Le menu « Transférer… » n'était pas reconnu alors que les fenêtres Monture et Inventaire l'étaient (« Le menu de
     transfert n'est pas apparu ») : son texte, très fin, n'était lu qu'à l'échelle d'origine, à 1 % près (à 1 % d'écart
